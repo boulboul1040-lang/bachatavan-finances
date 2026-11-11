@@ -1,0 +1,13 @@
+# Gros fichiers : jamais dans git
+rushes/*
+!rushes/.gitkeep
+inspirations/*
+!inspirations/.gitkeep
+projets/*
+!projets/.gitkeep
+*.mp4
+*.mov
+*.wav
+!template/**
+.hyperframes/
+node_modules/

@@ -1,0 +1,13 @@
+{
+  "rush": "assets/rush.mp4",
+  "duree": 0,
+  "titre": "SOIRÉE BACHATA",
+  "sousTitre": "Samedi · 20h",
+  "dureeTitre": 2.8,
+  "motsParGroupe": 3,
+  "motsCles": ["bachata", "bachatavan"],
+  "sousTitresY": 1180,
+  "fin": { "actif": true, "duree": 3, "appel": "RÉSERVE TA PLACE", "petit": "lien en bio" },
+  "musique": null,
+  "volumeMusique": 0.15
+}
