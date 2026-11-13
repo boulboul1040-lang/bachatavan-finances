@@ -14,6 +14,9 @@
     background: linear-gradient(180deg, rgba(14,10,18,.55) 0%, rgba(14,10,18,0) 22%, rgba(14,10,18,0) 55%, rgba(14,10,18,.7) 100%); }
   #van-tag { position: absolute; top: 220px; left: 0; right: 0; z-index: 2; display: flex; justify-content: center; }
   #van-tag span { font-family: "Inter", sans-serif; font-weight: 900; font-size: 30px; letter-spacing: 6px; color: var(--nuit); background: var(--or); padding: 12px 30px; border-radius: 999px; }
+  #van-logo { position: absolute; top: 300px; left: 0; right: 0; z-index: 2; display: flex; justify-content: center; }
+  #van-logo-txt { font-family: "Anton", sans-serif; font-size: 136px; line-height: 1; letter-spacing: 1px; color: var(--creme); background: rgba(14,10,18,.88); padding: 14px 40px 22px; border-radius: 26px; box-shadow: 0 12px 40px rgba(0,0,0,.45); }
+  #van-logo span { color: var(--passion); }
   .van-titre { position: absolute; left: 0; right: 0; top: 1310px; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 10px; }
   .van-titre span { font-family: "Anton", sans-serif; font-size: 104px; line-height: 1; text-transform: uppercase; color: var(--creme); background: var(--nuit); padding: 10px 28px 16px; border-radius: 16px; }
   .van-titre span.chaud { background: var(--passion); }
@@ -28,6 +31,7 @@
     <audio id="son-van" src="assets/van-son.m4a" data-start="0" data-duration="11.5" data-media-start="0.5" data-fade-out="1.5" data-track-index="9"></audio>
     <div id="van-voile" class="clip" data-start="0" data-duration="7" data-track-index="1"></div>
     <div id="van-tag" class="clip" data-start="0" data-duration="7" data-track-index="2"><span id="van-tag-txt">LAST NIGHT · AFTER ACM</span></div>
+    <div id="van-logo" class="clip" data-start="0" data-duration="7" data-track-index="6"><div id="van-logo-txt">Bachata<span>Van</span></div></div>
     <div id="titre-1" class="van-titre clip" data-start="0.2" data-duration="3.4" data-track-index="3"><span id="t1a">The ride home</span><span id="t1b" class="chaud">is the afterparty</span></div>
     <div id="titre-2" class="van-titre clip" data-start="3.9" data-duration="3.1" data-track-index="3"><span id="t2a">Still hungry?</span><span id="t2b" class="chaud">Next stop…</span></div>
 
@@ -37,6 +41,8 @@
   </div>
   <script>
     const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#van-logo-txt", { scale: 1.08 }, { scale: 1, duration: 0.4, ease: "back.out(2)" }, 0);
+    tl.to("#van-logo-txt", { y: -40, opacity: 0, duration: 0.15, ease: "power2.in" }, 6.83);
     tl.fromTo("#van-tag-txt", { y: -20 }, { y: 0, duration: 0.3, ease: "power3.out" }, 0);
     tl.fromTo("#t1a", { opacity: 0, y: 40, rotation: -3 }, { opacity: 1, y: 0, rotation: -2, duration: 0.3, ease: "back.out(2)" }, 0.2);
     tl.fromTo("#t1b", { opacity: 0, y: 40, rotation: 3 }, { opacity: 1, y: 0, rotation: 1.5, duration: 0.3, ease: "back.out(2)" }, 0.55);
