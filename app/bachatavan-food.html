@@ -1,0 +1,613 @@
+<title>BachataVan Food</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one mobile column — a "jauge du jour" hero, 3 ways to add food, then the day split into time slots with meal ideas. */
+:root {
+  --bg: #FBF6F8; --surface: #FFFFFF; --surface-2: #F5EEF2; --line: #EADFE5;
+  --fg: #22151D; --muted: #7C6873;
+  --rose: #E83E8C; --rose-soft: #FCE4EF;
+  --ok: #14965F; --ok-soft: #E2F5EC; --warn: #D97A0B; --over: #D93B48; --over-soft: #FBE6E8;
+  --p: #4B83FF; --c: #F2A93B; --f: #A77BFF;
+  --hero: #1E1219; --hero-2: #2C1B25; --hero-fg: #FFF4F8; --hero-muted: #BFA6B3;
+  --shadow: 0 1px 2px rgba(60, 20, 40, .06), 0 8px 24px rgba(60, 20, 40, .06);
+  --font-display: "Bricolage Grotesque", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #140C11; --surface: #1E141A; --surface-2: #281B23; --line: #36262F; --fg: #F8ECF2; --muted: #B39CA8;
+    --rose: #FF5FA2; --rose-soft: #3A1B2A; --ok: #3DD192; --ok-soft: #12291F; --over: #FF6B76; --over-soft: #331719;
+    --hero: #0B0609; --hero-2: #20131A; --shadow: 0 1px 2px rgba(0,0,0,.4); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #140C11; --surface: #1E141A; --surface-2: #281B23; --line: #36262F; --fg: #F8ECF2; --muted: #B39CA8;
+  --rose: #FF5FA2; --rose-soft: #3A1B2A; --ok: #3DD192; --ok-soft: #12291F; --over: #FF6B76; --over-soft: #331719;
+  --hero: #0B0609; --hero-2: #20131A; --shadow: 0 1px 2px rgba(0,0,0,.4); color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { background: var(--bg); }
+body {
+  color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.45;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 16px calc(96px + env(safe-area-inset-bottom, 0px));
+  -webkit-tap-highlight-color: transparent;
+}
+.wrap { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+.num { font-variant-numeric: tabular-nums; }
+h2 { font-family: var(--font-display); font-size: 19px; font-weight: 700; margin: 0; letter-spacing: -.01em; text-wrap: balance; }
+h3 { font-family: var(--font-display); font-size: 16px; font-weight: 700; margin: 0; }
+p { margin: 0; }
+.label { font-size: 11.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--rose); outline-offset: 2px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 18px; box-shadow: var(--shadow); }
+.muted { color: var(--muted); }
+
+/* Hero */
+.hero { background: radial-gradient(120% 90% at 0% 0%, rgba(232,62,140,.35), transparent 55%), linear-gradient(160deg, var(--hero-2), var(--hero)); color: var(--hero-fg); border-radius: 26px; padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 14px; }
+.hero-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.brand { font-family: var(--font-display); font-weight: 800; font-size: 17px; }
+.brand span { color: #FF7DB5; }
+.dnav { display: flex; align-items: center; gap: 4px; }
+.dnav button { width: 32px; height: 32px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); color: var(--hero-fg); }
+.dnav button:disabled { opacity: .3; }
+.dnav span { font-size: 13.5px; font-weight: 600; min-width: 92px; text-align: center; text-transform: capitalize; }
+.gauge { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 18px; align-items: center; }
+.ring { width: 150px; height: 150px; }
+.left-big { font-family: var(--font-display); font-weight: 800; font-size: 44px; line-height: 1; letter-spacing: -.03em; }
+.left-lbl { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--hero-muted); font-weight: 600; margin-top: 6px; }
+.eaten { font-size: 13.5px; color: var(--hero-muted); margin-top: 10px; }
+.eaten b { color: var(--hero-fg); }
+.macros { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.macro .top { display: flex; justify-content: space-between; font-size: 12px; color: var(--hero-muted); font-weight: 600; gap: 4px; }
+.macro .top b { color: var(--hero-fg); }
+.macro .bar { height: 7px; border-radius: 999px; background: rgba(255,255,255,.1); overflow: hidden; margin-top: 6px; }
+.macro .bar i { display: block; height: 100%; border-radius: 999px; transition: width .4s ease; }
+@media (max-width: 380px) { .gauge { grid-template-columns: 1fr; justify-items: center; text-align: center; } }
+
+/* Add buttons */
+.adds { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.add { border: 1px solid var(--line); background: var(--surface); border-radius: 18px; padding: 14px 8px 12px; display: flex; flex-direction: column; align-items: center; gap: 6px; box-shadow: var(--shadow); font-weight: 600; font-size: 13.5px; }
+.add .em { font-size: 26px; line-height: 1; }
+.add small { font-weight: 500; font-size: 11.5px; color: var(--muted); }
+.add.main { background: var(--rose); color: #fff; border-color: var(--rose); }
+.add.main small { color: rgba(255,255,255,.85); }
+
+/* Slots */
+.slot { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 14px 16px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 10px; }
+.slot.now { border-color: var(--rose); box-shadow: 0 0 0 3px var(--rose-soft), var(--shadow); }
+.slot-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.slot-head .t { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.slot-ico { width: 38px; height: 38px; border-radius: 12px; background: var(--surface-2); display: grid; place-items: center; font-size: 19px; flex: none; }
+.slot-head small { display: block; color: var(--muted); font-size: 12.5px; }
+.pill { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: var(--surface-2); color: var(--muted); white-space: nowrap; }
+.pill.ok { background: var(--ok-soft); color: var(--ok); } .pill.over { background: var(--over-soft); color: var(--over); }
+.pill.now { background: var(--rose); color: #fff; }
+.entry { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); }
+.entry .n { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.entry .m { font-size: 12px; color: var(--muted); }
+.entry .k { font-family: var(--font-display); font-weight: 700; white-space: nowrap; }
+.x { border: 0; background: transparent; color: var(--muted); width: 30px; height: 30px; border-radius: 8px; font-size: 16px; }
+.x.armed { background: var(--over); color: #fff; width: auto; padding: 0 8px; font-size: 12px; font-weight: 700; }
+.ideas-btn { border: 0; background: none; color: var(--rose); font-weight: 600; font-size: 13.5px; padding: 2px 0; text-align: left; }
+.ideas { display: flex; flex-direction: column; gap: 8px; }
+.idea { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; align-items: center; border: 1.5px dashed var(--line); border-radius: 14px; padding: 10px 12px; background: var(--bg); }
+.idea b { font-weight: 600; }
+.idea .mm { font-size: 12px; color: var(--muted); grid-column: 1; }
+.idea button { grid-row: 1 / span 2; grid-column: 2; border: 0; background: var(--rose-soft); color: var(--rose); border-radius: 10px; padding: 8px 10px; font-weight: 700; font-size: 13px; white-space: nowrap; }
+
+/* Week */
+.week { width: 100%; height: 200px; display: block; }
+.kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+.kpi { background: var(--surface-2); border-radius: 14px; padding: 10px; min-width: 0; }
+.kpi b { display: block; font-family: var(--font-display); font-size: 18px; margin-top: 2px; }
+
+/* Forms / sheets */
+.sheet { position: fixed; inset: 0; background: rgba(20, 8, 14, .55); display: grid; align-items: end; z-index: 30; padding: 0 max(10px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px)); }
+.sheet > .card { max-width: 560px; width: 100%; margin: 0 auto; max-height: 88vh; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+.sheet-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.close { border: 0; background: var(--surface-2); width: 34px; height: 34px; border-radius: 10px; font-size: 16px; }
+input.txt, textarea, select { width: 100%; border: 1.5px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 12px; padding: 11px 12px; font: inherit; min-width: 0; }
+textarea { min-height: 84px; resize: vertical; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.grid4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.fld { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.chip { border: 1.5px solid var(--line); background: var(--surface); border-radius: 12px; padding: 8px 12px; font-size: 14px; font-weight: 500; }
+.chip[aria-pressed="true"] { border-color: var(--rose); background: var(--rose-soft); font-weight: 600; }
+.btn { border: 0; border-radius: 16px; padding: 15px; font-weight: 700; font-size: 16px; color: #fff; background: var(--rose); width: 100%; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.ghost { background: var(--surface-2); color: var(--fg); }
+.photo-prev { width: 100%; max-height: 220px; object-fit: cover; border-radius: 14px; display: block; }
+.thinking { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; }
+.dots { display: inline-flex; gap: 4px; }
+.dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--rose); animation: b 1s infinite ease-in-out; }
+.dots i:nth-child(2) { animation-delay: .15s; } .dots i:nth-child(3) { animation-delay: .3s; }
+@keyframes b { 0%, 80%, 100% { opacity: .25; transform: scale(.8); } 40% { opacity: 1; transform: scale(1); } }
+.res { display: flex; flex-direction: column; gap: 8px; }
+.res-item { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; border: 1.5px solid var(--line); border-radius: 14px; padding: 10px; }
+.res-item input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--rose); }
+.res-item .n { font-weight: 600; }
+.res-item .m { font-size: 12px; color: var(--muted); }
+.stepper { display: flex; align-items: center; gap: 4px; }
+.stepper button { width: 30px; height: 30px; border-radius: 9px; border: 1px solid var(--line); background: var(--surface); font-weight: 700; }
+.stepper span { min-width: 54px; text-align: center; font-family: var(--font-display); font-weight: 700; font-size: 14px; }
+.tip { background: var(--rose-soft); border-radius: 14px; padding: 10px 12px; font-size: 13.5px; }
+.err { color: var(--over); font-size: 13.5px; }
+.note { font-size: 12px; color: var(--muted); text-align: center; }
+
+/* Onboarding */
+.target-box { background: var(--surface-2); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 4px; }
+.target-box .big { font-family: var(--font-display); font-size: 34px; font-weight: 800; color: var(--rose); line-height: 1.1; }
+
+/* Nav + toast */
+nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-top: 1px solid var(--line);
+  padding: 8px max(16px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+nav .in { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+nav button { border: 0; background: transparent; border-radius: 12px; padding: 6px 4px; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 12px; font-weight: 600; color: var(--muted); }
+nav button svg { width: 22px; height: 22px; }
+nav button[aria-current="page"] { color: var(--rose); background: var(--rose-soft); }
+.toast { position: fixed; left: 50%; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--hero); color: var(--hero-fg); border-radius: 14px; padding: 10px 10px 10px 16px; display: flex; gap: 12px; align-items: center; font-size: 14px; z-index: 40; box-shadow: 0 10px 30px rgba(0,0,0,.25); max-width: calc(100% - 32px); }
+.toast button { border: 0; background: rgba(255,255,255,.12); color: #FF9CC6; border-radius: 10px; padding: 6px 10px; font-weight: 700; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="wrap">
+  <section class="hero" aria-label="Ma journée">
+    <div class="hero-top">
+      <div class="brand">Bachata<span>Van</span> Food</div>
+      <div class="dnav"><button id="d-prev" aria-label="Jour précédent">‹</button><span id="d-label">Aujourd'hui</span><button id="d-next" aria-label="Jour suivant">›</button></div>
+    </div>
+    <div class="gauge">
+      <svg class="ring" id="ring" viewBox="0 0 150 150" aria-label="Kcal mangées sur l'objectif"></svg>
+      <div>
+        <div class="left-big num" id="left">—</div>
+        <div class="left-lbl" id="left-lbl">kcal restantes</div>
+        <div class="eaten" id="eaten"></div>
+      </div>
+    </div>
+    <div class="macros" id="macros"></div>
+  </section>
+
+  <!-- AUJOURD'HUI -->
+  <div id="view-day" class="wrap">
+    <div class="adds">
+      <button class="add main" type="button" id="btn-photo"><span class="em" aria-hidden="true">📸</span>Photo<small>Claude calcule</small></button>
+      <button class="add" type="button" id="btn-text"><span class="em" aria-hidden="true">✍️</span>Décrire<small>« 2 œufs, 1 pain »</small></button>
+      <button class="add" type="button" id="btn-manual"><span class="em" aria-hidden="true">⚡</span>Rapide<small>nom + kcal</small></button>
+    </div>
+    <div id="slots" class="wrap"></div>
+    <p class="note">Valeurs estimées pour t'aider à te repérer, pas un avis médical. En cas de doute, demande à un médecin ou un diététicien.</p>
+  </div>
+
+  <!-- SEMAINE -->
+  <div id="view-week" class="wrap" hidden>
+    <section class="card">
+      <h2>Mes 7 derniers jours</h2>
+      <svg class="week" id="week" viewBox="0 0 340 200" aria-label="Kcal par jour sur 7 jours"></svg>
+      <div class="kpis" id="wkpis"></div>
+    </section>
+    <section class="card">
+      <h2>Mes repas qui reviennent</h2>
+      <div class="ideas" id="favs" style="margin-top:12px"></div>
+    </section>
+  </div>
+
+  <!-- PROFIL -->
+  <div id="view-profile" class="wrap" hidden>
+    <section class="card" style="display:flex;flex-direction:column;gap:14px">
+      <div>
+        <h2 id="pf-title">Ton objectif du jour</h2>
+        <p class="muted" style="margin-top:4px;font-size:14px">Réponds à 6 questions : l'app calcule combien manger par jour et comment le répartir.</p>
+      </div>
+      <div class="fld"><div class="label">Je suis</div><div class="chips" id="pf-sex"></div></div>
+      <div class="grid4" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+        <div class="fld"><label class="label" for="pf-age">Âge</label><input class="txt" id="pf-age" inputmode="numeric" placeholder="35"></div>
+        <div class="fld"><label class="label" for="pf-h">Taille (cm)</label><input class="txt" id="pf-h" inputmode="numeric" placeholder="178"></div>
+        <div class="fld"><label class="label" for="pf-w">Poids (kg)</label><input class="txt" id="pf-w" inputmode="decimal" placeholder="85"></div>
+      </div>
+      <div class="fld"><div class="label">Mon activité</div><div class="chips" id="pf-act"></div></div>
+      <div class="fld"><div class="label">Mon objectif</div><div class="chips" id="pf-goal"></div></div>
+      <div class="target-box" id="pf-result" hidden></div>
+      <button class="btn" type="button" id="pf-save" disabled>Enregistrer mon objectif</button>
+    </section>
+  </div>
+</div>
+
+<nav aria-label="Navigation"><div class="in">
+  <button type="button" data-view="day" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2"/></svg>Ma journée</button>
+  <button type="button" data-view="week"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Semaine</button>
+  <button type="button" data-view="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Objectif</button>
+</div></nav>
+
+<!-- Sheet: photo / texte -->
+<div class="sheet" id="ai-sheet" hidden>
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="ai-title">
+    <div class="sheet-head"><h2 id="ai-title">Photo du repas</h2><button class="close" type="button" data-close aria-label="Fermer">✕</button></div>
+    <div id="ai-photo-zone">
+      <input type="file" id="ai-file" accept="image/*" hidden>
+      <button class="btn ghost" type="button" id="ai-pick">📷 Prendre / choisir une photo</button>
+      <img class="photo-prev" id="ai-prev" alt="Ton repas" hidden>
+    </div>
+    <div class="fld" id="ai-text-zone">
+      <label class="label" for="ai-desc" id="ai-desc-lbl">Précisions (facultatif)</label>
+      <textarea id="ai-desc" placeholder="Ex : 2 œufs au plat, 1 tranche de pain complet, un café au lait"></textarea>
+    </div>
+    <div class="fld"><div class="label">Moment</div><div class="chips" id="ai-slot"></div></div>
+    <button class="btn" type="button" id="ai-go">Calculer les kcal</button>
+    <div class="thinking" id="ai-wait" hidden><span class="dots"><i></i><i></i><i></i></span><span>Claude regarde ton assiette…</span><button class="close" type="button" id="ai-stop" style="width:auto;padding:0 10px;font-size:13px">Stop</button></div>
+    <div class="err" id="ai-err" hidden></div>
+    <div class="res" id="ai-res" hidden></div>
+    <div class="tip" id="ai-tip" hidden></div>
+    <button class="btn" type="button" id="ai-add" hidden>Ajouter</button>
+  </div>
+</div>
+
+<!-- Sheet: rapide -->
+<div class="sheet" id="mn-sheet" hidden>
+  <form class="card" id="mn-form" role="dialog" aria-modal="true" aria-labelledby="mn-title" autocomplete="off">
+    <div class="sheet-head"><h2 id="mn-title">Ajout rapide</h2><button class="close" type="button" data-close aria-label="Fermer">✕</button></div>
+    <div class="fld"><label class="label" for="mn-name">Quoi ?</label><input class="txt" id="mn-name" placeholder="Ex : Shaker whey + banane"></div>
+    <div class="grid4">
+      <div class="fld"><label class="label" for="mn-k">Kcal</label><input class="txt" id="mn-k" inputmode="numeric" placeholder="250"></div>
+      <div class="fld"><label class="label" for="mn-p">Prot. g</label><input class="txt" id="mn-p" inputmode="decimal" placeholder="—"></div>
+      <div class="fld"><label class="label" for="mn-c">Gluc. g</label><input class="txt" id="mn-c" inputmode="decimal" placeholder="—"></div>
+      <div class="fld"><label class="label" for="mn-f">Lip. g</label><input class="txt" id="mn-f" inputmode="decimal" placeholder="—"></div>
+    </div>
+    <div class="fld"><div class="label">Moment</div><div class="chips" id="mn-slot"></div></div>
+    <button class="btn" type="submit" id="mn-go" disabled>Ajouter</button>
+  </form>
+</div>
+
+<div class="toast" id="toast" hidden><span id="toast-txt"></span><button type="button" id="toast-undo">Annuler</button></div>
+
+<script>
+(() => {
+  // ---------- Créneaux + idées de repas (valeurs approximatives) ----------
+  const SLOTS = [
+    { id: "matin", name: "Matin", hours: "07:00 – 10:30", ico: "🌅", share: .25, from: 5, to: 11, ideas: [
+      { n: "Skyr + flocons d'avoine + fruits rouges", k: 350, p: 25, c: 45, f: 6 },
+      { n: "2 œufs + pain complet + ½ avocat", k: 420, p: 20, c: 35, f: 22 },
+      { n: "Shaker whey + banane + 20 g d'amandes", k: 380, p: 30, c: 33, f: 13 } ] },
+    { id: "midi", name: "Midi", hours: "12:30 – 14:30", ico: "🍽️", share: .35, from: 11, to: 15, ideas: [
+      { n: "Poulet grillé + riz + légumes", k: 600, p: 45, c: 70, f: 12 },
+      { n: "Salade thon, pois chiches, œuf, huile d'olive", k: 550, p: 40, c: 40, f: 24 },
+      { n: "Bocadillo de pavo + salade + fruit", k: 520, p: 32, c: 65, f: 12 } ] },
+    { id: "gouter", name: "Goûter", hours: "16:30 – 18:00", ico: "🍎", share: .10, from: 15, to: 18, ideas: [
+      { n: "Alpro Skyr fraise + pomme", k: 190, p: 10, c: 30, f: 3 },
+      { n: "Fromage blanc 0 % + kiwi", k: 150, p: 15, c: 18, f: 0 },
+      { n: "Banane + 1 c. à soupe de beurre de cacahuète", k: 200, p: 5, c: 28, f: 8 } ] },
+    { id: "soir", name: "Soir", hours: "19:30 – 21:30", ico: "🌙", share: .25, from: 18, to: 22, ideas: [
+      { n: "Saumon + patate douce + brocolis", k: 550, p: 35, c: 45, f: 22 },
+      { n: "Omelette 3 œufs + légumes + 1 tranche de pain", k: 420, p: 25, c: 30, f: 20 },
+      { n: "Wrap poulet + crudités", k: 480, p: 35, c: 45, f: 14 } ] },
+    { id: "nuit", name: "Après la soirée", hours: "23:00 – 04:00", ico: "💃", share: .05, from: 22, to: 5, ideas: [
+      { n: "Yaourt grec nature + un peu de miel", k: 180, p: 10, c: 15, f: 8 },
+      { n: "Verre de lait + 2 biscuits", k: 200, p: 8, c: 26, f: 7 },
+      { n: "Pizza à 3 h 30 : 2 parts maximum", k: 550, p: 22, c: 62, f: 22 } ] },
+  ];
+  const slotById = (id) => SLOTS.find((s) => s.id === id) || SLOTS[0];
+  const slotForHour = (h) => (SLOTS.find((s) => s.from < s.to ? h >= s.from && h < s.to : h >= s.from || h < s.to) || SLOTS[0]).id;
+  const ACTS = [
+    { id: "low", n: "Peu actif", d: "bureau, voiture", f: 1.375 },
+    { id: "mid", n: "Actif", d: "danse 2–3×/sem.", f: 1.55 },
+    { id: "high", n: "Très actif", d: "danse/sport 4×+", f: 1.725 } ];
+  const GOALS = [
+    { id: "lose", n: "Perdre du poids", d: "−15 %", m: .85 },
+    { id: "keep", n: "Garder mon poids", d: "", m: 1 },
+    { id: "gain", n: "Prendre du muscle", d: "+10 %", m: 1.1 } ];
+
+  // ---------- Utilitaires ----------
+  const $ = (id) => document.getElementById(id);
+  const pad = (n) => String(n).padStart(2, "0");
+  const keyOf = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const todayKey = () => keyOf(new Date());
+  const shift = (k, n) => { const [y, m, d] = k.split("-").map(Number); return keyOf(new Date(y, m - 1, d + n)); };
+  const dayLabel = (k) => k === todayKey() ? "Aujourd'hui" : k === shift(todayKey(), -1) ? "Hier" : (() => { const [y, m, d] = k.split("-").map(Number); return new Date(y, m - 1, d).toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" }); })();
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const r0 = (x) => Math.round(+x || 0);
+  const num = (s) => { const n = parseFloat(String(s).replace(",", ".")); return Number.isFinite(n) ? n : NaN; };
+  const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+  // ---------- Objectif (Mifflin-St Jeor) ----------
+  function computeTarget(p) {
+    if (!p || !p.sex || !(p.age > 0) || !(p.h > 0) || !(p.w > 0) || !p.act || !p.goal) return null;
+    const bmr = 10 * p.w + 6.25 * p.h - 5 * p.age + (p.sex === "h" ? 5 : -161);
+    const tdee = bmr * (ACTS.find((a) => a.id === p.act)?.f || 1.55);
+    let kcal = tdee * (GOALS.find((g) => g.id === p.goal)?.m || 1);
+    const floor = p.sex === "h" ? 1500 : 1200;
+    kcal = Math.max(floor, Math.round(kcal / 10) * 10);
+    const prot = Math.round(p.w * (p.goal === "keep" ? 1.6 : 1.8));
+    const fat = Math.round(p.w * 0.8);
+    const carbs = Math.max(0, Math.round((kcal - prot * 4 - fat * 9) / 4));
+    return { kcal, prot, fat, carbs, tdee: Math.round(tdee) };
+  }
+
+  // ---------- État ----------
+  let profile = null, target = null;
+  const days = {};                    // date -> {entries: []}
+  let store = null, sample = null, canImages = false;
+  const ui = { day: todayKey(), open: {}, aiMode: "photo", aiSlot: null, mnSlot: null, file: null, result: [], ctl: null };
+  const pf = { sex: null, act: null, goal: null };
+
+  // ---------- Calculs ----------
+  const entriesOf = (k) => days[k]?.entries || [];
+  const sum = (list) => list.reduce((a, e) => ({ k: a.k + r0(e.k), p: a.p + (+e.p || 0), c: a.c + (+e.c || 0), f: a.f + (+e.f || 0) }), { k: 0, p: 0, c: 0, f: 0 });
+
+  // ---------- Rendu ----------
+  function renderHero() {
+    $("d-label").textContent = dayLabel(ui.day);
+    $("d-next").disabled = ui.day >= todayKey();
+    const t = sum(entriesOf(ui.day));
+    const goal = target?.kcal || 0;
+    const left = goal - t.k;
+    const R = 62, C = 2 * Math.PI * R; const ratio = goal ? Math.min(1, t.k / goal) : 0;
+    const over = goal && t.k > goal;
+    const col = over ? "#FF6B76" : "#FF7DB5";
+    $("ring").innerHTML = `<circle cx="75" cy="75" r="${R}" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="14"/>
+      <circle cx="75" cy="75" r="${R}" fill="none" stroke="${col}" stroke-width="14" stroke-linecap="round" stroke-dasharray="${(ratio * C).toFixed(1)} ${C}" transform="rotate(-90 75 75)" style="transition:stroke-dasharray .5s ease"/>
+      <text x="75" y="70" text-anchor="middle" font-size="24" font-weight="800" fill="#FFF4F8" font-family="Bricolage Grotesque, Inter, sans-serif">${t.k}</text>
+      <text x="75" y="90" text-anchor="middle" font-size="11" fill="#BFA6B3" font-family="Inter, sans-serif">${goal ? "/ " + goal + " kcal" : "kcal"}</text>`;
+    if (!goal) { $("left").textContent = "?"; $("left-lbl").textContent = "objectif à définir"; $("eaten").innerHTML = `Va dans <b>Objectif</b> pour savoir combien manger par jour.`; }
+    else if (over) { $("left").textContent = "+" + (t.k - goal); $("left-lbl").textContent = "kcal au-dessus"; $("eaten").innerHTML = `Pas grave : demain on rééquilibre. Reste léger ce soir.`; }
+    else { $("left").textContent = left; $("left-lbl").textContent = "kcal restantes"; $("eaten").innerHTML = `Mangé : <b>${t.k} kcal</b> sur ${goal}`; }
+    const M = [["Prot.", t.p, target?.prot, "var(--p)"], ["Gluc.", t.c, target?.carbs, "var(--c)"], ["Lip.", t.f, target?.fat, "var(--f)"]];
+    $("macros").innerHTML = M.map(([n, v, g, c]) => `<div class="macro"><div class="top"><span>${n}</span><span><b>${r0(v)}</b>${g ? " / " + g : ""} g</span></div><div class="bar"><i style="width:${g ? Math.min(100, (v / g) * 100) : 0}%;background:${c}"></i></div></div>`).join("");
+  }
+  function renderSlots() {
+    const list = entriesOf(ui.day);
+    const nowSlot = ui.day === todayKey() ? slotForHour(new Date().getHours()) : null;
+    $("slots").innerHTML = SLOTS.map((s) => {
+      const items = list.filter((e) => e.slot === s.id);
+      const k = sum(items).k; const budget = target ? Math.round((target.kcal * s.share) / 10) * 10 : 0;
+      let pill = budget ? `<span class="pill ${k > budget * 1.15 ? "over" : k > 0 ? "ok" : ""} num">${k} / ${budget} kcal</span>` : (k ? `<span class="pill num">${k} kcal</span>` : "");
+      if (s.id === nowSlot && !k) pill = `<span class="pill now">Maintenant</span>`;
+      const open = ui.open[s.id] ?? (s.id === nowSlot && !items.length);
+      return `<section class="slot ${s.id === nowSlot ? "now" : ""}" aria-label="${s.name}">
+        <div class="slot-head"><div class="t"><div class="slot-ico" aria-hidden="true">${s.ico}</div><div><h3>${s.name}</h3><small>${s.hours}${budget ? " · vise ~" + budget + " kcal" : ""}</small></div></div>${pill}</div>
+        ${items.map((e) => `<div class="entry"><div style="min-width:0"><div class="n">${esc(e.n)}</div><div class="m">${e.p != null ? `P ${r0(e.p)} · G ${r0(e.c)} · L ${r0(e.f)}` : ""}${e.src === "photo" ? " · 📸" : e.src === "text" ? " · ✍️" : ""}</div></div><div class="k num">${r0(e.k)} kcal</div><button class="x" type="button" data-del="${esc(e.id)}" aria-label="Supprimer ${esc(e.n)}">✕</button></div>`).join("")}
+        <button class="ideas-btn" type="button" data-ideas="${s.id}" aria-expanded="${open}">${open ? "Masquer les idées" : "💡 3 idées de repas"}</button>
+        ${open ? `<div class="ideas">${s.ideas.map((i, ix) => `<div class="idea"><b>${esc(i.n)}</b><span class="mm num">${i.k} kcal · P ${i.p} · G ${i.c} · L ${i.f}</span><button type="button" data-idea="${s.id}:${ix}">+ J'ai mangé ça</button></div>`).join("")}</div>` : ""}
+      </section>`;
+    }).join("");
+  }
+  function renderWeek() {
+    const keys = Array.from({ length: 7 }, (_, i) => shift(todayKey(), i - 6));
+    const vals = keys.map((k) => sum(entriesOf(k)).k);
+    const goal = target?.kcal || 0;
+    const mx = Math.max(goal * 1.2, ...vals, 500);
+    const W = 340, H = 200, L = 40, B = 26, T = 10, bw = (W - L - 6) / 7;
+    const y = (v) => T + (H - T - B) * (1 - v / mx);
+    let g = "";
+    [0, .5, 1].forEach((q) => { const v = Math.round(mx * q / 100) * 100; g += `<line x1="${L}" x2="${W - 4}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end" font-size="10" fill="var(--muted)" font-family="Inter, sans-serif">${v}</text>`; });
+    keys.forEach((k, i) => { const v = vals[i]; const x = L + i * bw + bw * .2; const w = bw * .6;
+      const col = !v ? "var(--line)" : goal && v > goal * 1.1 ? "var(--over)" : "var(--rose)";
+      g += `<rect x="${x}" y="${y(v)}" width="${w}" height="${Math.max(0, H - B - y(v))}" rx="5" fill="${col}"/>`;
+      const [yy, mm, dd] = k.split("-").map(Number);
+      g += `<text x="${x + w / 2}" y="${H - 8}" text-anchor="middle" font-size="11" font-weight="${k === todayKey() ? 700 : 500}" fill="${k === todayKey() ? "var(--fg)" : "var(--muted)"}" font-family="Inter, sans-serif">${new Date(yy, mm - 1, dd).toLocaleDateString("fr-FR", { weekday: "short" }).replace(".", "")}</text>`; });
+    if (goal) g += `<line x1="${L}" x2="${W - 4}" y1="${y(goal)}" y2="${y(goal)}" stroke="var(--ok)" stroke-width="2" stroke-dasharray="5 4"/><text x="${W - 6}" y="${y(goal) - 5}" text-anchor="end" font-size="10" font-weight="700" fill="var(--ok)" font-family="Inter, sans-serif">objectif ${goal}</text>`;
+    $("week").innerHTML = g;
+    const logged = vals.filter((v) => v > 0);
+    const avg = logged.length ? Math.round(logged.reduce((a, b) => a + b, 0) / logged.length) : 0;
+    const inTarget = goal ? logged.filter((v) => v <= goal * 1.1 && v >= goal * .8).length : 0;
+    $("wkpis").innerHTML = `<div class="kpi"><div class="label">Moyenne</div><b class="num">${avg ? avg + " kcal" : "—"}</b></div>
+      <div class="kpi"><div class="label">Jours notés</div><b class="num">${logged.length} / 7</b></div>
+      <div class="kpi"><div class="label">Dans l'objectif</div><b class="num" style="color:var(--ok)">${goal ? inTarget + " j" : "—"}</b></div>`;
+    // repas fréquents
+    const freq = {};
+    Object.values(days).forEach((d) => (d.entries || []).forEach((e) => { const key = e.n.trim().toLowerCase(); (freq[key] ||= { e, count: 0 }).count++; }));
+    const top = Object.values(freq).sort((a, b) => b.count - a.count).slice(0, 6);
+    $("favs").innerHTML = top.length ? top.map(({ e, count }, i) => `<div class="idea"><b>${esc(e.n)}</b><span class="mm num">${r0(e.k)} kcal · noté ${count}×</span><button type="button" data-fav="${i}">+ Ajouter</button></div>`).join("")
+      : `<p class="muted" style="font-size:14px">Tes repas les plus fréquents apparaîtront ici pour les rajouter en 1 touche.</p>`;
+    favCache = top.map((t) => t.e);
+  }
+  let favCache = [];
+  function renderProfile() {
+    $("pf-sex").innerHTML = [["h", "Un homme"], ["f", "Une femme"]].map(([id, n]) => `<button class="chip" type="button" data-sex="${id}" aria-pressed="${pf.sex === id}">${n}</button>`).join("");
+    $("pf-act").innerHTML = ACTS.map((a) => `<button class="chip" type="button" data-act="${a.id}" aria-pressed="${pf.act === a.id}">${a.n} <span class="muted" style="font-size:12px">· ${a.d}</span></button>`).join("");
+    $("pf-goal").innerHTML = GOALS.map((g) => `<button class="chip" type="button" data-goal="${g.id}" aria-pressed="${pf.goal === g.id}">${g.n}${g.d ? ` <span class="muted" style="font-size:12px">${g.d}</span>` : ""}</button>`).join("");
+    const t = computeTarget(readPf());
+    $("pf-result").hidden = !t; $("pf-save").disabled = !t || !store;
+    if (t) $("pf-result").innerHTML = `<div class="label">Ton objectif</div><div class="big num">${t.kcal} kcal / jour</div>
+      <div style="font-size:14px">Protéines <b>${t.prot} g</b> · Glucides <b>${t.carbs} g</b> · Lipides <b>${t.fat} g</b></div>
+      <div class="muted" style="font-size:12.5px">Ton corps dépense environ ${t.tdee} kcal par jour.${pf.goal === "lose" ? " On vise une baisse douce, pas un régime extrême." : ""}</div>`;
+  }
+  const readPf = () => ({ sex: pf.sex, age: num($("pf-age").value), h: num($("pf-h").value), w: num($("pf-w").value), act: pf.act, goal: pf.goal });
+  function renderAll() { renderHero(); renderSlots(); renderWeek(); }
+
+  // ---------- Stockage ----------
+  async function makeStore() {
+    let db = null;
+    try { db = window.claude?.use ? await window.claude.use("db") : null; } catch { db = null; }
+    if (db) return {
+      kind: "db",
+      saveDay: (k, data) => db.doc("days/" + k).set(data),
+      saveProfile: (p) => db.doc("profile/main").set(p),
+      listen(onDays, onProfile) {
+        db.collection("days").onSnapshot((s) => onDays(s.docs.map((d) => [d.id, d.data()])), () => {});
+        db.doc("profile/main").onSnapshot((s) => onProfile(s.exists ? s.data() : null), () => {});
+      },
+    };
+    const mem = ls.get("bvf-local", { days: {}, profile: null }); let cbD = null, cbP = null;
+    const save = () => ls.set("bvf-local", mem);
+    return {
+      kind: "local",
+      saveDay: async (k, data) => { mem.days[k] = data; save(); cbD && cbD(Object.entries(mem.days)); },
+      saveProfile: async (p) => { mem.profile = p; save(); cbP && cbP(p); },
+      listen(onDays, onProfile) { cbD = onDays; cbP = onProfile; onDays(Object.entries(mem.days)); onProfile(mem.profile); },
+    };
+  }
+  // une écriture à la fois par jour
+  const queue = {};
+  function writeDay(k) {
+    const data = { entries: (days[k]?.entries || []).slice(), updatedAt: new Date().toISOString() };
+    queue[k] = (queue[k] || Promise.resolve()).then(() => store.saveDay(k, data)).catch(() => toast("Enregistrement impossible, vérifie ta connexion"));
+    return queue[k];
+  }
+  function addEntries(k, list) {
+    days[k] = { entries: [...(days[k]?.entries || []), ...list] };
+    renderAll(); writeDay(k);
+    const tot = list.reduce((a, e) => a + r0(e.k), 0);
+    toast(`${list.length > 1 ? list.length + " aliments ajoutés" : "Ajouté"} : ${tot} kcal`, () => {
+      const ids = new Set(list.map((e) => e.id)); days[k] = { entries: (days[k]?.entries || []).filter((e) => !ids.has(e.id)) }; renderAll(); writeDay(k);
+    });
+  }
+
+  // ---------- Toast ----------
+  let toastTimer = null, undoFn = null;
+  function toast(msg, undo) { $("toast-txt").textContent = msg; undoFn = undo || null; $("toast-undo").hidden = !undo; $("toast").hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { $("toast").hidden = true; undoFn = null; }, 4500); }
+  $("toast-undo").addEventListener("click", () => { const f = undoFn; $("toast").hidden = true; undoFn = null; f && f(); });
+
+  // ---------- Événements jour ----------
+  $("d-prev").addEventListener("click", () => { ui.day = shift(ui.day, -1); ui.open = {}; renderAll(); });
+  $("d-next").addEventListener("click", () => { if (ui.day < todayKey()) { ui.day = shift(ui.day, 1); ui.open = {}; renderAll(); } });
+  $("slots").addEventListener("click", (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.ideas) { const id = b.dataset.ideas; ui.open[id] = b.getAttribute("aria-expanded") !== "true"; renderSlots(); }
+    else if (b.dataset.idea) { if (!store) return; const [sid, ix] = b.dataset.idea.split(":"); const i = slotById(sid).ideas[+ix];
+      addEntries(ui.day, [{ id: uid(), n: i.n, k: i.k, p: i.p, c: i.c, f: i.f, slot: sid, src: "idea", at: new Date().toISOString() }]); }
+    else if (b.dataset.del) {
+      if (!b.classList.contains("armed")) { b.classList.add("armed"); b.textContent = "Suppr. ?"; setTimeout(() => { if (b.isConnected) { b.classList.remove("armed"); b.textContent = "✕"; } }, 3000); return; }
+      const k = ui.day; const old = days[k]?.entries || []; const gone = old.find((x) => x.id === b.dataset.del);
+      days[k] = { entries: old.filter((x) => x.id !== b.dataset.del) }; renderAll(); writeDay(k);
+      toast("Supprimé", () => { days[k] = { entries: [...(days[k]?.entries || []), gone] }; renderAll(); writeDay(k); });
+    }
+  });
+  $("favs").addEventListener("click", (e) => { const b = e.target.closest("[data-fav]"); if (!b || !store) return; const f = favCache[+b.dataset.fav]; if (!f) return;
+    const slot = ui.day === todayKey() ? slotForHour(new Date().getHours()) : f.slot;
+    addEntries(ui.day, [{ id: uid(), n: f.n, k: f.k, p: f.p, c: f.c, f: f.f, slot, src: "fav", at: new Date().toISOString() }]); });
+
+  // ---------- Navigation ----------
+  function show(view) {
+    ["day", "week", "profile"].forEach((v) => { $("view-" + v).hidden = v !== view; });
+    document.querySelectorAll("nav button").forEach((b) => { if (b.dataset.view === view) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
+    ls.set("bvf-view", view); window.scrollTo({ top: 0 });
+  }
+  document.querySelector("nav").addEventListener("click", (e) => { const b = e.target.closest("[data-view]"); if (b) show(b.dataset.view); });
+
+  // ---------- Profil ----------
+  $("view-profile").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.sex) pf.sex = b.dataset.sex; else if (b.dataset.act) pf.act = b.dataset.act; else if (b.dataset.goal) pf.goal = b.dataset.goal; else return; renderProfile(); });
+  ["pf-age", "pf-h", "pf-w"].forEach((id) => $(id).addEventListener("input", renderProfile));
+  $("pf-save").addEventListener("click", async () => { const p = readPf(); if (!computeTarget(p) || !store) return;
+    try { await store.saveProfile({ ...p, updatedAt: new Date().toISOString() }); toast("Objectif enregistré 🎯"); show("day"); } catch { toast("Enregistrement impossible, réessaie"); } });
+
+  // ---------- Sheets ----------
+  const slotChips = (el, sel, attr) => { el.innerHTML = SLOTS.map((s) => `<button class="chip" type="button" ${attr}="${s.id}" aria-pressed="${sel === s.id}">${s.ico} ${s.name}</button>`).join(""); };
+  const defaultSlot = () => ui.day === todayKey() ? slotForHour(new Date().getHours()) : "midi";
+  function openSheet(id) { $(id).hidden = false; }
+  function closeSheets() { document.querySelectorAll(".sheet").forEach((s) => (s.hidden = true)); ui.ctl?.abort(); }
+  document.querySelectorAll(".sheet").forEach((s) => s.addEventListener("click", (e) => { if (e.target === s || e.target.closest("[data-close]")) closeSheets(); }));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeSheets(); });
+
+  // Rapide
+  $("btn-manual").addEventListener("click", () => { ui.mnSlot = defaultSlot(); slotChips($("mn-slot"), ui.mnSlot, "data-mslot"); $("mn-form").reset(); $("mn-go").disabled = true; openSheet("mn-sheet"); setTimeout(() => $("mn-name").focus(), 50); });
+  $("mn-slot").addEventListener("click", (e) => { const b = e.target.closest("[data-mslot]"); if (!b) return; ui.mnSlot = b.dataset.mslot; slotChips($("mn-slot"), ui.mnSlot, "data-mslot"); });
+  $("mn-form").addEventListener("input", () => { $("mn-go").disabled = !$("mn-name").value.trim() || !(num($("mn-k").value) > 0) || !store; });
+  $("mn-form").addEventListener("submit", (e) => { e.preventDefault(); const k = num($("mn-k").value); if (!(k > 0) || !store) return;
+    const opt = (id) => { const v = num($(id).value); return Number.isFinite(v) ? v : null; };
+    const p = opt("mn-p"), c = opt("mn-c"), f = opt("mn-f");
+    addEntries(ui.day, [{ id: uid(), n: $("mn-name").value.trim().slice(0, 80), k: r0(k), p: p ?? undefined, c: c ?? undefined, f: f ?? undefined, slot: ui.mnSlot, src: "manual", at: new Date().toISOString() }].map((x) => (p == null && c == null && f == null ? (delete x.p, delete x.c, delete x.f, x) : { ...x, p: p || 0, c: c || 0, f: f || 0 })));
+    closeSheets(); });
+
+  // Photo / texte avec Claude
+  function openAi(mode) {
+    ui.aiMode = mode; ui.file = null; ui.result = []; ui.aiSlot = defaultSlot();
+    $("ai-title").textContent = mode === "photo" ? "Photo du repas" : "Décris ton repas";
+    $("ai-photo-zone").hidden = mode !== "photo"; $("ai-prev").hidden = true; $("ai-prev").removeAttribute("src");
+    $("ai-desc-lbl").textContent = mode === "photo" ? "Précisions (facultatif)" : "Qu'as-tu mangé ?";
+    $("ai-desc").value = ""; $("ai-err").hidden = true; $("ai-res").hidden = true; $("ai-tip").hidden = true; $("ai-add").hidden = true; $("ai-wait").hidden = true;
+    $("ai-go").hidden = false; slotChips($("ai-slot"), ui.aiSlot, "data-aslot"); updateAiGo(); openSheet("ai-sheet");
+    if (mode === "text") setTimeout(() => $("ai-desc").focus(), 50);
+  }
+  function updateAiGo() { $("ai-go").disabled = !sample || (ui.aiMode === "photo" ? !ui.file : !$("ai-desc").value.trim()); }
+  $("btn-photo").addEventListener("click", () => openAi("photo"));
+  $("btn-text").addEventListener("click", () => openAi("text"));
+  $("ai-pick").addEventListener("click", () => $("ai-file").click());
+  $("ai-file").addEventListener("change", async () => {
+    const f = $("ai-file").files?.[0]; if (!f) return;
+    ui.file = await shrink(f).catch(() => f);
+    $("ai-prev").src = URL.createObjectURL(ui.file); $("ai-prev").hidden = false; $("ai-file").value = ""; updateAiGo();
+  });
+  $("ai-desc").addEventListener("input", updateAiGo);
+  $("ai-slot").addEventListener("click", (e) => { const b = e.target.closest("[data-aslot]"); if (!b) return; ui.aiSlot = b.dataset.aslot; slotChips($("ai-slot"), ui.aiSlot, "data-aslot"); });
+  $("ai-stop").addEventListener("click", () => ui.ctl?.abort());
+  function shrink(file) {
+    return new Promise((res, rej) => { const img = new Image(); img.onload = () => { const s = Math.min(1, 1280 / Math.max(img.width, img.height));
+      const cv = document.createElement("canvas"); cv.width = Math.round(img.width * s); cv.height = Math.round(img.height * s);
+      cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height); cv.toBlob((b) => (b ? res(b) : rej()), "image/jpeg", .85); }; img.onerror = rej; img.src = URL.createObjectURL(file); });
+  }
+  $("ai-go").addEventListener("click", async () => {
+    if (!sample) return;
+    const desc = $("ai-desc").value.trim().slice(0, 600);
+    const left = target ? target.kcal - sum(entriesOf(ui.day)).k : null;
+    const prompt = `Tu es un nutritionniste. ${ui.aiMode === "photo" ? "La photo jointe montre un repas." : "Voici la description d'un repas."} ${desc ? "Précisions de la personne : « " + desc + " »." : ""}
+Identifie chaque aliment, estime la portion réaliste (en grammes ou en unités) et ses valeurs nutritionnelles. Aliments courants en Espagne/France (Mercadona etc.).
+Réponds UNIQUEMENT avec un objet JSON de cette forme :
+{"items":[{"name":"Riz blanc cuit","portion":"150 g","kcal":195,"protein":4,"carbs":43,"fat":0}],"tip":"une phrase courte et bienveillante en français"}
+"tip" : un conseil pratique et gentil${left != null ? ` sachant qu'il lui reste ${left} kcal pour la journée avant ce repas` : ""}. Nombres entiers. Noms courts en français.`;
+    $("ai-go").hidden = true; $("ai-wait").hidden = false; $("ai-err").hidden = true; $("ai-res").hidden = true; $("ai-tip").hidden = true; $("ai-add").hidden = true;
+    ui.ctl = new AbortController();
+    try {
+      const opts = { signal: ui.ctl.signal, cache: false };
+      if (ui.aiMode === "photo" && ui.file) opts.images = [ui.file];
+      const data = await sample.json(prompt, opts);
+      const items = (Array.isArray(data?.items) ? data.items : []).map((it) => ({ name: String(it.name || "Aliment").slice(0, 60), portion: String(it.portion || ""), k: r0(it.kcal), p: r0(it.protein), c: r0(it.carbs), f: r0(it.fat), mult: 1, on: true })).filter((it) => it.k > 0);
+      if (!items.length) throw { code: "empty" };
+      ui.result = items; renderResult();
+      if (data.tip) { $("ai-tip").hidden = false; $("ai-tip").textContent = "💡 " + String(data.tip).slice(0, 220); }
+    } catch (e) {
+      $("ai-go").hidden = false;
+      if (e?.code !== "cancelled") { $("ai-err").hidden = false; $("ai-err").textContent = ({
+        not_granted: "Claude n'est pas autorisé pour cette app. Utilise l'ajout rapide ou les idées de repas.",
+        rate_limited: "Trop de demandes pour le moment. Réessaie dans quelques minutes.",
+        image_rejected: "Cette photo n'a pas pu être lue. Essaie une autre photo.",
+        images_unavailable: "Les photos ne sont pas disponibles ici. Décris ton repas avec ✍️ à la place.",
+        empty: "Je n'ai pas reconnu de nourriture. Ajoute une précision et réessaie.",
+        invalid_json: "La réponse était incomplète. Réessaie.",
+      })[e?.code] || "Le calcul n'a pas abouti. Réessaie."; }
+    } finally { $("ai-wait").hidden = true; ui.ctl = null; }
+  });
+  function renderResult() {
+    const tot = ui.result.filter((i) => i.on).reduce((a, i) => a + Math.round(i.k * i.mult), 0);
+    $("ai-res").hidden = false;
+    $("ai-res").innerHTML = `<div class="label">Ce que Claude voit · ajuste les portions</div>` + ui.result.map((i, ix) => `<div class="res-item">
+      <input type="checkbox" data-on="${ix}" ${i.on ? "checked" : ""} aria-label="Garder ${esc(i.name)}">
+      <div style="min-width:0"><div class="n">${esc(i.name)}</div><div class="m num">${esc(i.portion)}${i.mult !== 1 ? " ×" + i.mult : ""} · P ${Math.round(i.p * i.mult)} · G ${Math.round(i.c * i.mult)} · L ${Math.round(i.f * i.mult)}</div></div>
+      <div class="stepper"><button type="button" data-m="${ix}:-" aria-label="Moins">−</button><span class="num">${Math.round(i.k * i.mult)}</span><button type="button" data-m="${ix}:+" aria-label="Plus">+</button></div></div>`).join("");
+    $("ai-add").hidden = false; $("ai-add").disabled = !tot || !store; $("ai-add").textContent = `Ajouter ${tot} kcal · ${slotById(ui.aiSlot).name}`;
+  }
+  $("ai-res").addEventListener("click", (e) => { const b = e.target.closest("[data-m]"); if (!b) return; const [ix, op] = b.dataset.m.split(":"); const it = ui.result[+ix];
+    const steps = [.25, .5, .75, 1, 1.25, 1.5, 2, 2.5, 3]; let i = steps.indexOf(it.mult); i = Math.max(0, Math.min(steps.length - 1, i + (op === "+" ? 1 : -1))); it.mult = steps[i]; renderResult(); });
+  $("ai-res").addEventListener("change", (e) => { const c = e.target.closest("[data-on]"); if (!c) return; ui.result[+c.dataset.on].on = c.checked; renderResult(); });
+  $("ai-slot").addEventListener("click", () => { if (ui.result.length) renderResult(); });
+  $("ai-add").addEventListener("click", () => { if (!store) return;
+    const list = ui.result.filter((i) => i.on).map((i) => ({ id: uid(), n: i.name + (i.portion ? " (" + i.portion + (i.mult !== 1 ? " ×" + i.mult : "") + ")" : ""), k: Math.round(i.k * i.mult), p: Math.round(i.p * i.mult), c: Math.round(i.c * i.mult), f: Math.round(i.f * i.mult), slot: ui.aiSlot, src: ui.aiMode, at: new Date().toISOString() }));
+    if (list.length) addEntries(ui.day, list); closeSheets(); });
+
+  // ---------- Démarrage ----------
+  show(ls.get("bvf-view", "day"));
+  renderAll(); renderProfile();
+  (async () => {
+    store = await makeStore();
+    try { sample = window.claude?.use ? await window.claude.use("sample") : null; } catch { sample = null; }
+    if (sample) { const lim = await sample.limits().catch(() => null); canImages = !!lim?.images; }
+    if (!sample) { $("btn-photo").hidden = true; $("btn-text").hidden = true; document.querySelector(".adds").style.gridTemplateColumns = "1fr"; }
+    else if (!canImages) { $("btn-photo").hidden = true; document.querySelector(".adds").style.gridTemplateColumns = "repeat(2, minmax(0, 1fr))"; }
+    store.listen(
+      (list) => { for (const k of Object.keys(days)) if (!list.some(([id]) => id === k)) delete days[k]; for (const [k, d] of list) days[k] = { entries: Array.isArray(d?.entries) ? d.entries : [] }; renderAll(); },
+      (p) => { profile = p; target = computeTarget(p);
+        if (p && !pf.sex) { pf.sex = p.sex; pf.act = p.act; pf.goal = p.goal; $("pf-age").value = p.age || ""; $("pf-h").value = p.h || ""; $("pf-w").value = p.w || ""; }
+        $("pf-title").textContent = p ? "Mon objectif" : "Ton objectif du jour";
+        if (!p && ls.get("bvf-view", null) == null) show("profile");
+        renderAll(); renderProfile(); }
+    );
+    renderProfile(); updateAiGo();
+  })();
+})();
+</script>
