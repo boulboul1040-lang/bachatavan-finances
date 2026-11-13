@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="assets/gsap.min.js"></script>
+<style>
+  @font-face { font-family: "Anton"; src: url("assets/fonts/anton.woff2") format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Caveat"; src: url("assets/fonts/caveat.woff2") format("woff2"); font-weight: 700; }
+  :root { --nuit: #0E0A12; --or: #FFC24B; --or-clair: #FFE3A1; --passion: #E8304A; --creme: #FFF6EC; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--nuit); }
+  #root { position: absolute; inset: 0; font-family: "Inter", sans-serif; color: var(--creme); overflow: hidden; }
+
+  #fond { position: absolute; inset: 0; overflow: hidden; }
+  #fond-img { position: absolute; inset: -80px; background: url("assets/crew.jpg") center / cover; filter: blur(40px) saturate(1.25) brightness(.42); }
+  #voile { position: absolute; inset: 0;
+    background: radial-gradient(800px 600px at 50% 26%, rgba(255,194,75,.20), transparent 70%),
+                linear-gradient(180deg, rgba(14,10,18,.5) 0%, rgba(14,10,18,.15) 40%, rgba(14,10,18,.8) 72%, var(--nuit) 100%); }
+
+  #tag { position: absolute; top: 220px; left: 0; right: 0; display: flex; justify-content: center; }
+  #tag span { font-weight: 900; font-size: 30px; letter-spacing: 6px; color: var(--nuit); background: var(--or); padding: 12px 30px; border-radius: 999px; }
+
+  #heure { position: absolute; top: 290px; left: 0; right: 0; text-align: center; font-family: "Anton", sans-serif; font-size: 250px; line-height: 1;
+    background: linear-gradient(180deg, var(--or-clair) 0%, var(--or) 55%, #C98A1B 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  #accroche { position: absolute; top: 565px; left: 0; right: 0; text-align: center; font-weight: 900; font-size: 50px; line-height: 1.15; }
+  #accroche em { font-style: normal; color: var(--or); }
+
+  #carte { position: absolute; left: 50px; top: 715px; width: 980px; padding: 18px 18px 0; background: var(--creme); border-radius: 10px;
+    box-shadow: 0 40px 90px rgba(0,0,0,.6); }
+  #photo { width: 944px; height: 531px; overflow: hidden; border-radius: 4px; }
+  #photo-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  #legende { height: 86px; display: flex; align-items: center; justify-content: center; font-family: "Caveat", cursive; font-size: 60px; color: var(--nuit); }
+  #scotch { position: absolute; top: -26px; left: 50%; width: 190px; height: 54px; margin-left: -95px; background: rgba(255,194,75,.85); transform: rotate(-3deg); }
+
+  #etapes { position: absolute; top: 1395px; left: 0; right: 0; display: flex; justify-content: center; align-items: center; gap: 16px; }
+  .etape { font-weight: 900; font-size: 34px; letter-spacing: 2px; text-transform: uppercase; padding: 14px 26px; border-radius: 16px;
+    background: rgba(255,246,236,.1); border: 2px solid rgba(255,246,236,.25); }
+  .etape.chaude { background: var(--passion); border-color: var(--passion); }
+  .fleche { font-weight: 900; font-size: 36px; color: var(--or); }
+
+  #marque { position: absolute; top: 1500px; left: 70px; right: 70px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+  #logo { font-family: "Anton", sans-serif; font-size: 96px; line-height: 1; letter-spacing: 1px; }
+  #logo span { color: var(--passion); }
+  #slogan { font-weight: 700; font-size: 38px; }
+  #slogan em { font-style: normal; color: var(--or); }
+  #cta { margin-top: 8px; font-weight: 900; font-size: 34px; color: var(--creme); background: var(--passion); padding: 16px 36px; border-radius: 999px; }
+</style>
+</head>
+<body>
+  <div id="root" data-composition-id="main" data-start="0" data-duration="8" data-width="1080" data-height="1920">
+    <div id="fond" class="clip" data-start="0" data-duration="8" data-track-index="0"><div id="fond-img"></div><div id="voile"></div></div>
+
+    <div id="tag" class="clip" data-start="0" data-duration="8" data-track-index="1"><span id="tag-txt">LAST NIGHT · AFTER ACM</span></div>
+    <div id="heure" class="clip" data-start="0" data-duration="8" data-track-index="2">03:30 AM</div>
+    <div id="accroche" class="clip" data-start="0.6" data-duration="7.4" data-track-index="3"><span id="acc-1">The party ended.</span> <em id="acc-2">The night didn't.</em></div>
+
+    <div id="carte" class="clip" data-start="0" data-duration="8" data-track-index="4">
+      <div id="scotch"></div>
+      <div id="photo"><img id="photo-img" src="assets/crew.jpg" alt="The BachataVan crew eating pizza at 3:30 AM" /></div>
+      <div id="legende"><span id="legende-txt">pizza o'clock with the fam</span></div>
+    </div>
+
+    <div id="etapes" class="clip" data-start="2.4" data-duration="5.6" data-track-index="5">
+      <span id="e1" class="etape">Dance</span><span id="f1" class="fleche">→</span>
+      <span id="e2" class="etape">Ride</span><span id="f2" class="fleche">→</span>
+      <span id="e3" class="etape chaude">Pizza</span>
+    </div>
+
+    <div id="marque" class="clip" data-start="3.8" data-duration="4.2" data-track-index="6">
+      <div id="logo">Bachata<span>Van</span></div>
+      <div id="slogan">More than a ride — <em>it's a community.</em></div>
+      <div id="cta">Join the next ride · DM us</div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // Accroche visible dès la 1re image (miniature)
+    tl.fromTo("#heure", { scale: 1.06 }, { scale: 1, duration: 0.45, ease: "back.out(2.2)" }, 0);
+    tl.fromTo("#tag-txt", { y: -20 }, { y: 0, duration: 0.3, ease: "power3.out" }, 0);
+    // Photo : arrive, se pose de travers, zoom lent
+    tl.fromTo("#carte", { y: 140, rotation: 4, scale: 0.94 }, { y: 0, rotation: -2.5, scale: 1, duration: 0.7, ease: "power3.out" }, 0);
+    tl.fromTo("#photo-img", { scale: 1.0 }, { scale: 1.1, duration: 8, ease: "none" }, 0);
+    tl.fromTo("#legende-txt", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, 1.4);
+    // Texte
+    tl.fromTo("#acc-1", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, 0.6);
+    tl.fromTo("#acc-2", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, 1.1);
+    // Dance → Ride → Pizza
+    tl.fromTo("#e1", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2.5)" }, 2.4);
+    tl.fromTo("#f1", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.2, ease: "power2.out" }, 2.65);
+    tl.fromTo("#e2", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2.5)" }, 2.8);
+    tl.fromTo("#f2", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.2, ease: "power2.out" }, 3.05);
+    tl.fromTo("#e3", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(3)" }, 3.2);
+    // BachataVan
+    tl.fromTo("#logo", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 3.8);
+    tl.fromTo("#slogan", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, 4.15);
+    tl.fromTo("#cta", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.4)" }, 4.5);
+    tl.to("#cta", { scale: 1.06, duration: 0.25, ease: "power2.inOut", yoyo: true, repeat: 3 }, 5.6);
+    window.__timelines["main"] = tl;
+    tl.seek(0);
+  </script>
+</body>
+</html>
