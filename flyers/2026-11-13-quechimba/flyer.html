@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>BachataVan × Quechimba</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@500;700;900&display=block" rel="stylesheet" />
+<style>
+  :root {
+    --nuit: #0E0A12;
+    --or: #FFC24B;
+    --or-clair: #FFE3A1;
+    --passion: #E8304A;
+    --creme: #FFF6EC;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--nuit); }
+  body { position: relative; font-family: "Inter", sans-serif; color: var(--creme); }
+
+  /* Fond : l'affiche floutée + dégradé sombre */
+  .fond { position: absolute; inset: -60px; background: url("affiche-quechimba.jpg") center / cover; filter: blur(38px) saturate(1.3) brightness(.45); }
+  .voile { position: absolute; inset: 0;
+    background:
+      radial-gradient(900px 700px at 50% 42%, rgba(255,194,75,.18), transparent 70%),
+      linear-gradient(180deg, rgba(14,10,18,.55) 0%, rgba(14,10,18,.2) 35%, rgba(14,10,18,.85) 70%, var(--nuit) 100%); }
+
+  .page { position: absolute; inset: 0; padding: 190px 70px 0; display: flex; flex-direction: column; align-items: center; }
+
+  .date { display: flex; align-items: center; gap: 18px; font-weight: 900; font-size: 34px; letter-spacing: 6px; color: var(--nuit);
+    background: var(--or); padding: 14px 34px; border-radius: 999px; }
+  .date .point { width: 14px; height: 14px; border-radius: 50%; background: var(--passion); }
+
+  h1 { margin-top: 28px; font-family: "Anton", sans-serif; font-weight: 400; text-transform: uppercase; text-align: center;
+    font-size: 176px; line-height: .95; letter-spacing: 1px;
+    background: linear-gradient(180deg, var(--or-clair) 0%, var(--or) 55%, #C98A1B 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 6px 0 rgba(0,0,0,.45)); }
+  .sous { margin-top: 16px; font-weight: 900; font-size: 38px; letter-spacing: 3px; text-transform: uppercase; }
+  .sous b { color: var(--passion); }
+
+  .affiche { margin-top: 40px; width: 600px; height: 558px; border-radius: 22px; overflow: hidden; transform: rotate(-2.5deg);
+    box-shadow: 0 0 0 6px var(--or), 0 40px 80px rgba(0,0,0,.6); }
+  .affiche img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .infos { margin-top: 48px; display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; }
+  .info { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 29px; padding: 14px 24px; border-radius: 16px;
+    background: rgba(255,246,236,.1); border: 2px solid rgba(255,246,236,.22); }
+  .info svg { width: 30px; height: 30px; flex: none; }
+  .info.gratis { background: var(--passion); border-color: var(--passion); }
+
+  /* Le billet BachataVan */
+  .billet { margin-top: 40px; width: 100%; border-radius: 30px; background: var(--creme); color: var(--nuit); padding: 34px 44px 36px; position: relative; }
+  .billet::before, .billet::after { content: ""; position: absolute; top: 50%; width: 44px; height: 44px; margin-top: -22px; border-radius: 50%; background: var(--nuit); }
+  .billet::before { left: -22px; } .billet::after { right: -22px; }
+  .marque { display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-family: "Anton", sans-serif; font-size: 58px; letter-spacing: .5px; }
+  .logo span { color: var(--passion); }
+  .tag { font-weight: 900; font-size: 22px; letter-spacing: 3px; text-transform: uppercase; color: var(--creme); background: var(--nuit); padding: 10px 18px; border-radius: 10px; }
+  .trajet { margin-top: 22px; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 22px; }
+  .arret small { display: block; font-weight: 700; font-size: 20px; letter-spacing: 3px; text-transform: uppercase; color: #7A6E66; }
+  .arret strong { display: block; font-family: "Anton", sans-serif; font-weight: 400; font-size: 52px; line-height: 1.05; text-transform: uppercase; }
+  .arret.fin { text-align: right; }
+  .route { position: relative; height: 60px; }
+  .route::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; border-top: 5px dashed var(--passion); }
+  .route svg { position: absolute; left: 50%; top: 50%; width: 92px; height: 60px; transform: translate(-50%,-56%); }
+  .slogan { margin-top: 22px; padding-top: 22px; border-top: 3px dashed rgba(14,10,18,.18); display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+  .slogan p { font-weight: 700; font-size: 28px; line-height: 1.25; }
+  .slogan p em { font-style: normal; color: var(--passion); }
+  .cta { font-weight: 900; font-size: 30px; letter-spacing: 1px; color: var(--creme); background: var(--passion); padding: 18px 30px; border-radius: 999px; white-space: nowrap; }
+
+  .note { margin-top: 22px; font-size: 21px; font-weight: 500; color: rgba(255,246,236,.6); text-align: center; }
+</style>
+</head>
+<body>
+  <div class="fond"></div>
+  <div class="voile"></div>
+
+  <div class="page">
+    <div class="date">VIERNES 13 NOV<span class="point"></span>23:00</div>
+    <h1>Quechimba</h1>
+    <div class="sous">Bachatón <b>+</b> Salsatón · 2 ambientes</div>
+
+    <div class="affiche"><img src="affiche-quechimba.jpg" alt="Cartel Bachatón + Salsatón Quechimba" /></div>
+
+    <div class="infos">
+      <div class="info gratis">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a3 3 0 0 0 0 6v3h18v-3a3 3 0 0 0 0-6V6H3z"/><path d="M14 6v12" stroke-dasharray="2 3"/></svg>
+        Entrada GRATIS 23h–00h*
+      </div>
+      <div class="info">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        Taller de bachata 23:10
+      </div>
+      <div class="info">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+        Av. del Vallès 115 · Terrassa
+      </div>
+    </div>
+
+    <div class="billet">
+      <div class="marque">
+        <div class="logo">Bachata<span>Van</span></div>
+        <div class="tag">Ride to the party</div>
+      </div>
+      <div class="trajet">
+        <div class="arret"><small>Salida</small><strong>Sagrada<br/>Família</strong></div>
+        <div class="route">
+          <svg viewBox="0 0 92 60" aria-hidden="true">
+            <rect x="4" y="10" width="62" height="34" rx="6" fill="#E8304A"/>
+            <path d="M66 18h12l10 14v12H66z" fill="#E8304A"/>
+            <path d="M69 22h8l7 10H69z" fill="#FFF6EC"/>
+            <rect x="12" y="17" width="14" height="11" rx="2" fill="#FFF6EC"/>
+            <rect x="31" y="17" width="14" height="11" rx="2" fill="#FFF6EC"/>
+            <circle cx="22" cy="46" r="8" fill="#0E0A12"/><circle cx="22" cy="46" r="3" fill="#FFF6EC"/>
+            <circle cx="72" cy="46" r="8" fill="#0E0A12"/><circle cx="72" cy="46" r="3" fill="#FFF6EC"/>
+          </svg>
+        </div>
+        <div class="arret fin"><small>Destino</small><strong>Quechimba<br/>Terrassa</strong></div>
+      </div>
+      <div class="slogan">
+        <p>More than a ride —<br/><em>it's a community.</em></p>
+        <div class="cta">Reserva tu plaza · DM</div>
+      </div>
+    </div>
+
+    <div class="note">*Compartiendo el flyer antes del viernes 12h · @quechimba_sbk × @shivaxperience</div>
+  </div>
+</body>
+</html>
