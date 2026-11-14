@@ -49,6 +49,7 @@
   .stat .l { font-size: 38px; font-weight: 600; margin-top: 16px; line-height: 1.25; }
 
   #s3-week { position: absolute; left: 0; right: 0; top: 900px; text-align: center; font-size: 40px; font-weight: 700; color: var(--amber); letter-spacing: 1px; }
+  #s3-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
   /* S4 */
   #s4-img { position: absolute; right: 0; top: 0; width: 700px; height: 1080px; object-fit: cover; }
   #s4-fade { position: absolute; right: 0; top: 0; width: 760px; height: 1080px; background: linear-gradient(90deg, var(--aub-2) 0%, rgba(26,8,36,0) 30%); }
@@ -79,9 +80,10 @@
   #s6-pol img { width: 472px; height: 266px; object-fit: cover; display: block; }
   #s6-pol span { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; font-family: "Anton", sans-serif; font-size: 30px; color: var(--aub-2); letter-spacing: 1px; }
 
-  #s6-pol2 { left: 1560px; top: 110px; width: 320px; height: 440px; }
+  #s6-pol2 { left: 1300px; top: 90px; width: 500px; height: 390px; }
   #s7-phone { position: absolute; right: 190px; top: 110px; width: 486px; height: 864px; border-radius: 46px; border: 10px solid var(--cream); box-shadow: 0 40px 100px rgba(0,0,0,.55); background: #000; }
   #s7-vid { position: absolute; left: 1254px; top: 120px; width: 466px; height: 844px; border-radius: 36px; object-fit: cover; z-index: 5; }
+  #s6-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
   /* S7 */
   #s7-shade { background: linear-gradient(90deg, rgba(26,8,36,.95) 0%, rgba(26,8,36,.85) 45%, rgba(26,8,36,.1) 80%); }
   #s7-txt { position: absolute; left: 140px; top: 230px; width: 1060px; display: flex; flex-direction: column; gap: 30px; }
@@ -103,10 +105,10 @@
 </style>
 </head>
 <body>
-<div id="root" data-composition-id="main" data-start="0" data-duration="62.6" data-width="1920" data-height="1080">
+<div id="root" data-composition-id="main" data-start="0" data-duration="64.6" data-width="1920" data-height="1080">
 
   <!-- S1 · 0–6 : hook -->
-  <div id="s1" class="scene clip" data-start="0" data-duration="6" data-track-index="0">
+  <div id="s1" class="scene clip" data-start="0" data-duration="8" data-track-index="0">
     <div class="ground"></div><div class="lights"></div>
     <div id="s1-txt">
       <div><span class="pill" id="s1-pill">Barcelona · Festival transfer partner</span></div>
@@ -117,7 +119,7 @@
   </div>
 
   <!-- S2 · 6–13 : arrivals -->
-  <div id="s2" class="scene clip" data-start="6" data-duration="7" data-track-index="0">
+  <div id="s2" class="scene clip" data-start="8" data-duration="7" data-track-index="0">
     <div class="ground"></div><div class="lights"></div>
     <div class="pol" id="s2-p1"><img src="assets/img/aeroport.jpg" alt="BachataVan sign at Barcelona airport"></div>
     <div class="pol" id="s2-p2"><img src="assets/img/selfie-plaque.jpg" alt="Dancers welcomed with the BachataVan sign"><span>Welcome to Barcelona</span></div>
@@ -131,9 +133,11 @@
     </div>
   </div>
 
+  <video id="s3-bg" class="clip" src="assets/acm.mp4" data-start="15" data-duration="8" data-media-start="1" data-track-index="2" muted></video>
+
   <!-- S3 · 13–21 : numbers -->
-  <div id="s3" class="scene clip" data-start="13" data-duration="8" data-track-index="0">
-    <img class="ill" id="s3-img" src="assets/img/sagrada-nuit.jpg" alt="" style="object-position:center 35%"><div class="shade" style="background:rgba(26,8,36,.74)"></div><div class="lights"></div>
+  <div id="s3" class="scene clip" data-start="15" data-duration="8" data-track-index="0">
+    <div class="shade" style="background:rgba(26,8,36,.74)"></div><div class="lights"></div>
     <div class="h" id="s3-h">Built by a dancer, <span class="coral">for dancers</span></div>
     <div id="s3-grid">
       <div class="stat" id="st1"><div class="n coral"><span id="n1">0</span>+</div><div class="l">dancers in our<br>WhatsApp community</div></div>
@@ -144,7 +148,7 @@
   </div>
 
   <!-- S4 · 21–31 : how it works -->
-  <div id="s4" class="scene clip" data-start="21" data-duration="10" data-track-index="0">
+  <div id="s4" class="scene clip" data-start="23" data-duration="10" data-track-index="0">
     <div class="ground"></div>
     <img id="s4-img" src="assets/img/valises.jpg" alt="Dancers with luggage next to the van" style="object-position:center 40%"><div id="s4-fade"></div>
     <div id="s4-txt">
@@ -157,7 +161,7 @@
   </div>
 
   <!-- S5 · 31–39 : track record -->
-  <div id="s5" class="scene clip" data-start="31" data-duration="8" data-track-index="0">
+  <div id="s5" class="scene clip" data-start="33" data-duration="8" data-track-index="0">
     <img class="ill" id="s5-img" src="assets/img/groupe-van.jpg" alt=""><div class="shade" id="s5-shade"></div>
     <div class="h" id="s5-h">Trusted by festivals</div>
     <div id="s5-sub">Spain · Germany · Bulgaria</div>
@@ -171,18 +175,20 @@
     </div>
   </div>
 
+  <video id="s6-bg" class="clip" src="assets/van-fete.mp4" data-start="41" data-duration="10" data-media-start="5.5" data-track-index="2" data-has-audio="true" data-volume="0.7" data-fade-in="0.4" data-fade-out="0.6"></video>
+
   <!-- S6 · 39–49 : the vibe (real footage) -->
-  <div id="s6" class="scene clip" data-start="39" data-duration="10" data-track-index="0">
-    <div class="ground"></div><div class="lights"></div>
+  <div id="s6" class="scene clip" data-start="41" data-duration="10" data-track-index="0">
+    <div class="shade" style="background:linear-gradient(90deg, rgba(26,8,36,.92) 0%, rgba(26,8,36,.7) 40%, rgba(26,8,36,.15) 70%)"></div>
     <div class="h" id="s6-h">The ride is part <span class="coral">of the festival</span></div>
     <div id="s6-sub">Your guests arrive already in the vibe: music, new friends, roommates met on the way.</div>
-    <div id="s6-phone"></div>
-    <div class="pol" id="s6-pol2"><img src="assets/img/manisero.jpg" alt="Dancers at Manisero with the BachataVan sign"><span>Saturday · Manisero</span></div>
+    
+    <div class="pol" id="s6-pol2"><img src="assets/img/selfie-van.jpg" alt="Dancers in the van with the BachataVan sign"><span>On the way</span></div>
     <div id="s6-pol"><img src="assets/img/crew.jpg" alt="The crew after the party"><span>03:30 AM · after the party</span></div>
   </div>
 
   <!-- S7 · 49–55 : organizers -->
-  <div id="s7" class="scene clip" data-start="49" data-duration="6" data-track-index="0">
+  <div id="s7" class="scene clip" data-start="51" data-duration="6" data-track-index="0">
     <div class="ground"></div><div class="lights"></div><div id="s7-phone"></div>
     <div id="s7-txt">
       <div class="h" id="s7-h">Zero headaches<br><span class="amber">for organizers</span></div>
@@ -192,13 +198,12 @@
     </div>
   </div>
 
-  <video id="s1-vid" class="clip" src="assets/sagrada.mp4" data-start="0" data-duration="6" data-media-start="0" data-track-index="1" muted></video>
-  <video id="s6-vid" class="clip" src="assets/van.mp4" data-start="39.6" data-duration="9.4" data-media-start="1.2" data-track-index="1" muted></video>
+  <video id="s1-vid" class="clip" src="assets/presenter.mp4" data-start="0" data-duration="7.8" data-track-index="1" data-has-audio="true" data-volume="1"></video>
 
-  <video id="s7-vid" class="clip" src="assets/rdv-nuit.mp4" data-start="49" data-duration="6" data-media-start="8.8" data-track-index="1" muted></video>
+  <video id="s7-vid" class="clip" src="assets/groupe-nuit.mp4" data-start="51" data-duration="6" data-media-start="0.5" data-track-index="1" muted></video>
 
   <!-- S8 · 55–62 : CTA -->
-  <div id="s8" class="scene clip" data-start="55" data-duration="7.6" data-track-index="0">
+  <div id="s8" class="scene clip" data-start="57" data-duration="7.6" data-track-index="0">
     <div class="ground"></div><div class="lights"></div>
     <div id="s8-in">
       <span class="pill pill-amber" id="s8-pill">Barcelona festivals</span>
@@ -222,60 +227,59 @@
   tl.fromTo("#s1-logo", { scale: 1.06 }, { scale: 1, duration: 0.6, ease: "back.out(2)" }, 0);
   tl.fromTo("#s1-phone, #s1-vid", { y: 60 }, { y: 0, duration: 0.7, ease: "power3.out" }, 0);
   pop("#s1-lead", 0.5); pop("#s1-pill", 0.2, { opacity: 0, x: -40 });
-  out("#s1-txt, #s1-phone, #s1-vid", 5.7);
+  out("#s1-txt, #s1-phone", 7.7);
 
   // S2
-  tl.fromTo("#s2-p1", { opacity: 0, y: 120, rotation: -9 }, { opacity: 1, y: 0, rotation: -4, duration: 0.6, ease: "power3.out" }, 6.2);
-  tl.fromTo("#s2-p2", { opacity: 0, y: 120, rotation: 10 }, { opacity: 1, y: 0, rotation: 5, duration: 0.6, ease: "back.out(1.5)" }, 8.6);
-  pop("#s2-h", 6.3);
-  ["#r1", "#ra1", "#r2", "#ra2", "#r3"].forEach((s, i) => pop(s, 7.4 + i * 0.35, { opacity: 0, x: -30 }));
-  tl.to("#s2-p1", { y: -20, duration: 3.5, ease: "none" }, 9.2);
-  tl.to("#s2-p2", { y: 16, duration: 3.5, ease: "none" }, 9.2);
-  out("#s2-txt, #s2-p1, #s2-p2", 12.7);
+  tl.fromTo("#s2-p1", { opacity: 0, y: 120, rotation: -9 }, { opacity: 1, y: 0, rotation: -4, duration: 0.6, ease: "power3.out" }, 8.2);
+  tl.fromTo("#s2-p2", { opacity: 0, y: 120, rotation: 10 }, { opacity: 1, y: 0, rotation: 5, duration: 0.6, ease: "back.out(1.5)" }, 10.6);
+  pop("#s2-h", 8.3);
+  ["#r1", "#ra1", "#r2", "#ra2", "#r3"].forEach((s, i) => pop(s, 9.4 + i * 0.35, { opacity: 0, x: -30 }));
+  tl.to("#s2-p1", { y: -20, duration: 3.5, ease: "none" }, 11.2);
+  tl.to("#s2-p2", { y: 16, duration: 3.5, ease: "none" }, 11.2);
+  out("#s2-txt, #s2-p1, #s2-p2", 14.7);
 
   // S3 — compteurs
-  tl.fromTo("#s3-img", { scale: 1.12 }, { scale: 1.0, duration: 8, ease: "none" }, 13);
-  pop("#s3-h", 13.2);
+  
+  pop("#s3-h", 15.2);
   [["#st1", "#n1", 300], ["#st2", "#n2", 15], ["#st3", "#n3", 4]].forEach(([card, num, v], i) => {
-    const t = 14 + i * 0.6;
+    const t = 16 + i * 0.6;
     pop(card, t, { opacity: 0, y: 60, scale: 0.92 });
     const o = { v: 0 };
     tl.to(o, { v, duration: 1.4, ease: "power2.out", onUpdate: () => { document.querySelector(num).textContent = Math.round(o.v); } }, t + 0.1);
   });
-  pop("#s3-week", 17.6);
-  tl.to("#s3-grid", { scale: 1.03, duration: 3.5, ease: "none" }, 17);
-  out("#s3-h, #s3-grid, #s3-week", 20.7);
+  pop("#s3-week", 19.6);
+  tl.to("#s3-grid", { scale: 1.03, duration: 3.5, ease: "none" }, 19);
+  out("#s3-h, #s3-grid, #s3-week", 22.7);
 
   // S4
-  tl.fromTo("#s4-img", { scale: 1.08, x: 40 }, { scale: 1, x: 0, duration: 10, ease: "none" }, 21);
-  pop("#s4-h", 21.3);
-  ["#f1", "#f2", "#f3", "#f4"].forEach((s, i) => pop(s, 22.4 + i * 1.3, { opacity: 0, x: -50 }));
-  out("#s4-txt", 30.7);
+  tl.fromTo("#s4-img", { scale: 1.08, x: 40 }, { scale: 1, x: 0, duration: 10, ease: "none" }, 23);
+  pop("#s4-h", 23.3);
+  ["#f1", "#f2", "#f3", "#f4"].forEach((s, i) => pop(s, 24.4 + i * 1.3, { opacity: 0, x: -50 }));
+  out("#s4-txt", 32.7);
 
   // S5
-  tl.fromTo("#s5-img", { scale: 1.0 }, { scale: 1.1, duration: 8, ease: "none" }, 31);
-  pop("#s5-h", 31.3); pop("#s5-sub", 31.7);
-  ["#b1", "#b2", "#b3", "#b4", "#b5", "#b6"].forEach((s, i) => pop(s, 32.4 + i * 0.45, { opacity: 0, y: 50, scale: 0.85 }));
-  out("#s5-h, #s5-sub, #s5-badges", 38.7);
+  tl.fromTo("#s5-img", { scale: 1.0 }, { scale: 1.1, duration: 8, ease: "none" }, 33);
+  pop("#s5-h", 33.3); pop("#s5-sub", 33.7);
+  ["#b1", "#b2", "#b3", "#b4", "#b5", "#b6"].forEach((s, i) => pop(s, 34.4 + i * 0.45, { opacity: 0, y: 50, scale: 0.85 }));
+  out("#s5-h, #s5-sub, #s5-badges", 40.7);
 
   // S6
-  pop("#s6-h", 39.3);
-  tl.fromTo("#s6-phone, #s6-vid", { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 39.6);
-  pop("#s6-sub", 40.6);
-  tl.fromTo("#s6-pol2", { opacity: 0, y: -80, rotation: 12 }, { opacity: 1, y: 0, rotation: 6, duration: 0.6, ease: "back.out(1.6)" }, 44.2);
-  tl.fromTo("#s6-pol", { opacity: 0, y: 100, rotation: 8 }, { opacity: 1, y: 0, rotation: 4, duration: 0.6, ease: "back.out(1.6)" }, 42.5);
-  out("#s6-h, #s6-sub, #s6-phone, #s6-vid, #s6-pol, #s6-pol2", 48.7);
+  pop("#s6-h", 41.3);
+    pop("#s6-sub", 42.6);
+  tl.fromTo("#s6-pol2", { opacity: 0, y: -80, rotation: 12 }, { opacity: 1, y: 0, rotation: 6, duration: 0.6, ease: "back.out(1.6)" }, 46.2);
+  tl.fromTo("#s6-pol", { opacity: 0, y: 100, rotation: 8 }, { opacity: 1, y: 0, rotation: 4, duration: 0.6, ease: "back.out(1.6)" }, 44.5);
+  out("#s6-h, #s6-sub, #s6-pol, #s6-pol2", 50.7);
 
   // S7
-  tl.fromTo("#s7-phone, #s7-vid", { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 49.1);
-  pop("#s7-h", 49.3);
-  ["#c1", "#c2", "#c3"].forEach((s, i) => pop(s, 50.4 + i * 0.7, { opacity: 0, x: -40 }));
-  out("#s7-txt, #s7-phone, #s7-vid", 54.7);
+  tl.fromTo("#s7-phone, #s7-vid", { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 51.1);
+  pop("#s7-h", 51.3);
+  ["#c1", "#c2", "#c3"].forEach((s, i) => pop(s, 52.4 + i * 0.7, { opacity: 0, x: -40 }));
+  out("#s7-txt, #s7-phone, #s7-vid", 56.7);
 
   // S8
-  pop("#s8-pill", 55.2); pop("#s8-h", 55.4, { opacity: 0, scale: 0.85 });
-  pop("#s8-logo", 56.0); pop("#k1", 56.5, { opacity: 0, y: 40 }); pop("#k2", 56.8, { opacity: 0, y: 40 });
-  pop("#s8-foot", 57.4); pop("#s8-spons", 57.7);
+  pop("#s8-pill", 57.2); pop("#s8-h", 57.4, { opacity: 0, scale: 0.85 });
+  pop("#s8-logo", 58); pop("#k1", 58.5, { opacity: 0, y: 40 }); pop("#k2", 58.8, { opacity: 0, y: 40 });
+  pop("#s8-foot", 59.4); pop("#s8-spons", 59.7);
 
   window.__timelines["main"] = tl;
   tl.seek(0);
