@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<script src="assets/gsap.min.js"></script>
+<style>
+  @font-face { font-family: "Anton"; src: url("assets/fonts/anton.woff2") format("woff2"); font-weight: 400; }
+  :root { --aub: #2A1038; --aub-2: #1A0824; --coral: #FF5A5F; --amber: #FFB84D; --cream: #FFF4E6; --teal: #3EC6B5; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--aub-2); }
+  #root { position: absolute; inset: 0; font-family: "Inter", sans-serif; color: var(--cream); overflow: hidden; }
+  .scene { position: absolute; inset: 0; overflow: hidden; }
+  .ground { position: absolute; inset: 0; background: radial-gradient(1200px 700px at 70% 30%, rgba(255,90,95,.22), transparent 60%), linear-gradient(160deg, var(--aub), var(--aub-2)); }
+  .lights { position: absolute; left: 0; right: 0; top: 70px; height: 10px; background-image: radial-gradient(circle, var(--amber) 0 4px, transparent 5px); background-size: 46px 10px; background-repeat: repeat-x; opacity: .85; }
+  .pill { display: inline-block; font-weight: 800; font-size: 28px; letter-spacing: 5px; text-transform: uppercase; color: var(--aub-2); background: var(--coral); padding: 12px 28px; border-radius: 999px; }
+  .pill.pill-amber { background: var(--amber); color: var(--aub-2); }
+  .h { font-family: "Anton", sans-serif; text-transform: uppercase; line-height: .95; letter-spacing: 1px; }
+  .lead { font-size: 40px; font-weight: 600; line-height: 1.3; }
+  .amber { color: var(--amber); } .coral { color: var(--coral); }
+  .ill { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .shade { position: absolute; inset: 0; }
+
+  /* S1 */
+  #s1-txt { position: absolute; left: 150px; top: 250px; width: 980px; display: flex; flex-direction: column; gap: 30px; }
+  #s1-logo { font-size: 210px; }
+  #s1-logo span { color: var(--coral); }
+  #s1-phone { position: absolute; right: 190px; top: 110px; width: 486px; height: 864px; border-radius: 46px; border: 10px solid var(--cream); box-shadow: 0 40px 100px rgba(0,0,0,.55); background: #000; }
+  #s1-vid { position: absolute; left: 1254px; top: 120px; width: 466px; height: 844px; border-radius: 36px; object-fit: cover; z-index: 5; }
+
+  /* S2 */
+  #s2-txt { position: absolute; left: 140px; bottom: 150px; width: 1200px; display: flex; flex-direction: column; gap: 22px; }
+  #s2-h { font-size: 130px; }
+  .route { display: flex; align-items: center; gap: 22px; font-weight: 800; font-size: 40px; }
+  .route .stop { white-space: nowrap; background: rgba(26,8,36,.82); border: 2px solid rgba(255,244,230,.25); padding: 14px 26px; border-radius: 18px; }
+  .route .arrow { color: var(--amber); font-size: 46px; }
+  .route .stop.end { background: var(--coral); border-color: var(--coral); color: var(--aub-2); }
+
+  /* S3 */
+  #s3-h { position: absolute; left: 0; right: 0; top: 170px; text-align: center; font-size: 96px; }
+  #s3-grid { position: absolute; left: 150px; right: 150px; top: 380px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 50px; }
+  .stat { text-align: center; padding: 40px 20px; border-radius: 34px; background: rgba(255,244,230,.06); border: 2px solid rgba(255,244,230,.12); }
+  .stat .n { font-family: "Anton", sans-serif; font-size: 230px; line-height: 1; }
+  .stat .l { font-size: 38px; font-weight: 600; margin-top: 16px; line-height: 1.25; }
+
+  #s3-week { position: absolute; left: 0; right: 0; top: 900px; text-align: center; font-size: 40px; font-weight: 700; color: var(--amber); letter-spacing: 1px; }
+  /* S4 */
+  #s4-img { position: absolute; right: 0; top: 0; width: 700px; height: 1080px; object-fit: cover; }
+  #s4-fade { position: absolute; right: 0; top: 0; width: 760px; height: 1080px; background: linear-gradient(90deg, var(--aub-2) 0%, rgba(26,8,36,0) 30%); }
+  #s4-txt { position: absolute; left: 140px; top: 130px; width: 1080px; display: flex; flex-direction: column; gap: 26px; }
+  #s4-h { font-size: 104px; }
+  .feat { display: grid; grid-template-columns: 74px 1fr; gap: 24px; align-items: center; background: rgba(255,244,230,.06); border: 2px solid rgba(255,244,230,.12); border-radius: 24px; padding: 20px 26px; }
+  .feat .ico { width: 74px; height: 74px; border-radius: 50%; display: grid; place-items: center; font-family: "Anton", sans-serif; font-size: 38px; color: var(--aub-2); }
+  .feat b { display: block; font-size: 36px; font-weight: 800; }
+  .feat span { display: block; font-size: 29px; opacity: .8; margin-top: 2px; }
+
+  /* S5 */
+  #s5-shade { background: linear-gradient(180deg, rgba(26,8,36,.92), rgba(26,8,36,.75) 50%, rgba(26,8,36,.95)); }
+  #s5-h { position: absolute; left: 0; right: 0; top: 150px; text-align: center; font-size: 110px; }
+  #s5-sub { position: absolute; left: 0; right: 0; top: 290px; text-align: center; font-size: 40px; font-weight: 600; }
+  #s5-badges { position: absolute; left: 170px; right: 170px; top: 420px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px; }
+  .badge { background: var(--cream); color: var(--aub-2); border-radius: 26px; padding: 34px 30px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
+  .badge b { display: block; font-family: "Anton", sans-serif; font-size: 52px; text-transform: uppercase; line-height: 1.05; }
+  .badge span { display: block; font-size: 29px; font-weight: 700; margin-top: 8px; color: #7A3A55; }
+
+  /* S6 */
+  #s6-h { position: absolute; left: 140px; top: 170px; width: 900px; font-size: 128px; }
+  #s6-sub { position: absolute; left: 140px; top: 600px; width: 820px; font-size: 40px; font-weight: 600; line-height: 1.3; }
+  #s6-phone { position: absolute; left: 1080px; top: 110px; width: 432px; height: 768px; border-radius: 40px; border: 9px solid var(--cream); box-shadow: 0 40px 100px rgba(0,0,0,.55); background: #000; }
+  #s6-vid { position: absolute; left: 1089px; top: 119px; width: 414px; height: 750px; border-radius: 31px; object-fit: cover; z-index: 5; }
+  #s6-pol { z-index: 6; }
+  #s6 { z-index: auto; }
+  #s6-pol { position: absolute; left: 1330px; top: 560px; width: 500px; background: var(--cream); padding: 14px 14px 64px; border-radius: 6px; box-shadow: 0 30px 80px rgba(0,0,0,.55); }
+  #s6-pol img { width: 472px; height: 266px; object-fit: cover; display: block; }
+  #s6-pol span { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; font-family: "Anton", sans-serif; font-size: 30px; color: var(--aub-2); letter-spacing: 1px; }
+
+  /* S7 */
+  #s7-shade { background: linear-gradient(90deg, rgba(26,8,36,.95) 0%, rgba(26,8,36,.85) 45%, rgba(26,8,36,.1) 80%); }
+  #s7-txt { position: absolute; left: 140px; top: 220px; width: 1000px; display: flex; flex-direction: column; gap: 30px; }
+  #s7-h { font-size: 130px; }
+  .check { display: flex; align-items: center; gap: 22px; font-size: 40px; font-weight: 700; }
+  .check i { width: 54px; height: 54px; border-radius: 50%; background: var(--teal); color: var(--aub-2); display: grid; place-items: center; font-style: normal; font-weight: 900; font-size: 32px; flex: none; }
+
+  /* S8 */
+  #s8-in { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; text-align: center; }
+  #s8-h { font-size: 170px; }
+  #s8-logo { font-family: "Anton", sans-serif; font-size: 72px; letter-spacing: 1px; }
+  #s8-logo span { color: var(--coral); }
+  #s8-cards { display: flex; gap: 40px; margin-top: 10px; }
+  .card { background: rgba(255,244,230,.08); border: 2px solid rgba(255,244,230,.18); border-radius: 28px; padding: 26px 48px; min-width: 560px; }
+  .card small { display: block; font-size: 28px; font-weight: 800; letter-spacing: 5px; text-transform: uppercase; }
+  .card b { display: block; font-size: 52px; font-weight: 800; margin-top: 6px; }
+  #s8-foot { font-size: 30px; font-weight: 700; letter-spacing: 6px; text-transform: uppercase; color: var(--teal); }
+  #s8-spons { font-size: 28px; opacity: .75; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="62" data-width="1920" data-height="1080">
+
+  <!-- S1 · 0–6 : hook -->
+  <div id="s1" class="scene clip" data-start="0" data-duration="6" data-track-index="0">
+    <div class="ground"></div><div class="lights"></div>
+    <div id="s1-txt">
+      <div><span class="pill" id="s1-pill">Barcelona · Festival transfer partner</span></div>
+      <div class="h" id="s1-logo">Bachata<span>Van</span></div>
+      <div class="lead" id="s1-lead">More than a ride. <span class="amber">It's a community.</span></div>
+    </div>
+    <div id="s1-phone"></div>
+  </div>
+
+  <!-- S2 · 6–13 : arrivals -->
+  <div id="s2" class="scene clip" data-start="6" data-duration="7" data-track-index="0">
+    <img class="ill" id="s2-img" src="assets/img/ill3.jpg" alt="">
+    <div class="shade" style="background:linear-gradient(0deg, rgba(26,8,36,.95) 0%, rgba(26,8,36,.55) 45%, rgba(26,8,36,.1) 75%)"></div>
+    <div id="s2-txt">
+      <div class="h" id="s2-h">Your dancers land.<br><span class="amber">We take it from there.</span></div>
+      <div class="route" id="s2-route">
+        <span class="stop" id="r1">Airport T1 · T2</span><span class="arrow" id="ra1">→</span>
+        <span class="stop" id="r2">Barcelona Sants</span><span class="arrow" id="ra2">→</span>
+        <span class="stop end" id="r3">Your festival hotel</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- S3 · 13–21 : numbers -->
+  <div id="s3" class="scene clip" data-start="13" data-duration="8" data-track-index="0">
+    <div class="ground"></div><div class="lights"></div>
+    <div class="h" id="s3-h">Built by a dancer, <span class="coral">for dancers</span></div>
+    <div id="s3-grid">
+      <div class="stat" id="st1"><div class="n coral"><span id="n1">0</span>+</div><div class="l">dancers in our<br>WhatsApp community</div></div>
+      <div class="stat" id="st2"><div class="n amber" id="n2">0</div><div class="l">seats per van,<br>clean &amp; modern</div></div>
+      <div class="stat" id="st3"><div class="n" style="color:var(--teal)" id="n3">0</div><div class="l">nights a week<br>from Sagrada Família</div></div>
+    </div>
+    <div id="s3-week">Thursday to Sunday · ACM · Quechimba · Manisero</div>
+  </div>
+
+  <!-- S4 · 21–31 : how it works -->
+  <div id="s4" class="scene clip" data-start="21" data-duration="10" data-track-index="0">
+    <div class="ground"></div>
+    <img id="s4-img" src="assets/img/ill2.jpg" alt=""><div id="s4-fade"></div>
+    <div id="s4-txt">
+      <div class="h" id="s4-h">Zero guesswork <span class="amber">for your guests</span></div>
+      <div class="feat" id="f1"><div class="ico" style="background:var(--coral)">1</div><div><b>Timetables published early</b><span>Guests book flights and trains with confidence</span></div></div>
+      <div class="feat" id="f2"><div class="ico" style="background:var(--amber)">2</div><div><b>Per-seat booking &amp; payment</b><span>Live passenger list, no cash chaos</span></div></div>
+      <div class="feat" id="f3"><div class="ico" style="background:var(--teal)">3</div><div><b>Driver, plate &amp; pin sent in advance</b><span>Plus a WhatsApp group with every update</span></div></div>
+      <div class="feat" id="f4"><div class="ico" style="background:var(--cream)">4</div><div><b>Flight delayed? Next van.</b><span>Rebooked on the next departure, no panic</span></div></div>
+    </div>
+  </div>
+
+  <!-- S5 · 31–39 : track record -->
+  <div id="s5" class="scene clip" data-start="31" data-duration="8" data-track-index="0">
+    <img class="ill" id="s5-img" src="assets/img/ill1.jpg" alt=""><div class="shade" id="s5-shade"></div>
+    <div class="h" id="s5-h">Trusted by festivals</div>
+    <div id="s5-sub">Spain · Germany · Bulgaria</div>
+    <div id="s5-badges">
+      <div class="badge" id="b1"><b>Latin Notion</b><span>Altafulla · 20+ transfers</span></div>
+      <div class="badge" id="b2"><b>Caribbean Dance Festival</b><span>Santa Susanna</span></div>
+      <div class="badge" id="b3"><b>La Casa de Bachata</b><span>Nuremberg</span></div>
+      <div class="badge" id="b4"><b>Bachata Week Cádiz</b><span>Cádiz</span></div>
+      <div class="badge" id="b5"><b>Dance Retreats Can Jou</b><span>Catalonia</span></div>
+      <div class="badge" id="b6"><b>International Festival</b><span>Bulgaria</span></div>
+    </div>
+  </div>
+
+  <!-- S6 · 39–49 : the vibe (real footage) -->
+  <div id="s6" class="scene clip" data-start="39" data-duration="10" data-track-index="0">
+    <div class="ground"></div><div class="lights"></div>
+    <div class="h" id="s6-h">The ride is part <span class="coral">of the festival</span></div>
+    <div id="s6-sub">Your guests arrive already in the vibe: music, new friends, roommates met on the way.</div>
+    <div id="s6-phone"></div>
+    <div id="s6-pol"><img src="assets/img/crew.jpg" alt="The crew after the party"><span>03:30 AM · after the party</span></div>
+  </div>
+
+  <!-- S7 · 49–55 : organizers -->
+  <div id="s7" class="scene clip" data-start="49" data-duration="6" data-track-index="0">
+    <img class="ill" id="s7-img" src="assets/img/ill7.jpg" alt="" style="object-position:right center"><div class="shade" id="s7-shade"></div>
+    <div id="s7-txt">
+      <div class="h" id="s7-h">Zero headaches<br><span class="amber">for organizers</span></div>
+      <div class="check" id="c1"><i>✓</i>We handle arrivals end to end</div>
+      <div class="check" id="c2"><i>✓</i>Private artist &amp; VIP transfers on request</div>
+      <div class="check" id="c3"><i>✓</i>Your team focuses on stage and sound</div>
+    </div>
+  </div>
+
+  <video id="s1-vid" class="clip" src="assets/van.mp4" data-start="0" data-duration="6" data-media-start="0.5" data-track-index="1" muted></video>
+  <video id="s6-vid" class="clip" src="assets/van.mp4" data-start="39.6" data-duration="9.4" data-media-start="1.2" data-track-index="1" muted></video>
+
+  <!-- S8 · 55–62 : CTA -->
+  <div id="s8" class="scene clip" data-start="55" data-duration="7" data-track-index="0">
+    <div class="ground"></div><div class="lights"></div>
+    <div id="s8-in">
+      <span class="pill pill-amber" id="s8-pill">Barcelona festivals</span>
+      <div class="h" id="s8-h">Let's work together</div>
+      <div id="s8-logo">Bachata<span>Van</span></div>
+      <div id="s8-cards">
+        <div class="card" id="k1"><small class="coral">Instagram</small><b>@BachataVan_official</b></div>
+        <div class="card" id="k2"><small class="amber">WhatsApp</small><b>+34 603 190 476</b></div>
+      </div>
+      <div id="s8-foot">Dance · Travel · Belong</div>
+      <div id="s8-spons">Proudly sponsored by Smove Dance Shoes</div>
+    </div>
+  </div>
+</div>
+<script>
+  const tl = gsap.timeline({ paused: true });
+  const pop = (sel, t, from = { opacity: 0, y: 40 }) => tl.fromTo(sel, from, { opacity: 1, y: 0, x: 0, scale: 1, duration: 0.45, ease: "power3.out" }, t);
+  const out = (sel, t) => tl.to(sel, { opacity: 0, duration: 0.3, ease: "power2.in" }, t);
+
+  // S1 — visible dès la 1re image
+  tl.fromTo("#s1-logo", { scale: 1.06 }, { scale: 1, duration: 0.6, ease: "back.out(2)" }, 0);
+  tl.fromTo("#s1-phone, #s1-vid", { y: 60 }, { y: 0, duration: 0.7, ease: "power3.out" }, 0);
+  pop("#s1-lead", 0.5); pop("#s1-pill", 0.2, { opacity: 0, x: -40 });
+  out("#s1-txt, #s1-phone, #s1-vid", 5.7);
+
+  // S2
+  tl.fromTo("#s2-img", { scale: 1.12 }, { scale: 1.0, duration: 7, ease: "none" }, 6);
+  pop("#s2-h", 6.3);
+  ["#r1", "#ra1", "#r2", "#ra2", "#r3"].forEach((s, i) => pop(s, 7.4 + i * 0.35, { opacity: 0, x: -30 }));
+  out("#s2-txt", 12.7);
+
+  // S3 — compteurs
+  pop("#s3-h", 13.2);
+  [["#st1", "#n1", 300], ["#st2", "#n2", 15], ["#st3", "#n3", 4]].forEach(([card, num, v], i) => {
+    const t = 14 + i * 0.6;
+    pop(card, t, { opacity: 0, y: 60, scale: 0.92 });
+    const o = { v: 0 };
+    tl.to(o, { v, duration: 1.4, ease: "power2.out", onUpdate: () => { document.querySelector(num).textContent = Math.round(o.v); } }, t + 0.1);
+  });
+  pop("#s3-week", 17.6);
+  tl.to("#s3-grid", { scale: 1.03, duration: 3.5, ease: "none" }, 17);
+  out("#s3-h, #s3-grid, #s3-week", 20.7);
+
+  // S4
+  tl.fromTo("#s4-img", { scale: 1.08, x: 40 }, { scale: 1, x: 0, duration: 10, ease: "none" }, 21);
+  pop("#s4-h", 21.3);
+  ["#f1", "#f2", "#f3", "#f4"].forEach((s, i) => pop(s, 22.4 + i * 1.3, { opacity: 0, x: -50 }));
+  out("#s4-txt", 30.7);
+
+  // S5
+  tl.fromTo("#s5-img", { scale: 1.0 }, { scale: 1.1, duration: 8, ease: "none" }, 31);
+  pop("#s5-h", 31.3); pop("#s5-sub", 31.7);
+  ["#b1", "#b2", "#b3", "#b4", "#b5", "#b6"].forEach((s, i) => pop(s, 32.4 + i * 0.45, { opacity: 0, y: 50, scale: 0.85 }));
+  out("#s5-h, #s5-sub, #s5-badges", 38.7);
+
+  // S6
+  pop("#s6-h", 39.3);
+  tl.fromTo("#s6-phone, #s6-vid", { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 39.6);
+  pop("#s6-sub", 40.6);
+  tl.fromTo("#s6-pol", { opacity: 0, y: 100, rotation: 8 }, { opacity: 1, y: 0, rotation: 4, duration: 0.6, ease: "back.out(1.6)" }, 42.5);
+  out("#s6-h, #s6-sub, #s6-phone, #s6-vid, #s6-pol", 48.7);
+
+  // S7
+  tl.fromTo("#s7-img", { scale: 1.1 }, { scale: 1.0, duration: 6, ease: "none" }, 49);
+  pop("#s7-h", 49.3);
+  ["#c1", "#c2", "#c3"].forEach((s, i) => pop(s, 50.4 + i * 0.7, { opacity: 0, x: -40 }));
+  out("#s7-txt", 54.7);
+
+  // S8
+  pop("#s8-pill", 55.2); pop("#s8-h", 55.4, { opacity: 0, scale: 0.85 });
+  pop("#s8-logo", 56.0); pop("#k1", 56.5, { opacity: 0, y: 40 }); pop("#k2", 56.8, { opacity: 0, y: 40 });
+  pop("#s8-foot", 57.4); pop("#s8-spons", 57.7);
+
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+</script>
+</body>
+</html>
