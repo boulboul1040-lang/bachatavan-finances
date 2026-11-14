@@ -1,0 +1,191 @@
+<title>Emblèmes BachataVan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: four emblem concepts, each shown big, as an Instagram profile circle, tiny, and as a full logo lockup — then a side-by-side comparison with the current logo. */
+:root {
+  --paper: #F4F1EC; --surface: #FFFFFF; --ink: #17121A; --muted: #6B6370; --line: #E2DDD6;
+  --red: #8E1B2E; --white: #F8F6F1; --night: #141018; --amber: #F2B544; --blue: #1F3FA8;
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --paper: #121014; --surface: #1C181F; --ink: #F3EEF2; --muted: #A79FAA; --line: #2E2832; color-scheme: dark; } }
+:root[data-theme="dark"] { --paper: #121014; --surface: #1C181F; --ink: #F3EEF2; --muted: #A79FAA; --line: #2E2832; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
+.wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+h1, h2 { font-family: var(--font-display); text-transform: uppercase; margin: 0; line-height: 1; text-wrap: balance; }
+h1 { font-size: clamp(42px, 7vw, 72px); } h2 { font-size: 34px; }
+p { margin: 0; max-width: 65ch; }
+.eyebrow { font-size: 12.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--red); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .eyebrow { color: #E36A7E; } }
+:root[data-theme="dark"] .eyebrow { color: #E36A7E; }
+.muted { color: var(--muted); }
+.concept { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); }
+.concept.pick { border: 2px solid var(--red); }
+@media (max-width: 800px) { .concept { grid-template-columns: 1fr; } }
+.hero { background: var(--night); display: grid; place-items: center; padding: 34px; min-height: 320px; }
+.hero svg { width: min(260px, 70%); height: auto; }
+.body { padding: 24px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.tag { align-self: flex-start; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: var(--red); color: var(--white); }
+.tag.alt { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+.uses { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding-top: 6px; border-top: 1px solid var(--line); }
+.use { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.avatar { width: 84px; height: 84px; border-radius: 50%; background: var(--night); display: grid; place-items: center; overflow: hidden; }
+.avatar svg { width: 72%; height: auto; }
+.avatar.light { background: var(--white); border: 1px solid var(--line); }
+.tiny { width: 34px; height: 34px; border-radius: 50%; background: var(--night); display: grid; place-items: center; }
+.tiny svg { width: 74%; height: auto; }
+.lockup { display: flex; align-items: center; gap: 14px; background: var(--night); border-radius: 14px; padding: 14px 18px; flex: 1 1 260px; min-width: 0; }
+.lockup svg { width: 54px; height: 54px; flex: none; }
+.lockup b { display: block; font-family: var(--font-display); font-size: 34px; letter-spacing: .04em; color: var(--white); line-height: 1; }
+.lockup span { display: block; font-size: 12.5px; color: var(--amber); font-weight: 600; margin-top: 4px; }
+.compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 700px) { .compare { grid-template-columns: 1fr; } }
+.box { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- 1 · Van Cœur : van de face, pare-brise en cœur -->
+    <symbol id="e-heart" viewBox="0 0 200 200">
+      <path d="M44 150 V72 Q44 40 76 38 H124 Q156 40 156 72 V150 Q156 160 146 160 H54 Q44 160 44 150 Z" fill="#F8F6F1"/>
+      <path d="M100 118 C78 104 62 92 62 76 C62 66 70 58 80 58 C89 58 96 63 100 71 C104 63 111 58 120 58 C130 58 138 66 138 76 C138 92 122 104 100 118 Z" fill="#8E1B2E"/>
+      <circle cx="62" cy="134" r="8" fill="#F2B544"/><circle cx="138" cy="134" r="8" fill="#F2B544"/>
+      <rect x="80" y="128" width="40" height="13" rx="3" fill="#141018"/>
+      <text x="100" y="139" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="13" fill="#F8F6F1" letter-spacing="1">BV</text>
+      <rect x="50" y="160" width="22" height="16" rx="5" fill="#F8F6F1"/><rect x="128" y="160" width="22" height="16" rx="5" fill="#F8F6F1"/>
+    </symbol>
+    <!-- 2 · Le Pin Danseur : repère de carte, couple en creux -->
+    <symbol id="e-pin" viewBox="0 0 200 200">
+      <path d="M100 14 C58 14 32 46 32 82 C32 128 100 188 100 188 C100 188 168 128 168 82 C168 46 142 14 100 14 Z" fill="#8E1B2E"/>
+      <circle cx="84" cy="54" r="11" fill="#F8F6F1"/>
+      <circle cx="115" cy="58" r="10" fill="#F8F6F1"/>
+      <path d="M84 70 C68 92 70 118 82 140" stroke="#F8F6F1" stroke-width="12" stroke-linecap="round" fill="none"/>
+      <path d="M114 72 C132 94 130 118 116 140" stroke="#F8F6F1" stroke-width="12" stroke-linecap="round" fill="none"/>
+      <path d="M80 96 Q100 84 120 96" stroke="#F8F6F1" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <path d="M118 74 C128 62 134 50 134 38" stroke="#F8F6F1" stroke-width="7" stroke-linecap="round" fill="none"/>
+      <path d="M116 140 C124 132 134 130 140 134" stroke="#F8F6F1" stroke-width="7" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <!-- 3 · Van Équaliseur : van de profil, fenêtres = barres de musique -->
+    <symbol id="e-eq" viewBox="0 0 200 200">
+      <path d="M18 134 V82 Q18 60 40 58 H138 Q152 58 160 68 L180 96 Q184 101 184 108 V134 Q184 140 178 140 H24 Q18 140 18 134 Z" fill="#F8F6F1"/>
+      <rect x="32" y="84" width="12" height="22" rx="4" fill="#8E1B2E"/>
+      <rect x="50" y="70" width="12" height="36" rx="4" fill="#8E1B2E"/>
+      <rect x="68" y="78" width="12" height="28" rx="4" fill="#8E1B2E"/>
+      <rect x="86" y="66" width="12" height="40" rx="4" fill="#8E1B2E"/>
+      <rect x="104" y="80" width="12" height="26" rx="4" fill="#8E1B2E"/>
+      <path d="M134 68 H144 Q152 68 157 75 L170 94 Q172 98 168 100 H134 Z" fill="#141018"/>
+      <rect x="18" y="116" width="166" height="6" fill="#F2B544"/>
+      <circle cx="56" cy="142" r="17" fill="#141018" stroke="#F8F6F1" stroke-width="6"/>
+      <circle cx="148" cy="142" r="17" fill="#141018" stroke="#F8F6F1" stroke-width="6"/>
+    </symbol>
+    <!-- 4 · Le Badge Route : B + V sur une route qui serpente -->
+    <symbol id="e-road" viewBox="0 0 200 200">
+      <circle cx="100" cy="100" r="92" fill="#F8F6F1"/>
+      <path d="M46 176 C60 140 140 132 132 96 C124 62 66 70 70 24" stroke="#141018" stroke-width="26" fill="none" stroke-linecap="round"/>
+      <path d="M46 176 C60 140 140 132 132 96 C124 62 66 70 70 24" stroke="#F2B544" stroke-width="3" stroke-dasharray="8 8" fill="none"/>
+      <circle cx="70" cy="26" r="14" fill="#8E1B2E"/>
+      <circle cx="70" cy="26" r="5" fill="#F8F6F1"/>
+      <text x="150" y="70" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="46" fill="#8E1B2E">BV</text>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:14px">
+    <div class="eyebrow">Nouvel emblème · 4 propositions</div>
+    <h1>Un symbole simple, qui raconte ton projet</h1>
+    <p class="lede">Le dessin actuel (couple, notes de musique, van réaliste, étoiles) ressemble à une affiche, pas à un logo. Un bon emblème se dessine en quelques formes, se reconnaît en photo de profil de 40 px et s'imprime sur un van ou un T-shirt. Chacune de ces pistes garde ton idée : <b>le van + la danse + la communauté</b>.</p>
+  </header>
+
+  <!-- 1 -->
+  <article class="concept pick">
+    <div class="hero"><svg viewBox="0 0 200 200" role="img" aria-label="Van Cœur"><use href="#e-heart"/></svg></div>
+    <div class="body">
+      <span class="tag">Mon coup de cœur</span>
+      <h2>1 · Van Cœur</h2>
+      <p>Un van vu de face, dont le pare-brise est un <b>cœur</b> : l'amour de la danse et de la communauté, au volant. Les phares ambre rappellent les trajets de nuit, et la plaque « BV » fait le lien avec ta vraie plaque.</p>
+      <p class="muted">Pourquoi ça marche : une seule idée, comprise en une seconde, même en tout petit. Très facile à imprimer en sticker ou à broder.</p>
+      <div class="uses">
+        <div class="use"><div class="avatar"><svg viewBox="0 0 200 200"><use href="#e-heart"/></svg></div>Profil Instagram</div>
+        <div class="use"><div class="tiny"><svg viewBox="0 0 200 200"><use href="#e-heart"/></svg></div>Tout petit</div>
+        <div class="lockup"><svg viewBox="0 0 200 200"><use href="#e-heart"/></svg><div><b>BACHATAVAN</b><span>More than a ride. It's a community.</span></div></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 2 -->
+  <article class="concept">
+    <div class="hero"><svg viewBox="0 0 200 200" role="img" aria-label="Pin Danseur"><use href="#e-pin"/></svg></div>
+    <div class="body">
+      <span class="tag alt">Danse + destination</span>
+      <h2>2 · Le Pin Danseur</h2>
+      <p>Un repère de carte (le point de rendez-vous, la soirée) avec un <b>couple de bachata</b> dessiné en creux. Il dit : « on t'emmène danser ».</p>
+      <p class="muted">Plus « danse » que « transport ». Idéal si BachataVan devient aussi une marque d'événements. Le couple est ici une esquisse : il faudra le faire redessiner par un illustrateur pour qu'il soit vraiment élégant.</p>
+      <div class="uses">
+        <div class="use"><div class="avatar"><svg viewBox="0 0 200 200"><use href="#e-pin"/></svg></div>Profil Instagram</div>
+        <div class="use"><div class="tiny"><svg viewBox="0 0 200 200"><use href="#e-pin"/></svg></div>Tout petit</div>
+        <div class="lockup"><svg viewBox="0 0 200 200"><use href="#e-pin"/></svg><div><b>BACHATAVAN</b><span>More than a ride. It's a community.</span></div></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 3 -->
+  <article class="concept">
+    <div class="hero"><svg viewBox="0 0 200 200" role="img" aria-label="Van Équaliseur"><use href="#e-eq"/></svg></div>
+    <div class="body">
+      <span class="tag alt">Musique + transport</span>
+      <h2>3 · Van Équaliseur</h2>
+      <p>Un van de profil dont les fenêtres sont les <b>barres d'un égaliseur de musique</b> : le van où la bachata joue déjà. Une ligne ambre sur le côté, comme la bande de lumière de la nuit.</p>
+      <p class="muted">Très « marque de transport », moderne. Les fenêtres-barres peuvent même s'animer dans tes vidéos.</p>
+      <div class="uses">
+        <div class="use"><div class="avatar"><svg viewBox="0 0 200 200"><use href="#e-eq"/></svg></div>Profil Instagram</div>
+        <div class="use"><div class="tiny"><svg viewBox="0 0 200 200"><use href="#e-eq"/></svg></div>Tout petit</div>
+        <div class="lockup"><svg viewBox="0 0 200 200"><use href="#e-eq"/></svg><div><b>BACHATAVAN</b><span>More than a ride. It's a community.</span></div></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 4 -->
+  <article class="concept">
+    <div class="hero"><svg viewBox="0 0 200 200" role="img" aria-label="Badge Route"><use href="#e-road"/></svg></div>
+    <div class="body">
+      <span class="tag alt">Le trajet</span>
+      <h2>4 · Badge Route</h2>
+      <p>Une route qui serpente jusqu'au point de rendez-vous, avec les initiales <b>BV</b>. Elle raconte le trajet : de chez toi jusqu'à la piste de danse.</p>
+      <p class="muted">Le plus sobre et élégant des quatre, mais il parle moins de danse.</p>
+      <div class="uses">
+        <div class="use"><div class="avatar light"><svg viewBox="0 0 200 200"><use href="#e-road"/></svg></div>Profil Instagram</div>
+        <div class="use"><div class="tiny"><svg viewBox="0 0 200 200"><use href="#e-road"/></svg></div>Tout petit</div>
+        <div class="lockup"><svg viewBox="0 0 200 200"><use href="#e-road"/></svg><div><b>BACHATAVAN</b><span>More than a ride. It's a community.</span></div></div>
+      </div>
+    </div>
+  </article>
+
+  <section class="compare">
+    <div class="box">
+      <div class="eyebrow">Ce qu'on quitte</div>
+      <ul>
+        <li>Une affiche détaillée, illisible en petit</li>
+        <li>Le rendu « IA » : or en relief, dégradé, silhouettes génériques</li>
+        <li>L'étoile Mercedes (marque d'un autre)</li>
+        <li>« It's a memory » au lieu de « It's a community »</li>
+      </ul>
+    </div>
+    <div class="box">
+      <div class="eyebrow">Ce qu'on gagne</div>
+      <ul>
+        <li>Un symbole qu'on reconnaît en une seconde</li>
+        <li>Imprimable sur le van, des stickers, des T-shirts, des bracelets</li>
+        <li>Les couleurs de ta vraie plaque : nuit, blanc, bordeaux, ambre</li>
+        <li>Animable dans tes vidéos (le cœur qui bat, les barres qui dansent)</li>
+      </ul>
+    </div>
+  </section>
+
+  <p class="muted" style="font-size:14px">Ce sont des pistes dessinées en vectoriel pour choisir une direction. Une fois la piste choisie, je l'affine (proportions, détails), puis je te livre les fichiers : PNG pour Instagram, SVG pour l'imprimeur. Pour le van ou un dépôt de marque, fais valider la version finale par un graphiste.</p>
+</div>
