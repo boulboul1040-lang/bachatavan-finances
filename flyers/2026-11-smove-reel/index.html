@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="assets/gsap.min.js"></script>
+<style>
+  @font-face { font-family: "BarlowC"; src: url("assets/fonts/barlow-700.woff2") format("woff2"); font-weight: 700; }
+  @font-face { font-family: "BarlowC"; src: url("assets/fonts/barlow-800.woff2") format("woff2"); font-weight: 800; }
+  :root { --night: #101418; --white: #F8F6F1; --teal: #1F8FB0; --teal-d: #16627C; --red: #8E1B2E; --amber: #F2B544; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--night); }
+  #root { position: absolute; inset: 0; font-family: "Inter", sans-serif; color: var(--white); overflow: hidden; }
+  .scene { position: absolute; inset: 0; overflow: hidden; }
+  .h { font-family: "BarlowC", sans-serif; font-weight: 800; text-transform: uppercase; line-height: .9; }
+  #s1-h .teal, #s3-h .teal, #s5-h .teal { color: #4FC3E3; }
+  .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .teal { color: var(--teal); }
+  .pill { display: inline-block; font-weight: 800; font-size: 30px; letter-spacing: 5px; text-transform: uppercase; color: var(--white); background: var(--teal); padding: 12px 28px; border-radius: 999px; }
+  #cobrand { position: absolute; top: 190px; left: 0; right: 0; display: flex; justify-content: center; align-items: center; gap: 22px; z-index: 30; }
+  #cobrand .sm { font-family: "BarlowC"; font-weight: 800; font-size: 58px; letter-spacing: 4px; color: var(--white); background: var(--teal); padding: 4px 22px 6px; border-radius: 12px; }
+  #cobrand .x { font-family: "BarlowC"; font-weight: 800; font-size: 46px; }
+  #cobrand svg { width: 330px; height: auto; }
+
+  /* S1 hook */
+  #s1-img { position: absolute; left: -560px; top: 560px; width: 2200px; height: 949px; object-fit: cover; }
+  #s1-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(16,20,24,.95) 0%, rgba(16,20,24,.3) 30%, rgba(16,20,24,.15) 60%, rgba(16,20,24,.95) 85%); }
+  #s1-txt { position: absolute; left: 0; right: 0; top: 360px; text-align: center; }
+  #s1-h { font-size: 150px; }
+  #s1-sub { position: absolute; left: 0; right: 0; top: 1560px; text-align: center; font-size: 44px; font-weight: 800; }
+
+  /* S2 product */
+  #s2-img { position: absolute; left: 0; top: 330px; width: 1080px; height: 1016px; object-fit: cover; }
+  #s2-shade { position: absolute; left: 0; right: 0; top: 330px; height: 1016px; background: linear-gradient(180deg, rgba(16,20,24,.6) 0%, rgba(16,20,24,0) 25%, rgba(16,20,24,0) 70%, var(--night) 100%); }
+  #s2-list { position: absolute; left: 70px; right: 70px; top: 1290px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .feat { display: flex; align-items: center; gap: 16px; background: rgba(248,246,241,.08); border: 2px solid rgba(47,163,196,.55); border-radius: 20px; padding: 18px 20px; font-size: 34px; font-weight: 800; }
+  .feat i { width: 46px; height: 46px; border-radius: 50%; background: var(--teal); flex: none; display: grid; place-items: center; font-style: normal; font-size: 28px; }
+
+  /* S3 partner */
+  #s3-photo { position: absolute; left: 90px; top: 420px; width: 560px; height: 747px; border: 14px solid var(--white); border-bottom-width: 70px; transform: rotate(-3deg); box-shadow: 0 40px 90px rgba(0,0,0,.55); overflow: hidden; }
+  #s3-photo img { width: 100%; height: 100%; object-fit: cover; }
+  #s3-box { position: absolute; right: 70px; top: 560px; width: 400px; height: 533px; border: 12px solid var(--white); border-bottom-width: 60px; transform: rotate(5deg); box-shadow: 0 40px 90px rgba(0,0,0,.55); overflow: hidden; }
+  #s3-box img { width: 100%; height: 100%; object-fit: cover; }
+  #s3-txt { position: absolute; left: 70px; right: 70px; top: 1300px; display: flex; flex-direction: column; gap: 18px; }
+  #s3-h { font-size: 104px; }
+  #s3-p { font-size: 38px; font-weight: 600; line-height: 1.3; opacity: .92; }
+
+  /* S4 happy dancers */
+  #s4-h { position: absolute; left: 0; right: 0; top: 330px; text-align: center; z-index: 5; }
+  #s4-h .h { font-size: 116px; }
+  #s4-h .h2 { font-size: 40px; font-weight: 800; margin-top: 10px; }
+  #s4-wall { position: absolute; left: 60px; top: 600px; width: 960px; display: grid; grid-template-columns: 1fr 1fr; gap: 34px; }
+  .pol { background: var(--white); padding: 12px 12px 50px; border-radius: 6px; box-shadow: 0 24px 60px rgba(0,0,0,.5); position: relative; }
+  .pol img { width: 100%; height: 520px; object-fit: cover; display: block; }
+  .pol span { position: absolute; left: 0; right: 0; bottom: 10px; text-align: center; font-family: "BarlowC"; font-weight: 800; font-size: 30px; color: var(--teal-d); letter-spacing: 2px; }
+  #s4-fadeT { position: absolute; left: 0; right: 0; top: 0; height: 600px; background: linear-gradient(180deg, var(--night) 72%, rgba(16,20,24,0)); z-index: 3; }
+  #s4-fadeB { position: absolute; left: 0; right: 0; bottom: 0; height: 260px; background: linear-gradient(0deg, var(--night) 20%, rgba(16,20,24,0)); z-index: 3; }
+
+  /* S5 offer */
+  #s5-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(16,20,24,.85) 0%, rgba(16,20,24,.3) 45%, rgba(16,20,24,.92) 72%); }
+  #s5-txt { position: absolute; left: 70px; right: 70px; top: 380px; display: flex; flex-direction: column; align-items: center; gap: 26px; text-align: center; }
+  #s5-h { font-size: 128px; }
+  #s5-badge { width: 420px; height: 420px; border-radius: 50%; background: var(--teal); border: 10px solid var(--white); display: flex; flex-direction: column; align-items: center; justify-content: center; transform: rotate(-6deg); box-shadow: 0 30px 70px rgba(0,0,0,.5); margin: 10px 0; }
+  #s5-badge small { font-weight: 900; font-size: 34px; letter-spacing: 4px; }
+  #s5-badge b { font-family: "BarlowC"; font-weight: 800; font-size: 108px; line-height: .95; }
+  #s5-badge em { font-style: normal; font-weight: 800; font-size: 34px; margin-top: 4px; }
+  #s5-cta { position: absolute; left: 70px; right: 70px; top: 1300px; display: flex; flex-direction: column; gap: 18px; }
+  .act { display: grid; grid-template-columns: 86px 1fr; gap: 22px; align-items: center; background: var(--white); color: var(--night); border-radius: 24px; padding: 20px 24px; }
+  .act .ic { width: 86px; height: 86px; border-radius: 50%; display: grid; place-items: center; font-family: "BarlowC"; font-weight: 800; font-size: 36px; color: var(--white); }
+  .act b { display: block; font-family: "BarlowC"; font-weight: 800; font-size: 46px; text-transform: uppercase; line-height: 1; }
+  .act span { display: block; font-size: 30px; font-weight: 700; margin-top: 4px; }
+  #s5-foot { position: absolute; left: 0; right: 0; top: 1690px; text-align: center; font-size: 32px; font-weight: 800; }
+  #s5-foot span { color: var(--amber); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <symbol id="plate" viewBox="0 0 560 120">
+    <rect x="4" y="4" width="552" height="112" rx="12" fill="#F8F6F1" stroke="#8E1B2E" stroke-width="7"/>
+    <path d="M12 12 h56 v96 h-56 a6 6 0 0 1 -6 -6 v-84 a6 6 0 0 1 6 -6z" fill="#1F3FA8"/>
+    <g fill="#F2B544"><circle cx="40" cy="22" r="2.6"/><circle cx="48.5" cy="24.3" r="2.6"/><circle cx="54.7" cy="30.5" r="2.6"/><circle cx="57" cy="39" r="2.6"/><circle cx="54.7" cy="47.5" r="2.6"/><circle cx="48.5" cy="53.7" r="2.6"/><circle cx="40" cy="56" r="2.6"/><circle cx="31.5" cy="53.7" r="2.6"/><circle cx="25.3" cy="47.5" r="2.6"/><circle cx="23" cy="39" r="2.6"/><circle cx="25.3" cy="30.5" r="2.6"/><circle cx="31.5" cy="24.3" r="2.6"/></g>
+    <text x="40" y="96" text-anchor="middle" font-family="BarlowC, sans-serif" font-weight="700" font-size="30" fill="#F8F6F1">BCN</text>
+    <text x="312" y="88" text-anchor="middle" font-family="BarlowC, sans-serif" font-weight="700" font-size="80" letter-spacing="6" fill="#8E1B2E">BACHATAVAN</text>
+  </symbol>
+</defs></svg>
+
+<div id="root" data-composition-id="main" data-start="0" data-duration="22" data-width="1080" data-height="1920">
+
+  <!-- S1 hook: the van full of shoes -->
+  <div id="s1" class="scene clip" data-start="0" data-duration="3.6" data-track-index="0">
+    <img id="s1-img" src="assets/img/trunk.jpg" alt="">
+    <div id="s1-shade"></div>
+    <div id="s1-txt"><div class="h" id="s1-h">Dance<br><span class="teal">mode on</span></div></div>
+    <div id="s1-sub">The dance sneakers everyone in the van wants 👟</div>
+  </div>
+
+  <!-- S2 product -->
+  <div id="s2" class="scene clip" data-start="3.6" data-duration="4.4" data-track-index="0">
+    <img id="s2-img" src="assets/img/plate.jpg" alt="">
+    <div id="s2-shade"></div>
+    <div id="s2-list">
+      <div class="feat" id="f1"><i>✓</i>Ultra-light</div>
+      <div class="feat" id="f2"><i>✓</i>Breathable</div>
+      <div class="feat" id="f3"><i>✓</i>Cushioned sole</div>
+      <div class="feat" id="f4"><i>✓</i>Glide &amp; grip</div>
+      <div class="feat" id="f5" style="grid-column:1 / -1;justify-content:center"><i>✓</i>Indoor or outdoor · day or night</div>
+    </div>
+  </div>
+
+  <!-- S3 partner -->
+  <div id="s3" class="scene clip" data-start="8" data-duration="4" data-track-index="0">
+    <div id="s3-photo"><img src="assets/img/organizer.jpg" alt=""></div>
+    <div id="s3-box"><img src="assets/img/box.jpg" alt=""></div>
+    <div id="s3-txt">
+      <div class="h" id="s3-h">Made by dancers,<br><span class="teal">for dancers</span></div>
+      <div id="s3-p">Developed by the Dancing Queens team with feedback from the international dance community.</div>
+    </div>
+  </div>
+
+  <!-- S4 happy dancers -->
+  <div id="s4" class="scene clip" data-start="12" data-duration="5" data-track-index="0">
+    <div id="s4-wall">
+      <div class="pol"><img src="assets/img/h1.jpg" alt=""><span>LOVE THEM ❤</span></div>
+      <div class="pol"><img src="assets/img/h2.jpg" alt=""><span>SAGRADA NIGHTS</span></div>
+      <div class="pol"><img src="assets/img/h5.jpg" alt=""><span>SO COMFY</span></div>
+      <div class="pol"><img src="assets/img/h4.jpg" alt=""><span>DANCE MODE ON</span></div>
+      <div class="pol"><img src="assets/img/h6.jpg" alt=""><span>SANTS PICK-UP</span></div>
+      <div class="pol"><img src="assets/img/h8.jpg" alt=""><span>GOLD EDITION ✨</span></div>
+      <div class="pol"><img src="assets/img/h7.jpg" alt=""><span>READY TO DANCE</span></div>
+      <div class="pol"><img src="assets/img/h3.jpg" alt=""><span>BEST GIFT</span></div>
+    </div>
+    <div id="s4-fadeT"></div><div id="s4-fadeB"></div>
+    <div id="s4-h"><div class="h">Happy dancers</div><div class="h2">They already dance in SMOVE ❤️</div></div>
+  </div>
+
+  <!-- S5 offer -->
+  <div id="s5" class="scene clip" data-start="17" data-duration="5" data-track-index="0">
+    <img class="bg" id="s5-img" src="assets/img/sagrada.jpg" alt="">
+    <div id="s5-shade"></div>
+    <div id="s5-txt">
+      <div class="h" id="s5-h">Ride with us,<br><span class="teal">dance in SMOVE</span></div>
+      <div id="s5-badge"><small>EXCLUSIVE</small><b>DISCOUNT</b><em>for BachataVan dancers</em></div>
+    </div>
+    <div id="s5-cta">
+      <div class="act" id="a1"><div class="ic" style="background:#1FA855">WA</div><div><b>Ask for your code</b><span>WhatsApp +34 603 190 476</span></div></div>
+      <div class="act" id="a2"><div class="ic" style="background:var(--teal)">👟</div><div><b>Shop SMOVE</b><span>dancing-queens.com</span></div></div>
+    </div>
+    <div id="s5-foot">More than a ride. <span>It's a community.</span></div>
+  </div>
+
+  <div id="cobrand" class="clip" data-start="0" data-duration="22" data-track-index="5"><span class="sm">SMOVE</span><span class="x">×</span><svg viewBox="0 0 560 120"><use href="#plate"/></svg></div>
+</div>
+<script>
+  const tl = gsap.timeline({ paused: true });
+  const pop = (sel, t, from = { opacity: 0, y: 50 }) => tl.fromTo(sel, from, { opacity: 1, y: 0, x: 0, scale: 1, duration: 0.4, ease: "power3.out" }, t);
+  const out = (sel, t) => tl.to(sel, { opacity: 0, duration: 0.25, ease: "power2.in" }, t);
+  // S1
+  tl.fromTo("#s1-img", { x: 0 }, { x: 300, duration: 3.6, ease: "none" }, 0);
+  tl.fromTo("#s1-h", { scale: 1.1 }, { scale: 1, duration: 0.5, ease: "back.out(2)" }, 0);
+  pop("#s1-sub", 0.8);
+  out("#s1-txt, #s1-sub", 3.35);
+  // S2
+  tl.fromTo("#s2-img", { scale: 1.12 }, { scale: 1, duration: 4.4, ease: "none" }, 3.6);
+  ["#f1", "#f2", "#f3", "#f4", "#f5"].forEach((s, i) => pop(s, 4.0 + i * 0.35, { opacity: 0, y: 40, scale: 0.9 }));
+  out("#s2-list", 7.75);
+  // S3
+  tl.fromTo("#s3-photo", { opacity: 0, y: 120, rotation: -9 }, { opacity: 1, y: 0, rotation: -3, duration: 0.6, ease: "power3.out" }, 8.05);
+  tl.fromTo("#s3-box", { opacity: 0, y: 120, rotation: 12 }, { opacity: 1, y: 0, rotation: 5, duration: 0.6, ease: "back.out(1.6)" }, 8.6);
+  pop("#s3-h", 8.7); pop("#s3-p", 8.95);
+  out("#s3-photo, #s3-box, #s3-txt", 11.75);
+  // S4 wall scrolls up
+  pop("#s4-h", 12.05);
+  document.querySelectorAll("#s4-wall .pol").forEach((el, i) => tl.fromTo(el, { opacity: 0, scale: 0.85, rotation: i % 2 ? 4 : -4 }, { opacity: 1, scale: 1, rotation: i % 2 ? 2 : -2, duration: 0.35, ease: "back.out(1.8)" }, 12.15 + i * 0.12));
+  tl.fromTo("#s4-wall", { y: 0 }, { y: -1150, duration: 4.6, ease: "power1.inOut" }, 12.3);
+  out("#s4-h, #s4-wall", 16.75);
+  // S5
+  tl.fromTo("#s5-img", { scale: 1.1 }, { scale: 1, duration: 5, ease: "none" }, 17);
+  pop("#s5-h", 17.15);
+  tl.fromTo("#s5-badge", { opacity: 0, scale: 0.4, rotation: -30 }, { opacity: 1, scale: 1, rotation: -6, duration: 0.55, ease: "back.out(2.2)" }, 17.6);
+  pop("#a1", 18.3, { opacity: 0, x: -60 }); pop("#a2", 18.6, { opacity: 0, x: -60 }); pop("#s5-foot", 19);
+  tl.to("#s5-badge", { scale: 1.06, duration: 0.3, yoyo: true, repeat: 5, ease: "power2.inOut" }, 19.2);
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+</script>
+</body>
+</html>
