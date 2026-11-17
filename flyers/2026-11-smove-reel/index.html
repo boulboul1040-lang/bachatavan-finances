@@ -7,164 +7,176 @@
 <style>
   @font-face { font-family: "BarlowC"; src: url("assets/fonts/barlow-700.woff2") format("woff2"); font-weight: 700; }
   @font-face { font-family: "BarlowC"; src: url("assets/fonts/barlow-800.woff2") format("woff2"); font-weight: 800; }
-  :root { --teal: #1E8FB4; --teal-l: #DFF3FA; --white: #FFFFFF; --ink: #111A20; --red: #C2273F; --amber: #FFC94A; }
+  :root { --night: #0A0D11; --night2: #131820; --white: #FFFFFF; --teal: #2AB3DA; --teal-d: #1A8DB0; --red: #C2273F; --soft: #B9C4CC; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--white); }
-  #root { position: absolute; inset: 0; font-family: "Inter", sans-serif; color: var(--ink); overflow: hidden; background: var(--white); }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--night); }
+  #root { position: absolute; inset: 0; font-family: "Inter", sans-serif; color: var(--white); overflow: hidden; background: var(--night); }
   .scene { position: absolute; inset: 0; overflow: hidden; }
-  .full { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .h { font-family: "BarlowC", sans-serif; font-weight: 800; text-transform: uppercase; line-height: .92; }
+  .h { font-family: "BarlowC", sans-serif; font-weight: 800; text-transform: uppercase; line-height: .9; letter-spacing: .5px; }
+  .teal { color: var(--teal); }
+  .eyebrow { font-weight: 800; font-size: 30px; letter-spacing: 9px; text-transform: uppercase; color: var(--teal); }
 
-  /* co-brand lockup (big, readable) */
-  .lock { display: flex; align-items: center; justify-content: center; gap: 18px; }
-  .lock .sm { font-family: "BarlowC"; font-weight: 800; font-size: 96px; letter-spacing: 3px; color: var(--white); background: var(--teal); padding: 6px 30px 10px; border-radius: 18px; line-height: 1; }
-  .lock .bv { font-family: "BarlowC"; font-weight: 800; font-size: 96px; letter-spacing: 1px; color: var(--red); background: var(--white); padding: 6px 30px 10px; border-radius: 18px; line-height: 1; border: 6px solid var(--red); }
-  .lock .x { font-family: "BarlowC"; font-weight: 800; font-size: 80px; color: var(--white); text-shadow: 0 4px 16px rgba(0,0,0,.35); }
-  .lock.small .sm, .lock.small .bv { font-size: 58px; padding: 4px 20px 6px; border-radius: 12px; }
-  .lock.small .bv { border-width: 4px; }
-  .lock.small .x { font-size: 50px; }
+  #lock { position: absolute; top: 110px; left: 0; right: 0; display: flex; justify-content: center; align-items: center; gap: 20px; z-index: 50; }
+  #lock .sm { font-family: "BarlowC"; font-weight: 800; font-size: 62px; letter-spacing: 3px; color: var(--white); background: var(--teal-d); padding: 4px 24px 8px; border-radius: 12px; line-height: 1; }
+  #lock .bv { font-family: "BarlowC"; font-weight: 800; font-size: 62px; letter-spacing: 1px; color: var(--red); background: var(--white); padding: 4px 24px 8px; border-radius: 12px; line-height: 1; }
+  #lock .x { font-family: "BarlowC"; font-weight: 800; font-size: 50px; color: var(--white); }
 
-  .band { position: absolute; left: 0; right: 0; padding: 30px 60px 34px; text-align: center; }
-  .sticker { position: absolute; font-family: "BarlowC"; font-weight: 800; text-transform: uppercase; background: var(--amber); color: var(--ink); padding: 10px 26px 14px; border-radius: 16px; box-shadow: 0 14px 30px rgba(0,0,0,.25); }
+  .frame { position: absolute; overflow: hidden; border-radius: 28px; box-shadow: 0 40px 100px rgba(0,0,0,.6); }
+  .frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-  /* S1 */
-  #s1-top { position: absolute; top: 150px; left: 0; right: 0; }
-  #s1-band { bottom: 0; background: var(--teal); color: var(--white); padding-bottom: 120px; }
-  #s1-band .h { font-size: 104px; }
-  #s1-band p { font-size: 44px; font-weight: 800; margin-top: 12px; }
-  #s1-st { right: 50px; top: 980px; font-size: 54px; transform: rotate(6deg); }
+  #s1-photo { left: 70px; top: 250px; width: 940px; height: 1060px; }
+  #s1-txt { position: absolute; left: 70px; right: 70px; top: 1370px; display: flex; flex-direction: column; gap: 18px; }
+  #s1-h { font-size: 120px; }
+  #s1-p { font-size: 38px; font-weight: 600; color: var(--soft); }
 
-  /* S2 product */
-  #s2-img { position: absolute; left: 0; top: 0; width: 1080px; height: 1100px; object-fit: cover; }
-  #s2-panel { position: absolute; left: 0; right: 0; top: 1060px; bottom: 0; background: var(--white); border-radius: 48px 48px 0 0; padding: 70px 70px; display: flex; flex-direction: column; gap: 40px; }
-  #s2-panel .h { font-size: 96px; color: var(--teal); }
-  .f { display: flex; align-items: center; gap: 22px; font-size: 54px; font-weight: 800; }
-  .f i { width: 70px; height: 70px; border-radius: 50%; background: var(--teal); color: var(--white); display: grid; place-items: center; font-style: normal; font-size: 40px; flex: none; }
+  #s2-photo { left: 70px; top: 250px; width: 940px; height: 880px; }
+  #s2-txt { position: absolute; left: 70px; right: 70px; top: 1190px; display: flex; flex-direction: column; gap: 24px; }
+  #s2-h { font-size: 112px; }
+  .feats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .feat { border: 2px solid rgba(42,179,218,.55); background: rgba(42,179,218,.08); border-radius: 18px; padding: 18px 22px; font-family: "BarlowC"; font-weight: 800; font-size: 44px; text-transform: uppercase; }
+  .feat.wide { grid-column: 1 / -1; text-align: center; }
 
-  /* S3 dancers */
-  .dn { position: absolute; inset: 0; }
-  .dn img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .dn .cap { position: absolute; left: 50px; bottom: 300px; font-family: "BarlowC"; font-weight: 800; font-size: 64px; text-transform: uppercase; background: var(--white); color: var(--ink); padding: 8px 26px 12px; border-radius: 14px; box-shadow: 0 14px 30px rgba(0,0,0,.25); }
-  #s3-head { position: absolute; left: 0; right: 0; top: 0; background: var(--teal); color: var(--white); padding: 120px 40px 34px; text-align: center; z-index: 10; }
-  #s3-head .h { font-size: 112px; }
-  #s3-count { position: absolute; right: 50px; bottom: 180px; z-index: 10; font-family: "BarlowC"; font-weight: 800; font-size: 60px; background: var(--red); color: var(--white); padding: 8px 26px 12px; border-radius: 14px; }
+  #s3-photo { left: 70px; top: 250px; width: 940px; height: 1000px; }
+  #s3-txt { position: absolute; left: 70px; right: 70px; top: 1320px; display: flex; flex-direction: column; gap: 18px; }
+  #s3-h { font-size: 116px; }
 
-  /* S4 van */
-  #s4-img { position: absolute; left: -420px; top: 470px; width: 1920px; height: 828px; object-fit: cover; }
-  #s4-top { position: absolute; left: 0; right: 0; top: 0; height: 470px; background: var(--teal); color: var(--white); padding: 150px 60px 0; text-align: center; }
-  #s4-top .h { font-size: 112px; }
-  #s4-bot { position: absolute; left: 0; right: 0; top: 1298px; bottom: 0; background: var(--white); padding: 60px 70px; text-align: center; }
-  #s4-bot .h { font-size: 88px; color: var(--red); }
-  #s4-bot p { font-size: 44px; font-weight: 700; margin-top: 18px; }
+  #s4-head { position: absolute; left: 0; right: 0; top: 230px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; z-index: 5; }
+  #s4-h { font-size: 120px; }
+  #grid { position: absolute; left: 45px; top: 470px; width: 990px; height: 1320px; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 18px; }
+  .tile { overflow: hidden; border-radius: 22px; background: var(--night2); }
+  .tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  #hero { position: absolute; left: 45px; top: 470px; width: 990px; height: 1320px; border-radius: 22px; overflow: hidden; z-index: 6; }
+  #hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  #hero-cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 140px 40px 46px; background: linear-gradient(0deg, rgba(10,13,17,.92), rgba(10,13,17,0)); text-align: center; }
+  #hero-cap .h { font-size: 92px; }
 
-  /* S5 offer */
-  #s5-img { position: absolute; left: 0; top: 0; width: 1080px; height: 1080px; object-fit: cover; object-position: center 100%; }
-  #s5-panel { position: absolute; left: 0; right: 0; top: 1020px; bottom: 0; background: var(--teal); border-radius: 48px 48px 0 0; color: var(--white); padding: 70px 60px; display: flex; flex-direction: column; align-items: center; gap: 30px; text-align: center; }
-  #s5-panel .h { font-size: 120px; }
-  #s5-panel .h span { color: var(--amber); }
-  #s5-btn { background: var(--white); color: var(--ink); border-radius: 999px; padding: 26px 46px; font-family: "BarlowC"; font-weight: 800; font-size: 64px; text-transform: uppercase; box-shadow: 0 18px 40px rgba(0,0,0,.25); }
-  #s5-wa { font-size: 52px; font-weight: 900; }
-  #s5-web { font-size: 40px; font-weight: 700; opacity: .95; }
-  #s5-lock { position: absolute; top: 140px; left: 0; right: 0; }
+  #s5-photo { left: 0; top: 330px; width: 1080px; height: 860px; border-radius: 0; }
+  #s5-txt { position: absolute; left: 70px; right: 70px; top: 1260px; display: flex; flex-direction: column; gap: 18px; }
+  #s5-h { font-size: 116px; }
+
+  #s6-photo { left: 70px; top: 250px; width: 940px; height: 780px; }
+  #s6-txt { position: absolute; left: 70px; right: 70px; top: 1090px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 24px; }
+  #s6-h { font-size: 120px; }
+  #s6-btn { margin-top: 10px; background: var(--teal); color: var(--night); border-radius: 999px; padding: 26px 56px 30px; font-family: "BarlowC"; font-weight: 800; font-size: 66px; text-transform: uppercase; box-shadow: 0 0 0 10px rgba(42,179,218,.18), 0 20px 50px rgba(0,0,0,.5); }
+  #s6-wa { font-size: 48px; font-weight: 800; }
+  #s6-web { font-size: 38px; font-weight: 600; color: var(--soft); }
 </style>
 </head>
 <body>
-<div id="root" data-composition-id="main" data-start="0" data-duration="26.5" data-width="1080" data-height="1920">
+<div id="root" data-composition-id="main" data-start="0" data-duration="25" data-width="1080" data-height="1920">
 
-  <!-- S1 · founder + me -->
   <div id="s1" class="scene clip" data-start="0" data-duration="4" data-track-index="0">
-    <img class="full" id="s1-img" src="assets/img/founder.jpg" alt="SMOVE founder and BachataVan" style="object-position:center 40%">
-    <div id="s1-top"><div class="lock"><span class="sm">SMOVE</span><span class="x">×</span><span class="bv">BACHATAVAN</span></div></div>
-    <div class="sticker" id="s1-st">New partners ❤️</div>
-    <div class="band" id="s1-band"><div class="h">Dance sneakers<br>for our dancers</div><p>With the SMOVE team · Dancing Queens</p></div>
-  </div>
-
-  <!-- S2 · product -->
-  <div id="s2" class="scene clip" data-start="4" data-duration="3.6" data-track-index="0">
-    <img id="s2-img" src="assets/img/plate.jpg" alt="">
-    <div id="s2-panel">
-      <div class="h">Why dancers love them</div>
-      <div class="f" id="f1"><i>✓</i>Ultra-light &amp; breathable</div>
-      <div class="f" id="f2"><i>✓</i>Perfect glide &amp; grip</div>
-      <div class="f" id="f3"><i>✓</i>Comfy all night long</div>
+    <div class="frame" id="s1-photo"><img id="s1-img" src="assets/img/founder.jpg" alt="SMOVE director and BachataVan founder" style="object-position:center 42%"></div>
+    <div id="s1-txt">
+      <div class="eyebrow">Official partners</div>
+      <div class="h" id="s1-h">Dancing Queens<br><span class="teal">rides BachataVan</span></div>
+      <div id="s1-p">SMOVE Dance Sneakers, now for our dancers in Barcelona</div>
     </div>
   </div>
 
-  <!-- S2b · Dancing Queens box -->
-  <div id="s2b" class="scene clip" data-start="7.6" data-duration="3.5" data-track-index="0">
-    <img id="s2b-img" src="assets/img/box.jpg" alt="" style="position:absolute;left:0;top:0;width:1080px;height:1180px;object-fit:cover;object-position:center 30%">
-    <div id="s2b-panel" style="position:absolute;left:0;right:0;top:1120px;bottom:0;background:var(--teal);color:var(--white);border-radius:48px 48px 0 0;padding:90px 60px;text-align:center;display:flex;flex-direction:column;gap:30px">
-      <div class="h" style="font-size:104px">By Dancing Queens</div>
-      <div style="font-size:46px;font-weight:800;line-height:1.25">Developed with the feedback of the international dance community</div>
+  <div id="s2" class="scene clip" data-start="4" data-duration="4" data-track-index="0">
+    <div class="frame" id="s2-photo"><img id="s2-img" src="assets/img/plate.jpg" alt=""></div>
+    <div id="s2-txt">
+      <div class="h" id="s2-h">Built to <span class="teal">dance</span></div>
+      <div class="feats">
+        <div class="feat" id="f1">Ultra-light</div>
+        <div class="feat" id="f2">Breathable</div>
+        <div class="feat" id="f3">Glide &amp; grip</div>
+        <div class="feat" id="f4">Cushioned</div>
+        <div class="feat wide" id="f5">Indoor · Outdoor · All night</div>
+      </div>
     </div>
   </div>
 
-  <!-- S3 · happy dancers, best first -->
-  <div id="s3" class="scene clip" data-start="11.1" data-duration="6.4" data-track-index="0">
-    <div class="dn" id="d1"><img src="assets/img/h6.jpg" alt=""><div class="cap">Barcelona-Sants ☀️</div></div>
-    <div class="dn" id="d2"><img src="assets/img/h4.jpg" alt=""><div class="cap">Dance mode on</div></div>
-    <div class="dn" id="d3"><img src="assets/img/h5.jpg" alt=""><div class="cap">So comfy 😍</div></div>
-    <div class="dn" id="d4"><img src="assets/img/h8.jpg" alt=""><div class="cap">Gold edition ✨</div></div>
-    <div class="dn" id="d5"><img src="assets/img/h3.jpg" alt=""><div class="cap">Sagrada Família</div></div>
-    <div class="dn" id="d6"><img src="assets/img/h2.jpg" alt=""><div class="cap">Night ride 🌙</div></div>
-    <div class="dn" id="d7"><img src="assets/img/h1.jpg" alt=""><div class="cap">Love them ❤️</div></div>
-    <div class="dn" id="d8"><img src="assets/img/h7.jpg" alt=""><div class="cap">Ready to dance</div></div>
-    <div id="s3-head"><div class="h">Happy dancers</div></div>
-    <div id="s3-count"><span id="cnt">1</span> / 8 ❤️</div>
-  </div>
-
-  <!-- S4 · van full of shoes -->
-  <div id="s4" class="scene clip" data-start="17.5" data-duration="3.6" data-track-index="0">
-    <div id="s4-top"><div class="h">We bring them<br>to you 🚐</div></div>
-    <img id="s4-img" src="assets/img/trunk.jpg" alt="">
-    <div id="s4-bot"><div class="h">Straight from the van</div><p>Pick yours at your next BachataVan ride</p></div>
-  </div>
-
-  <!-- S5 · offer -->
-  <div id="s5" class="scene clip" data-start="21.1" data-duration="5.4" data-track-index="0">
-    <img id="s5-img" src="assets/img/sagrada.jpg" alt="">
-    <div id="s5-lock"><div class="lock small"><span class="sm">SMOVE</span><span class="x">×</span><span class="bv">BACHATAVAN</span></div></div>
-    <div id="s5-panel">
-      <div class="h">Special discount<br><span>for BachataVan dancers</span></div>
-      <div id="s5-btn">Ask for your code 👇</div>
-      <div id="s5-wa">WhatsApp +34 603 190 476</div>
-      <div id="s5-web">Shop at dancing-queens.com</div>
+  <div id="s3" class="scene clip" data-start="8" data-duration="3.5" data-track-index="0">
+    <div class="frame" id="s3-photo"><img id="s3-img" src="assets/img/box.jpg" alt="" style="object-position:center 30%"></div>
+    <div id="s3-txt">
+      <div class="eyebrow">By Dancing Queens</div>
+      <div class="h" id="s3-h">Made by dancers,<br><span class="teal">for dancers</span></div>
     </div>
   </div>
+
+  <div id="s4" class="scene clip" data-start="11.5" data-duration="6" data-track-index="0">
+    <div id="s4-head"><div class="eyebrow">Our community</div><div class="h" id="s4-h">Happy <span class="teal">dancers</span></div></div>
+    <div id="grid">
+      <div class="tile" id="t1"><img src="assets/img/h4.jpg" alt=""></div>
+      <div class="tile" id="t2"><img src="assets/img/h6.jpg" alt=""></div>
+      <div class="tile" id="t3"><img src="assets/img/h8.jpg" alt=""></div>
+      <div class="tile" id="t4"><img src="assets/img/h5.jpg" alt=""></div>
+      <div class="tile" id="t5"><img src="assets/img/h3.jpg" alt=""></div>
+      <div class="tile" id="t6"><img src="assets/img/sagrada.jpg" alt="" style="object-position:center 85%"></div>
+      <div class="tile" id="t7"><img src="assets/img/h2.jpg" alt=""></div>
+      <div class="tile" id="t8"><img src="assets/img/h1.jpg" alt=""></div>
+      <div class="tile" id="t9"><img src="assets/img/h7.jpg" alt=""></div>
+    </div>
+    <div id="hero"><img src="assets/img/h6.jpg" alt=""><div id="hero-cap"><div class="h">They already<br><span class="teal">dance in SMOVE</span></div></div></div>
+  </div>
+
+  <div id="s5" class="scene clip" data-start="17.5" data-duration="3" data-track-index="0">
+    <div class="frame" id="s5-photo"><img id="s5-img" src="assets/img/trunk.jpg" alt=""></div>
+    <div id="s5-txt">
+      <div class="eyebrow">Straight from the van</div>
+      <div class="h" id="s5-h">We bring them<br><span class="teal">to the party</span></div>
+    </div>
+  </div>
+
+  <div id="s6" class="scene clip" data-start="20.5" data-duration="4.5" data-track-index="0">
+    <div class="frame" id="s6-photo"><img id="s6-img" src="assets/img/sagrada.jpg" alt="" style="object-position:center 88%"></div>
+    <div id="s6-txt">
+      <div class="eyebrow" id="s6-e">For BachataVan dancers</div>
+      <div class="h" id="s6-h">Exclusive<br><span class="teal">discount</span></div>
+      <div id="s6-btn">Ask for your code</div>
+      <div id="s6-wa">WhatsApp +34 603 190 476</div>
+      <div id="s6-web">dancing-queens.com · @bachatavan_official</div>
+    </div>
+  </div>
+
+  <div id="lock" class="clip" data-start="0" data-duration="25" data-track-index="5"><span class="sm">SMOVE</span><span class="x">×</span><span class="bv">BACHATAVAN</span></div>
 </div>
 <script>
   const tl = gsap.timeline({ paused: true });
-  const pop = (sel, t, from = { opacity: 0, y: 50 }) => tl.fromTo(sel, from, { opacity: 1, y: 0, x: 0, scale: 1, rotation: 0, duration: 0.35, ease: "back.out(1.8)" }, t);
-  // S1 — everything readable on the first frame
-  tl.fromTo("#s1-img", { scale: 1.0 }, { scale: 1.08, duration: 4, ease: "none" }, 0);
-  tl.fromTo(".lock .sm", { x: -40 }, { x: 0, duration: 0.4, ease: "power3.out" }, 0);
-  tl.fromTo(".lock .bv", { x: 40 }, { x: 0, duration: 0.4, ease: "power3.out" }, 0);
-  tl.fromTo("#s1-st", { scale: 0, rotation: -20 }, { scale: 1, rotation: 6, duration: 0.45, ease: "back.out(2.5)" }, 0.5);
-  // S2
-  tl.fromTo("#s2-img", { scale: 1.1 }, { scale: 1, duration: 3.6, ease: "none" }, 4);
-  tl.fromTo("#s2-panel", { y: 300 }, { y: 0, duration: 0.45, ease: "power3.out" }, 4);
-  pop("#f1", 4.4, { opacity: 0, x: -60 }); pop("#f2", 4.7, { opacity: 0, x: -60 }); pop("#f3", 5, { opacity: 0, x: -60 });
-  // S2b
-  tl.fromTo("#s2b-img", { scale: 1.1 }, { scale: 1, duration: 3.5, ease: "none" }, 7.6);
-  tl.fromTo("#s2b-panel", { y: 400 }, { y: 0, duration: 0.45, ease: "power3.out" }, 7.6);
-  // S3 — quick cuts 0.8 s each, counter
-  for (let i = 0; i < 8; i++) {
-    const t = 11.1 + i * 0.8, el = "#d" + (i + 1);
-    tl.set(el, { opacity: 0 }, 11.1);
-    tl.set(el, { opacity: 1 }, t);
-    if (i < 7) tl.set(el, { opacity: 0 }, t + 0.8);
-    tl.fromTo(el + " img", { scale: 1.12 }, { scale: 1, duration: 0.8, ease: "power2.out" }, t);
-    tl.fromTo(el + " .cap", { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.25, ease: "power3.out" }, t + 0.05);
-    tl.call(() => { document.getElementById("cnt").textContent = String(i + 1); }, null, t);
+  const up = (sel, t, d = 0.45) => tl.fromTo(sel, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: d, ease: "power4.out" }, t);
+  const out = (sel, t) => tl.to(sel, { opacity: 0, y: -30, duration: 0.25, ease: "power2.in" }, t);
+  const kb = (sel, t, d, from = 1.12) => tl.fromTo(sel, { scale: from }, { scale: 1, duration: d, ease: "none" }, t);
+
+  kb("#s1-img", 0, 4, 1.06);
+  tl.fromTo("#s1-photo", { scale: 0.96 }, { scale: 1, duration: 0.6, ease: "power3.out" }, 0);
+  tl.fromTo("#s1-h", { y: 30 }, { y: 0, duration: 0.5, ease: "power4.out" }, 0);
+  out("#s1-photo, #s1-txt", 3.75);
+
+  tl.fromTo("#s2-photo", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" }, 4);
+  kb("#s2-img", 4, 4);
+  up("#s2-h", 4.25);
+  ["#f1", "#f2", "#f3", "#f4", "#f5"].forEach((s, i) => tl.fromTo(s, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, 4.6 + i * 0.22));
+  out("#s2-photo, #s2-txt", 7.75);
+
+  tl.fromTo("#s3-photo", { opacity: 0, x: 200 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 8);
+  kb("#s3-img", 8, 3.5);
+  up("#s3-txt", 8.3);
+  out("#s3-photo, #s3-txt", 11.25);
+
+  up("#s4-head", 11.6);
+  for (let i = 1; i <= 9; i++) {
+    tl.fromTo("#t" + i, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.8)" }, 11.8 + (i - 1) * 0.28);
+    tl.fromTo("#t" + i + " img", { scale: 1.25 }, { scale: 1, duration: 1.2, ease: "power2.out" }, 11.8 + (i - 1) * 0.28);
   }
-  tl.fromTo("#s3-head", { y: -200 }, { y: 0, duration: 0.35, ease: "power3.out" }, 11.1);
-  // S4
-  tl.fromTo("#s4-img", { x: 0 }, { x: 420, duration: 3.6, ease: "none" }, 17.5);
-  pop("#s4-bot .h", 17.8); pop("#s4-bot p", 18.1);
-  // S5
-  tl.fromTo("#s5-panel", { y: 500 }, { y: 0, duration: 0.5, ease: "power3.out" }, 21.1);
-  pop("#s5-btn", 21.7, { opacity: 0, scale: 0.6 }); pop("#s5-wa", 22); pop("#s5-web", 22.3);
-  tl.to("#s5-btn", { scale: 1.07, duration: 0.3, yoyo: true, repeat: 7, ease: "power2.inOut" }, 22.7);
+  tl.to("#grid", { scale: 1.03, duration: 1.2, ease: "none" }, 14.4);
+  tl.fromTo("#hero", { opacity: 0, clipPath: "inset(0% 33.3% 66.6% 33.3% round 22px)" }, { opacity: 1, clipPath: "inset(0% 0% 0% 0% round 22px)", duration: 0.6, ease: "power3.inOut" }, 15.3);
+  tl.fromTo("#hero img", { scale: 1.2 }, { scale: 1, duration: 2.2, ease: "none" }, 15.3);
+  up("#hero-cap", 15.7);
+  out("#s4-head, #hero", 17.25);
+
+  tl.fromTo("#s5-photo", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 17.5);
+  tl.fromTo("#s5-img", { scale: 1.3, x: -80 }, { scale: 1.05, x: 60, duration: 3, ease: "none" }, 17.5);
+  up("#s5-txt", 17.75);
+  out("#s5-photo, #s5-txt", 20.25);
+
+  tl.fromTo("#s6-photo", { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" }, 20.5);
+  kb("#s6-img", 20.5, 4.5, 1.08);
+  up("#s6-e", 20.75); up("#s6-h", 20.95);
+  tl.fromTo("#s6-btn", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.2)" }, 21.4);
+  up("#s6-wa", 21.7); up("#s6-web", 21.9);
+  tl.to("#s6-btn", { scale: 1.06, duration: 0.32, yoyo: true, repeat: 5, ease: "power2.inOut" }, 22.3);
   window.__timelines["main"] = tl;
   tl.seek(0);
 </script>
