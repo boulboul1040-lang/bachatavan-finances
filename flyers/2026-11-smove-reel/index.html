@@ -47,15 +47,15 @@
   .tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
   #hero { position: absolute; left: 45px; top: 470px; width: 990px; height: 1320px; border-radius: 22px; overflow: hidden; z-index: 6; }
   #hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  #hero-cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 140px 40px 46px; background: linear-gradient(0deg, rgba(10,13,17,.92), rgba(10,13,17,0)); text-align: center; }
+  #hero-cap { position: absolute; left: 0; right: 0; top: 0; padding: 40px 40px 150px; background: linear-gradient(180deg, rgba(10,13,17,.9), rgba(10,13,17,0)); text-align: right; }
   #hero-cap .h { font-size: 92px; }
 
   #s5-photo { left: 0; top: 330px; width: 1080px; height: 860px; border-radius: 0; }
   #s5-txt { position: absolute; left: 70px; right: 70px; top: 1260px; display: flex; flex-direction: column; gap: 18px; }
   #s5-h { font-size: 116px; }
 
-  #s6-photo { left: 70px; top: 250px; width: 940px; height: 780px; }
-  #s6-txt { position: absolute; left: 70px; right: 70px; top: 1090px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 24px; }
+  #s6-photo { left: 40px; top: 300px; width: 1000px; height: 543px; }
+  #s6-txt { position: absolute; left: 70px; right: 70px; top: 940px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 24px; }
   #s6-h { font-size: 120px; }
   #s6-btn { margin-top: 10px; background: var(--teal); color: var(--night); border-radius: 999px; padding: 26px 56px 30px; font-family: "BarlowC"; font-weight: 800; font-size: 66px; text-transform: uppercase; box-shadow: 0 0 0 10px rgba(42,179,218,.18), 0 20px 50px rgba(0,0,0,.5); }
   #s6-wa { font-size: 48px; font-weight: 800; }
@@ -109,7 +109,7 @@
       <div class="tile" id="t8"><img src="assets/img/h1.jpg" alt=""></div>
       <div class="tile" id="t9"><img src="assets/img/h7.jpg" alt=""></div>
     </div>
-    <div id="hero"><img src="assets/img/h6.jpg" alt=""><div id="hero-cap"><div class="h">They already<br><span class="teal">dance in SMOVE</span></div></div></div>
+    <div id="hero"><img src="assets/img/h3.jpg" alt=""><div id="hero-cap"><div class="h">They already<br><span class="teal">dance in SMOVE</span></div></div></div>
   </div>
 
   <div id="s5" class="scene clip" data-start="17.5" data-duration="3" data-track-index="0">
@@ -121,7 +121,7 @@
   </div>
 
   <div id="s6" class="scene clip" data-start="20.5" data-duration="4.5" data-track-index="0">
-    <div class="frame" id="s6-photo"><img id="s6-img" src="assets/img/vans-sunset.jpg" alt="Les deux vans BachataVan" style="object-position:center 60%"></div>
+    <div class="frame" id="s6-photo"><img id="s6-img" src="assets/img/vans-sunset.jpg" alt="Les deux vans BachataVan" style="object-fit:contain;background:#0A0D11"></div>
     <div id="s6-txt">
       <div class="eyebrow" id="s6-e">For BachataVan dancers</div>
       <div class="h" id="s6-h">Exclusive<br><span class="teal">discount</span></div>
@@ -161,7 +161,7 @@
     tl.fromTo("#t" + i + " img", { scale: 1.25 }, { scale: 1, duration: 1.2, ease: "power2.out" }, 11.8 + (i - 1) * 0.28);
   }
   tl.to("#grid", { scale: 1.03, duration: 1.2, ease: "none" }, 14.4);
-  tl.fromTo("#hero", { opacity: 0, clipPath: "inset(0% 33.3% 66.6% 33.3% round 22px)" }, { opacity: 1, clipPath: "inset(0% 0% 0% 0% round 22px)", duration: 0.6, ease: "power3.inOut" }, 15.3);
+  tl.fromTo("#hero", { opacity: 0, clipPath: "inset(33.3% 33.3% 33.3% 33.3% round 22px)" }, { opacity: 1, clipPath: "inset(0% 0% 0% 0% round 22px)", duration: 0.6, ease: "power3.inOut" }, 15.3);
   tl.fromTo("#hero img", { scale: 1.2 }, { scale: 1, duration: 2.2, ease: "none" }, 15.3);
   up("#hero-cap", 15.7);
   out("#s4-head, #hero", 17.25);
@@ -172,7 +172,7 @@
   out("#s5-photo, #s5-txt", 20.25);
 
   tl.fromTo("#s6-photo", { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" }, 20.5);
-  kb("#s6-img", 20.5, 4.5, 1.08);
+  
   up("#s6-e", 20.75); up("#s6-h", 20.95);
   tl.fromTo("#s6-btn", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.2)" }, 21.4);
   up("#s6-wa", 21.7); up("#s6-web", 21.9);
