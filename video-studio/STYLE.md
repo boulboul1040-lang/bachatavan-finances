@@ -56,3 +56,4 @@ pour ne jamais refaire la même erreur.
      Exemple : - 2026-11-11 : sous-titres trop hauts → les placer plus bas. -->
 - 2026-11-11 : selfie face caméra → sous-titres sous le menton (`sousTitresY` ≈ 1430), jamais sur la bouche.
 - 2026-11-14 : logo BachataVan visible du début à la fin des vidéos (au-dessus des têtes, fond sombre), pas seulement sur la carte de fin.
+- 2026-11-22 : TOUJOURS centrer les titres et textes sous les photos/vidéos (jamais alignés à gauche).
