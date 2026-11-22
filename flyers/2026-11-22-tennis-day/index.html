@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="assets/gsap.min.js"></script>
+<style>
+  @font-face { font-family: "BarlowC"; src: url("assets/fonts/barlow-700.woff2") format("woff2"); font-weight: 700; }
+  @font-face { font-family: "BarlowC"; src: url("assets/fonts/barlow-800.woff2") format("woff2"); font-weight: 800; }
+  :root { --night: #0A0D11; --white: #FFFFFF; --clay: #E0703A; --clay-l: #F29A62; --red: #C2273F; --soft: #B9C4CC; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--night); }
+  #root { position: absolute; inset: 0; font-family: "Inter", sans-serif; color: var(--white); overflow: hidden; background: var(--night); }
+  .scene { position: absolute; inset: 0; overflow: hidden; }
+  .h { font-family: "BarlowC", sans-serif; font-weight: 800; text-transform: uppercase; line-height: .9; letter-spacing: .5px; }
+  .c { color: var(--clay-l); }
+  .eyebrow { font-weight: 800; font-size: 30px; letter-spacing: 9px; text-transform: uppercase; color: var(--clay-l); }
+
+  #lock { position: absolute; top: 110px; left: 0; right: 0; display: flex; justify-content: center; align-items: center; gap: 18px; z-index: 50; }
+  #lock .bv { font-family: "BarlowC"; font-weight: 800; font-size: 60px; letter-spacing: 1px; color: var(--red); background: var(--white); padding: 4px 24px 8px; border-radius: 12px; line-height: 1; }
+  #lock .ca { font-family: "BarlowC"; font-weight: 800; font-size: 60px; letter-spacing: 2px; color: var(--white); background: var(--clay); padding: 4px 24px 8px; border-radius: 12px; line-height: 1; }
+
+  .frame { position: absolute; overflow: hidden; border-radius: 28px; box-shadow: 0 40px 100px rgba(0,0,0,.6); }
+  .frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .vid { position: absolute; left: 70px; top: 250px; width: 940px; height: 1260px; border-radius: 28px; object-fit: cover; z-index: 2; }
+  .txt { position: absolute; left: 70px; right: 70px; display: flex; flex-direction: column; gap: 16px; z-index: 3; }
+
+  #s1-photo { left: 70px; top: 250px; width: 940px; height: 1180px; }
+  #s1-txt { top: 1480px; }
+  #s1-h { font-size: 132px; }
+  #s1-p { font-size: 38px; font-weight: 600; color: var(--soft); margin-top: 14px; }
+
+  #s2-txt, #s3-txt { top: 1570px; }
+  #s2-h, #s3-h { font-size: 112px; }
+
+  #grid { position: absolute; left: 45px; top: 250px; width: 990px; height: 1330px; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 18px; }
+  .tile { overflow: hidden; border-radius: 22px; }
+  .tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  #s4-txt { top: 1640px; text-align: center; align-items: center; }
+  #s4-h { font-size: 100px; }
+
+  #s5-photo { left: 70px; top: 250px; width: 940px; height: 800px; }
+  #s5-txt { top: 1110px; text-align: center; align-items: center; gap: 22px; }
+  #s5-h { font-size: 118px; }
+  #s5-p { font-size: 40px; font-weight: 600; color: var(--soft); }
+  #s5-btn { margin-top: 12px; background: var(--clay); color: var(--white); border-radius: 999px; padding: 24px 52px 28px; font-family: "BarlowC"; font-weight: 800; font-size: 60px; text-transform: uppercase; box-shadow: 0 0 0 10px rgba(224,112,58,.2), 0 20px 50px rgba(0,0,0,.5); }
+  #s5-wa { font-size: 46px; font-weight: 800; }
+  #s5-ig { font-size: 38px; font-weight: 600; color: var(--soft); }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="19" data-width="1080" data-height="1920">
+
+  <div id="s1" class="scene clip" data-start="0" data-duration="3.5" data-track-index="0">
+    <div class="frame" id="s1-photo"><img id="s1-img" src="assets/img/group.jpg" alt="" style="object-position:center 78%"></div>
+    <div class="txt" id="s1-txt">
+      <div class="eyebrow">Bachata Chill Activity</div>
+      <div class="h" id="s1-h">Tennis <span class="c">day</span></div>
+      <div id="s1-p">Sunny morning at Montjuïc, Barcelona</div>
+    </div>
+  </div>
+
+  <div id="s2" class="scene clip" data-start="3.5" data-duration="3.5" data-track-index="0">
+    <div class="txt" id="s2-txt"><div class="eyebrow">At night we dance</div><div class="h" id="s2-h">By day we <span class="c">play</span></div></div>
+  </div>
+
+  <div id="s3" class="scene clip" data-start="7" data-duration="3.9" data-track-index="0">
+    <div class="txt" id="s3-txt"><div class="eyebrow">Same crew</div><div class="h" id="s3-h">New <span class="c">court</span></div></div>
+  </div>
+
+  <div id="s4" class="scene clip" data-start="10.9" data-duration="3.6" data-track-index="0">
+    <div id="grid">
+      <div class="tile" id="t1"><img src="assets/img/palms.jpg" alt=""></div>
+      <div class="tile" id="t2"><img src="assets/img/racket.jpg" alt=""></div>
+      <div class="tile" id="t3"><img src="assets/img/net.jpg" alt=""></div>
+      <div class="tile" id="t4"><img src="assets/img/group.jpg" alt="" style="object-position:center 80%"></div>
+    </div>
+    <div class="txt" id="s4-txt"><div class="h" id="s4-h">Sun · Clay · <span class="c">Friends</span></div></div>
+  </div>
+
+  <div id="s5" class="scene clip" data-start="14.5" data-duration="4.5" data-track-index="0">
+    <div class="frame" id="s5-photo"><img id="s5-img" src="assets/img/selfie.jpg" alt=""></div>
+    <div class="txt" id="s5-txt">
+      <div class="eyebrow">More than a ride</div>
+      <div class="h" id="s5-h">It's a <span class="c">community</span></div>
+      <div id="s5-btn">Join the next activity</div>
+      <div id="s5-wa">WhatsApp +34 603 190 476</div>
+      <div id="s5-ig">@bachatavan_official</div>
+    </div>
+  </div>
+
+  <video id="v1" class="vid clip" src="assets/IMG_3640.mp4" data-start="3.5" data-duration="3.5" data-track-index="1" muted></video>
+  <video id="v2" class="vid clip" src="assets/IMG_3641.mp4" data-start="7" data-duration="3.9" data-track-index="1" muted></video>
+
+  <div id="lock" class="clip" data-start="0" data-duration="19" data-track-index="5"><span class="bv">BACHATAVAN</span><span class="ca">CHILL ACTIVITY</span></div>
+</div>
+<script>
+  const tl = gsap.timeline({ paused: true });
+  const up = (sel, t, d = 0.45) => tl.fromTo(sel, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: d, ease: "power4.out" }, t);
+  const out = (sel, t) => tl.to(sel, { opacity: 0, y: -30, duration: 0.25, ease: "power2.in" }, t);
+
+  tl.fromTo("#s1-img", { scale: 1.06 }, { scale: 1, duration: 3.5, ease: "none" }, 0);
+  out("#s1-photo, #s1-txt", 3.25);
+
+  tl.fromTo("#v1", { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.45, ease: "power3.out" }, 3.5);
+  up("#s2-txt", 3.75);
+  out("#v1, #s2-txt", 6.75);
+
+  tl.fromTo("#v2", { opacity: 0, x: 200 }, { opacity: 1, x: 0, duration: 0.45, ease: "power3.out" }, 7);
+  up("#s3-txt", 7.25);
+  out("#v2, #s3-txt", 10.65);
+
+  ["#t1", "#t2", "#t3", "#t4"].forEach((s, i) => {
+    tl.fromTo(s, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.8)" }, 11 + i * 0.25);
+    tl.fromTo(s + " img", { scale: 1.25 }, { scale: 1, duration: 1.4, ease: "power2.out" }, 11 + i * 0.25);
+  });
+  up("#s4-txt", 12.2);
+  out("#grid, #s4-txt", 14.25);
+
+  tl.fromTo("#s5-photo", { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" }, 14.5);
+  tl.fromTo("#s5-img", { scale: 1.1 }, { scale: 1, duration: 4.5, ease: "none" }, 14.5);
+  up("#s5-txt .eyebrow", 14.75); up("#s5-h", 14.95);
+  tl.fromTo("#s5-btn", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.2)" }, 15.4);
+  up("#s5-wa", 15.7); up("#s5-ig", 15.9);
+  tl.to("#s5-btn", { scale: 1.06, duration: 0.32, yoyo: true, repeat: 5, ease: "power2.inOut" }, 16.3);
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+</script>
+</body>
+</html>
