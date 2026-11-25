@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="assets/gsap.min.js"></script>
+<style>
+  @font-face { font-family: "Anton"; src: url("assets/fonts/anton.woff2") format("woff2"); font-weight: 400; }
+  :root { --nuit: #0E0A12; --nuit2: #1A1220; --or: #FFC24B; --or-clair: #FFE3A1; --passion: #E8304A; --creme: #FFF6EC; --bleu: #1F3FA8; --vin: #8E1B2E; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--nuit); }
+  #root { position: absolute; inset: 0; font-family: "Inter", "Helvetica Neue", Arial, sans-serif; color: var(--creme); overflow: hidden; }
+  #fond { position: absolute; inset: 0; background: radial-gradient(900px 700px at 50% 45%, #2A1A33 0%, var(--nuit) 70%); }
+
+  /* Logo plaque, visible du début à la fin */
+  #logo { position: absolute; top: 190px; left: 0; right: 0; display: flex; justify-content: center; }
+  #logo svg { width: 520px; height: auto; filter: drop-shadow(0 14px 30px rgba(0,0,0,.6)); }
+
+  #tag { position: absolute; top: 330px; left: 0; right: 0; display: flex; justify-content: center; }
+  #tag span { font-weight: 900; font-size: 30px; letter-spacing: 6px; color: var(--nuit); background: var(--or); padding: 12px 30px; border-radius: 999px; }
+  #titre { position: absolute; top: 395px; left: 0; right: 0; text-align: center; font-family: "Anton", sans-serif; font-size: 120px; line-height: 1; letter-spacing: 1px; }
+  #titre em { font-style: normal; background: linear-gradient(180deg, var(--or-clair), var(--or) 55%, #C98A1B); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+  /* Carte */
+  #carte { position: absolute; left: 60px; top: 560px; width: 960px; height: 760px; border-radius: 36px; overflow: hidden; background: #17111C; box-shadow: 0 40px 90px rgba(0,0,0,.6), 0 0 0 3px rgba(255,194,75,.35); }
+  #carte svg { position: absolute; inset: 0; width: 960px; height: 760px; }
+  #van { position: absolute; left: 0; top: 0; width: 92px; height: 52px; margin: -26px 0 0 -46px; }
+  #van svg { width: 92px; height: 52px; }
+  .lbl { position: absolute; font-family: "Anton", sans-serif; font-size: 40px; letter-spacing: 1px; color: var(--creme); text-shadow: 0 4px 14px rgba(0,0,0,.8); white-space: nowrap; }
+  .lbl small { display: block; font-family: "Inter", Arial, sans-serif; font-weight: 700; font-size: 24px; letter-spacing: 0; color: var(--or); }
+  #lbl-sf { left: 600px; top: 640px; text-align: center; transform: translateX(-50%); }
+  #lbl-acm { left: 355px; top: 46px; text-align: left; }
+  #temps { position: absolute; right: 34px; top: 34px; background: rgba(14,10,18,.85); border: 2px solid rgba(255,194,75,.5); border-radius: 18px; padding: 14px 22px; text-align: center; }
+  #temps b { display: block; font-family: "Anton", sans-serif; font-size: 54px; line-height: 1; color: var(--or); font-variant-numeric: tabular-nums; }
+  #temps span { font-weight: 700; font-size: 20px; letter-spacing: 3px; text-transform: uppercase; color: var(--creme); opacity: .8; }
+
+  /* Horaires */
+  #horaires { position: absolute; top: 1355px; left: 60px; right: 60px; display: flex; gap: 20px; justify-content: center; }
+  .h { flex: 1; background: rgba(255,246,236,.08); border: 2px solid rgba(255,246,236,.2); border-radius: 24px; padding: 18px 10px; text-align: center; }
+  .h b { display: block; font-family: "Anton", sans-serif; font-size: 72px; line-height: 1; color: var(--creme); }
+  .h span { font-weight: 800; font-size: 24px; letter-spacing: 3px; text-transform: uppercase; color: var(--or); }
+  .h.chaud { background: var(--passion); border-color: var(--passion); }
+  .h.chaud span { color: var(--creme); }
+
+  #infos { position: absolute; top: 1540px; left: 60px; right: 60px; text-align: center; font-weight: 700; font-size: 34px; line-height: 1.35; }
+  #infos em { font-style: normal; color: var(--or); }
+  #cta { position: absolute; top: 1660px; left: 0; right: 0; display: flex; justify-content: center; }
+  #cta span { font-weight: 900; font-size: 38px; color: var(--creme); background: var(--passion); padding: 18px 40px; border-radius: 999px; }
+  #slogan { position: absolute; top: 1775px; left: 0; right: 0; text-align: center; font-weight: 700; font-size: 30px; opacity: .85; }
+  #slogan em { font-style: normal; color: var(--or); }
+</style>
+</head>
+<body>
+  <div id="root" data-composition-id="main" data-start="0" data-duration="10" data-width="1080" data-height="1920">
+    <div id="fond" class="clip" data-start="0" data-duration="10" data-track-index="0"></div>
+
+    <div id="logo" class="clip" data-start="0" data-duration="10" data-track-index="1">
+      <svg viewBox="0 0 560 120" role="img" aria-label="BachataVan">
+        <rect x="4" y="4" width="552" height="112" rx="12" fill="#F8F6F1" stroke="#8E1B2E" stroke-width="7"/>
+        <path d="M12 12 h56 v96 h-56 a6 6 0 0 1 -6 -6 v-84 a6 6 0 0 1 6 -6z" fill="#1F3FA8"/>
+        <g fill="#F2B544"><circle cx="40" cy="22" r="2.6"/><circle cx="48.5" cy="24.3" r="2.6"/><circle cx="54.7" cy="30.5" r="2.6"/><circle cx="57" cy="39" r="2.6"/><circle cx="54.7" cy="47.5" r="2.6"/><circle cx="48.5" cy="53.7" r="2.6"/><circle cx="40" cy="56" r="2.6"/><circle cx="31.5" cy="53.7" r="2.6"/><circle cx="25.3" cy="47.5" r="2.6"/><circle cx="23" cy="39" r="2.6"/><circle cx="25.3" cy="30.5" r="2.6"/><circle cx="31.5" cy="24.3" r="2.6"/></g>
+        <text x="40" y="96" text-anchor="middle" font-family="Anton, sans-serif" font-size="28" fill="#F8F6F1">BCN</text>
+        <text x="312" y="90" text-anchor="middle" font-family="Anton, sans-serif" font-size="78" letter-spacing="5" fill="#8E1B2E">BACHATAVAN</text>
+      </svg>
+    </div>
+
+    <div id="tag" class="clip" data-start="0" data-duration="10" data-track-index="2"><span>THURSDAY 26 NOV · ACM CITY</span></div>
+    <div id="titre" class="clip" data-start="0" data-duration="10" data-track-index="3">YOUR RIDE TO <em>ACM</em></div>
+
+    <div id="carte" class="clip" data-start="0" data-duration="10" data-track-index="4">
+      <svg viewBox="0 0 960 760" aria-hidden="true">
+        <defs>
+          <pattern id="grille" width="34" height="34" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect width="34" height="34" fill="none" stroke="#2C2233" stroke-width="2"/>
+          </pattern>
+          <radialGradient id="halo"><stop offset="0" stop-color="#FFC24B" stop-opacity=".55"/><stop offset="1" stop-color="#FFC24B" stop-opacity="0"/></radialGradient>
+        </defs>
+        <!-- mer -->
+        <path d="M960 380 C 900 470, 820 560, 760 640 S 700 720, 690 760 L 960 760 Z" fill="#14223A"/>
+        <path d="M960 380 C 900 470, 820 560, 760 640 S 700 720, 690 760" fill="none" stroke="#2B4470" stroke-width="3"/>
+        <text x="850" y="690" font-family="Inter, Arial" font-style="italic" font-weight="600" font-size="24" fill="#6F8DBF" text-anchor="middle">Mediterrània</text>
+        <!-- ville : quadrillage de l'Eixample -->
+        <path d="M380 470 C 470 420, 640 400, 760 440 L 800 560 C 760 640, 640 700, 480 700 C 400 650, 360 560, 380 470 Z" fill="url(#grille)" opacity=".9"/>
+        <text x="400" y="520" font-family="Anton, sans-serif" font-size="34" fill="#5A4866" letter-spacing="4">BARCELONA</text>
+        <!-- Collserola -->
+        <path d="M0 330 C 120 300, 230 380, 330 340 S 520 250, 640 300 S 820 250, 960 200 L 960 270 C 830 320, 720 360, 630 360 S 470 410, 340 420 S 120 400, 0 420 Z" fill="#1F2A1E"/>
+        <text x="150" y="385" font-family="Inter, Arial" font-weight="700" font-size="22" fill="#6E9269" letter-spacing="6">COLLSEROLA</text>
+        <!-- Cerdanyola -->
+        <path d="M150 80 C 230 60, 400 70, 450 120 C 470 190, 400 240, 300 240 C 200 240, 130 190, 150 80 Z" fill="url(#grille)" opacity=".7"/>
+        <!-- routes secondaires -->
+        <g fill="none" stroke="#2A2030" stroke-width="5" stroke-linecap="round">
+          <path d="M0 520 C 200 500, 300 470, 380 470"/><path d="M800 560 C 860 500, 900 420, 960 330"/><path d="M450 120 C 600 140, 760 120, 960 90"/><path d="M0 180 C 80 170, 130 150, 150 130"/>
+        </g>
+        <!-- trajet -->
+        <path id="route-fond" d="M600 600 C 560 520, 600 450, 560 400 S 440 330, 400 280 S 330 210, 300 150" fill="none" stroke="#3A2A40" stroke-width="16" stroke-linecap="round"/>
+        <path id="route" d="M600 600 C 560 520, 600 450, 560 400 S 440 330, 400 280 S 330 210, 300 150" fill="none" stroke="#FFC24B" stroke-width="9" stroke-linecap="round"/>
+        <!-- Sagrada Família -->
+        <g id="sf">
+          <circle cx="600" cy="600" r="70" fill="url(#halo)"/>
+          <g transform="translate(600 600)" fill="#FFF6EC">
+            <path d="M-34 0 L-34 -38 L-30 -62 L-26 -38 L-26 0 Z"/>
+            <path d="M-18 0 L-18 -52 L-13 -84 L-8 -52 L-8 0 Z"/>
+            <path d="M-4 0 L-4 -66 L2 -104 L8 -66 L8 0 Z"/>
+            <path d="M12 0 L12 -52 L17 -84 L22 -52 L22 0 Z"/>
+            <path d="M28 0 L28 -38 L32 -62 L36 -38 L36 0 Z"/>
+            <rect x="-40" y="-8" width="82" height="12" rx="3"/>
+            <circle cx="2" cy="-108" r="4" fill="#FFC24B"/>
+          </g>
+        </g>
+        <!-- pin ACM -->
+        <g id="pin">
+          <circle id="onde1" cx="300" cy="150" r="30" fill="none" stroke="#E8304A" stroke-width="5"/>
+          <circle id="onde2" cx="300" cy="150" r="30" fill="none" stroke="#E8304A" stroke-width="5"/>
+          <g id="pin-corps">
+            <path d="M300 150 C 278 120, 262 104, 262 84 A 38 38 0 0 1 338 84 C 338 104, 322 120, 300 150 Z" fill="#E8304A" stroke="#FFF6EC" stroke-width="4"/>
+            <circle cx="300" cy="84" r="14" fill="#FFF6EC"/>
+          </g>
+        </g>
+      </svg>
+      <div id="van"><svg viewBox="0 0 92 52" aria-hidden="true">
+        <rect x="4" y="6" width="80" height="34" rx="9" fill="#FFF6EC" stroke="#8E1B2E" stroke-width="4"/>
+        <path d="M58 10 h14 a8 8 0 0 1 8 8 v8 h-22z" fill="#1F3FA8"/>
+        <rect x="14" y="13" width="36" height="9" rx="2" fill="#8E1B2E"/>
+        <circle cx="24" cy="42" r="8" fill="#0E0A12" stroke="#FFC24B" stroke-width="3"/><circle cx="66" cy="42" r="8" fill="#0E0A12" stroke="#FFC24B" stroke-width="3"/>
+      </svg></div>
+      <div id="lbl-sf" class="lbl">SAGRADA FAMÍLIA<small>Meeting point</small></div>
+      <div id="lbl-acm" class="lbl">ACM CITY<small>Can Pallarès 2 · Cerdanyola</small></div>
+      <div id="temps"><b id="temps-n">0</b><span>min</span></div>
+    </div>
+
+    <div id="horaires" class="clip" data-start="5.2" data-duration="4.8" data-track-index="5">
+      <div class="h" id="h1"><span>Departure</span><b>22:30</b></div>
+      <div class="h chaud" id="h2"><span>Return</span><b>02:30</b></div>
+    </div>
+    <div id="infos" class="clip" data-start="6.3" data-duration="3.7" data-track-index="6">22h workshop <em>Irene &amp; Nicolò</em><br>Room 1 · <em>100% bachata</em></div>
+    <div id="cta" class="clip" data-start="7.1" data-duration="2.9" data-track-index="7"><span>Book your seat · link in bio</span></div>
+    <div id="slogan" class="clip" data-start="7.6" data-duration="2.4" data-track-index="8">More than a ride. <em>It's a community.</em></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const route = document.getElementById("route"), L = route.getTotalLength();
+    const van = document.getElementById("van"), tn = document.getElementById("temps-n");
+    route.style.strokeDasharray = L; route.style.strokeDashoffset = L;
+    const trajet = { p: 0 };
+    function place() {
+      const pt = route.getPointAtLength(trajet.p * L), pt2 = route.getPointAtLength(Math.min(L, trajet.p * L + 2));
+      const ang = Math.atan2(pt2.y - pt.y, pt2.x - pt.x) * 180 / Math.PI;
+      const flip = Math.abs(ang) > 90;
+      van.style.transform = `translate(${pt.x}px, ${pt.y}px) rotate(${flip ? ang + 180 : ang}deg) scaleX(${flip ? -1 : 1})`;
+      route.style.strokeDashoffset = L * (1 - trajet.p);
+      tn.textContent = Math.round(trajet.p * 25);
+    }
+    place();
+
+    // Miniature : logo, tag, titre déjà là à l'image 0
+    tl.fromTo("#titre", { scale: 1.06 }, { scale: 1, duration: 0.45, ease: "back.out(2.2)" }, 0);
+    tl.fromTo("#logo svg", { y: -16 }, { y: 0, duration: 0.35, ease: "power3.out" }, 0);
+    // Carte
+    tl.fromTo("#carte", { y: 60, scale: 0.97 }, { y: 0, scale: 1, duration: 0.7, ease: "power3.out" }, 0.1);
+    tl.fromTo("#sf", { scale: 0, transformOrigin: "600px 600px" }, { scale: 1, duration: 0.45, ease: "back.out(2.5)" }, 0.6);
+    tl.fromTo("#lbl-sf", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, 0.85);
+    tl.fromTo("#van", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 1.0);
+    // Le van roule
+    tl.to(trajet, { p: 1, duration: 3.6, ease: "power1.inOut", onUpdate: place }, 1.1);
+    // Arrivée
+    tl.to("#van", { opacity: 0, scale: 0.5, duration: 0.25 }, 4.65);
+    tl.fromTo("#pin-corps", { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "bounce.out" }, 4.6);
+    tl.fromTo("#onde1", { attr: { r: 20 }, opacity: 1 }, { attr: { r: 90 }, opacity: 0, duration: 1, ease: "power2.out" }, 4.8);
+    tl.fromTo("#onde2", { attr: { r: 20 }, opacity: 1 }, { attr: { r: 90 }, opacity: 0, duration: 1, ease: "power2.out" }, 5.3);
+    tl.fromTo("#lbl-acm", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.4)" }, 4.85);
+    tl.fromTo("#temps", { scale: 1 }, { scale: 1.15, duration: 0.2, yoyo: true, repeat: 1, ease: "power2.inOut" }, 4.7);
+    // Horaires + infos
+    tl.fromTo("#h1", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2.5)" }, 5.2);
+    tl.fromTo("#h2", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2.5)" }, 5.45);
+    tl.fromTo("#infos", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, 6.3);
+    tl.fromTo("#cta span", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.4)" }, 7.1);
+    tl.to("#cta span", { scale: 1.06, duration: 0.25, ease: "power2.inOut", yoyo: true, repeat: 3 }, 8.2);
+    tl.fromTo("#slogan", { opacity: 0 }, { opacity: 0.85, duration: 0.4 }, 7.6);
+    window.__timelines = window.__timelines || {};
+    window.__timelines["main"] = tl;
+    tl.seek(0);
+  </script>
+</body>
+</html>
