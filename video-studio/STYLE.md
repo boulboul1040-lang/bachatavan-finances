@@ -57,3 +57,4 @@ pour ne jamais refaire la même erreur.
 - 2026-11-11 : selfie face caméra → sous-titres sous le menton (`sousTitresY` ≈ 1430), jamais sur la bouche.
 - 2026-11-14 : logo BachataVan visible du début à la fin des vidéos (au-dessus des têtes, fond sombre), pas seulement sur la carte de fin.
 - 2026-11-22 : TOUJOURS centrer les titres et textes sous les photos/vidéos (jamais alignés à gauche).
+- 2026-11-26 : animation de logo codée (phares, comète) jugée trop basique → pour un logo reveal réaliste/cinéma, passer par une IA vidéo (Veo via Higgsfield ou Google Flow) à partir du PNG de la plaque ; le code reste pour les cartes, textes et infos.
