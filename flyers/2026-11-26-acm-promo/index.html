@@ -1,205 +1,232 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=1080, height=1920" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080, height=1920">
 <script src="assets/gsap.min.js"></script>
 <style>
   @font-face { font-family: "Anton"; src: url("assets/fonts/anton.woff2") format("woff2"); font-weight: 400; }
-  :root { --nuit: #0E0A12; --or: #FFC24B; --or-clair: #FFE3A1; --passion: #E8304A; --creme: #FFF6EC; --neon: #FF4FD8; }
+  /* Palette chaude : vin, or, crème sur noir chaud. Plus de bleu/violet. */
+  :root { --noir: #140A08; --vin: #8E1B2E; --vin-fonce: #4A0C16; --or: #F2B544; --or-clair: #FFE0A3; --creme: #FFF4E6; --braise: #FF7A3D; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--nuit); }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--noir); }
   #root { position: absolute; inset: 0; overflow: hidden; font-family: "Inter", "Helvetica Neue", Arial, sans-serif; color: var(--creme); }
 
-  video.plan { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; }
-  #fin-bg { filter: blur(26px) brightness(.45) saturate(1.2); transform: scale(1.15); }
+  .cam { position: absolute; inset: 0; transform-origin: 50% 50%; }
+  .cam video { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; }
 
-  /* voiles pour lire le texte */
+  /* lumière chaude + lisibilité */
+  #chaleur { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: soft-light;
+    background: radial-gradient(900px 700px at 30% 20%, rgba(255,150,60,.55), transparent 70%), radial-gradient(900px 900px at 80% 90%, rgba(142,27,46,.6), transparent 70%); }
   #voile { position: absolute; inset: 0; pointer-events: none;
-    background: linear-gradient(180deg, rgba(14,10,18,.75) 0%, rgba(14,10,18,0) 22%, rgba(14,10,18,0) 52%, rgba(14,10,18,.85) 80%, rgba(14,10,18,.95) 100%); }
-  #vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 80% 60% at 50% 50%, transparent 55%, rgba(0,0,0,.55) 100%); }
-  #grain { position: absolute; inset: -50px; opacity: .09; pointer-events: none; mix-blend-mode: overlay; }
-  #flash { position: absolute; inset: 0; background: #FFF6EC; opacity: 0; pointer-events: none; }
+    background: linear-gradient(180deg, rgba(20,10,8,.55) 0%, rgba(20,10,8,0) 20%, rgba(20,10,8,0) 40%, rgba(20,10,8,.75) 72%, rgba(20,10,8,.9) 100%); }
+  #fuite { position: absolute; inset: -200px; pointer-events: none; opacity: 0; mix-blend-mode: screen;
+    background: radial-gradient(600px 900px at 85% 40%, rgba(255,140,50,.95), rgba(255,90,40,.4) 40%, transparent 70%); }
 
-  /* logo fixe en haut */
-  #logo { position: absolute; top: 186px; left: 0; right: 0; display: flex; justify-content: center; }
-  #logo img { width: 420px; height: auto; filter: drop-shadow(0 10px 24px rgba(0,0,0,.7)); }
+  /* logo plaque toujours visible (règle maison) */
+  #logo { position: absolute; top: 300px; left: 0; right: 0; display: flex; justify-content: center; z-index: 20; }
+  #logo img { width: 380px; filter: drop-shadow(0 10px 24px rgba(0,0,0,.6)); }
 
-  /* textes */
-  .t { position: absolute; left: 60px; right: 60px; text-align: center; }
-  .big { font-family: "Anton", sans-serif; line-height: .95; letter-spacing: 1px; text-shadow: 0 8px 30px rgba(0,0,0,.6); }
-  .big em { font-style: normal; background: linear-gradient(180deg, var(--or-clair), var(--or) 55%, #C98A1B); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 6px 16px rgba(0,0,0,.85)); }
+  .t { position: absolute; left: 120px; right: 192px; text-align: center; z-index: 15; }
+  .big { font-family: "Anton", sans-serif; line-height: .96; letter-spacing: 1px; }
   .w { display: inline-block; }
-  .pill { display: inline-block; font-weight: 900; font-size: 40px; letter-spacing: 3px; color: var(--nuit); background: var(--or); padding: 16px 34px; border-radius: 999px; box-shadow: 0 14px 30px rgba(0,0,0,.45); }
-  .pill.rouge { background: var(--passion); color: var(--creme); }
+  .or { color: var(--or); }
+  .ombre { text-shadow: 0 6px 30px rgba(20,10,8,.75); }
+  .pill { display: inline-block; font-weight: 900; font-size: 34px; letter-spacing: 4px; color: var(--noir); background: var(--or); padding: 14px 30px; border-radius: 999px; }
 
-  #t1 { top: 980px; font-size: 168px; }
-  #t1-tag { top: 900px; }
-  #t2 { top: 1100px; }
-  #t2 .big { font-size: 96px; display: block; margin-bottom: 22px; }
-  #t4 { top: 1060px; }
-  #t4 .big { font-size: 120px; display: block; text-shadow: 0 6px 24px rgba(0,0,0,.9); }
-  #t4::before { content: ""; position: absolute; left: -60px; right: -60px; top: -80px; bottom: -80px; background: radial-gradient(ellipse at center, rgba(14,10,18,.6), rgba(14,10,18,0) 70%); z-index: -1; }
-  #t4 .barre { display: block; height: 10px; width: 520px; margin: 18px auto 0; border-radius: 6px; background: var(--or); transform-origin: left center; }
-  #t5 { top: 860px; }
-  #t5 .big { font-size: 190px; color: #fff; text-shadow: 0 0 18px #FF4FD8, 0 0 46px #FF4FD8, 0 0 90px #B21FFF; }
-  #t5 .sous { display: block; margin-top: 20px; font-weight: 900; font-size: 44px; letter-spacing: 6px; color: var(--creme); text-shadow: 0 0 14px rgba(255,79,216,.9); }
-  #t6 { top: 1060px; }
-  #t6 .big { font-size: 120px; display: block; margin-top: 18px; }
+  #h1-tag { top: 760px; }
+  #h1 { top: 830px; font-size: 150px; }
+  #h2 { top: 860px; font-size: 118px; }
+  #h2-pill { top: 1110px; }
+  #h4 { top: 900px; font-size: 128px; }
+  #h5 { top: 820px; font-size: 176px; color: #FFF; text-shadow: 0 0 16px #FF6A3D, 0 0 44px #FF3D6A, 0 0 90px #8E1B2E; }
+  #h5-sous { top: 1020px; font-weight: 900; font-size: 38px; letter-spacing: 6px; text-shadow: 0 0 14px rgba(255,106,61,.9); }
+  #h6-pill { top: 860px; }
+  #h6 { top: 940px; font-size: 190px; }
 
-  /* carte */
-  #carte { position: absolute; inset: 0; background: radial-gradient(900px 900px at 50% 45%, #2A1A33, #0E0A12 75%); }
-  #carte-in { position: absolute; left: 40px; top: 470px; width: 1000px; height: 792px; }
-  #carte-in svg { position: absolute; inset: 0; width: 1000px; height: 792px; }
-  #van { position: absolute; left: 0; top: 0; width: 110px; height: 62px; margin: -31px 0 0 -55px; }
-  #van svg { width: 110px; height: 62px; }
-  #carte-titre { position: absolute; top: 330px; left: 0; right: 0; text-align: center; font-family: "Anton", sans-serif; font-size: 92px; }
-  #carte-titre em { font-style: normal; color: var(--or); }
-  #mins { position: absolute; top: 1200px; z-index: 2; text-shadow: 0 0 30px rgba(255,194,75,.5); left: 0; right: 0; text-align: center; font-family: "Anton", sans-serif; font-size: 150px; line-height: 1; color: var(--or); }
-  #mins small { font-size: 54px; color: var(--creme); margin-left: 10px; }
+  /* carte chaude, caméra qui suit le van */
+  #carte { position: absolute; inset: 0; background: radial-gradient(1000px 1100px at 50% 50%, #3A1810, var(--noir) 75%); overflow: hidden; z-index: 5; }
+  #monde { position: absolute; left: 0; top: 0; width: 960px; height: 760px; transform-origin: 0 0; }
+  #monde > svg { position: absolute; inset: 0; width: 960px; height: 760px; overflow: visible; }
+  #van { position: absolute; left: 0; top: 0; width: 92px; height: 52px; margin: -26px 0 0 -46px; }
+  #carte-titre { position: absolute; top: 470px; left: 0; right: 0; text-align: center; font-family: "Anton", sans-serif; font-size: 84px; z-index: 6; text-shadow: 0 6px 24px rgba(0,0,0,.6); }
+  #minutes { position: absolute; top: 572px; left: 0; right: 0; text-align: center; font-family: "Anton", sans-serif; font-size: 96px; line-height: 1; color: var(--or); z-index: 6; text-shadow: 0 0 30px rgba(242,181,68,.45); }
+  #minutes small { font-size: 36px; color: var(--creme); margin-left: 8px; }
+  #pastille { position: absolute; left: 540px; top: 1110px; width: 560px; height: 76px; margin: -38px 0 0 -280px; border-radius: 999px; background: var(--or); z-index: 7; opacity: 0; }
 
   /* fin */
-  #fin { position: absolute; inset: 0; }
-  #fin-plaque { position: absolute; left: 90px; top: 640px; width: 900px; }
-  #fin-plaque img { width: 900px; display: block; filter: drop-shadow(0 30px 50px rgba(0,0,0,.7)); }
-  #fin-halo { position: absolute; left: -100px; right: -100px; top: 560px; height: 360px; background: radial-gradient(ellipse, rgba(255,194,75,.35), rgba(255,194,75,0) 65%); }
-  #fin-txt { position: absolute; top: 900px; left: 60px; right: 60px; text-align: center; }
-  #fin-date { font-family: "Anton", sans-serif; font-size: 86px; line-height: 1; }
-  #fin-date em { font-style: normal; color: var(--or); }
-  #fin-h { margin-top: 18px; font-weight: 800; font-size: 40px; color: var(--creme); opacity: .9; }
-  #fin-cta { margin-top: 44px; }
-  #fin-cta span { font-size: 46px; padding: 22px 46px; }
-  #fin-slogan { margin-top: 36px; font-weight: 700; font-size: 34px; }
+  #fin { position: absolute; inset: 0; background: radial-gradient(900px 1000px at 50% 45%, var(--vin), var(--vin-fonce) 70%, var(--noir)); z-index: 30; }
+  #fin-halo { position: absolute; left: -100px; right: -100px; top: 520px; height: 420px; background: radial-gradient(ellipse, rgba(242,181,68,.45), rgba(242,181,68,0) 65%); }
+  #fin-plaque { position: absolute; left: 120px; top: 620px; width: 840px; }
+  #fin-plaque img { width: 840px; display: block; filter: drop-shadow(0 30px 50px rgba(0,0,0,.6)); }
+  #fin-date { position: absolute; top: 850px; left: 0; right: 0; text-align: center; font-family: "Anton", sans-serif; font-size: 92px; }
+  #fin-trajet { position: absolute; top: 965px; left: 0; right: 0; text-align: center; font-weight: 800; font-size: 34px; color: var(--or-clair); }
+  #fin-cta { position: absolute; top: 1050px; left: 0; right: 0; text-align: center; }
+  #fin-cta span { display: inline-block; font-weight: 900; font-size: 42px; letter-spacing: 2px; color: var(--vin-fonce); background: var(--or); padding: 20px 44px; border-radius: 999px; box-shadow: 0 16px 40px rgba(0,0,0,.35); }
+  #fin-slogan { position: absolute; top: 1170px; left: 0; right: 0; text-align: center; font-weight: 700; font-size: 32px; }
   #fin-slogan em { font-style: normal; color: var(--or); }
 </style>
 </head>
 <body>
-  <div id="root" data-composition-id="main" data-start="0" data-duration="15" data-width="1080" data-height="1920">
+  <div data-hf-id="hf-rmqe" id="root" data-composition-id="main" data-start="0" data-duration="16.5" data-width="1080" data-height="1920" data-motion-blur="on">
 
-    <!-- PLANS -->
-    <video id="p1" class="plan clip" src="assets/sagrada.mp4" data-start="0" data-duration="1.8" data-media-start="4.4" data-track-index="0" muted></video>
-    <video id="p2" class="plan clip" src="assets/sagrada.mp4" data-start="1.8" data-duration="1.8" data-media-start="0.4" data-track-index="1" muted></video>
-    <div id="carte" class="clip" data-start="3.6" data-duration="2.6" data-track-index="2">
-      <div id="carte-titre"><span id="ct">SAGRADA <em>→</em> ACM</span></div>
-      <div id="carte-in">
-        <svg viewBox="0 0 960 760" aria-hidden="true">
-          <defs>
-            <pattern id="grille" width="34" height="34" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="34" height="34" fill="none" stroke="#2C2233" stroke-width="2"/></pattern>
-            <radialGradient id="halo"><stop offset="0" stop-color="#FFC24B" stop-opacity=".6"/><stop offset="1" stop-color="#FFC24B" stop-opacity="0"/></radialGradient>
+    <!-- PLANS (la caméra = le wrapper .cam, jamais la vidéo) -->
+    <div data-hf-id="hf-o583" class="cam" id="c1"><video data-color-grading="{&quot;preset&quot;:&quot;warm-daylight&quot;,&quot;intensity&quot;:0.8,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.06,&quot;shadows&quot;:0.08,&quot;whites&quot;:0,&quot;blacks&quot;:0,&quot;temperature&quot;:0.08,&quot;tint&quot;:0,&quot;vibrance&quot;:0.15,&quot;saturation&quot;:0.08},&quot;details&quot;:{&quot;vignette&quot;:0.3,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0.18,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-1spf" id="p1" class="clip" src="assets/sagrada.mp4" data-start="0" data-duration="1.75" data-media-start="4.3" data-track-index="0" muted></video></div>
+    <div data-hf-id="hf-fhc8" class="cam" id="c2"><video data-color-grading="{&quot;preset&quot;:&quot;warm-daylight&quot;,&quot;intensity&quot;:0.8,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.06,&quot;shadows&quot;:0.08,&quot;whites&quot;:0,&quot;blacks&quot;:0,&quot;temperature&quot;:0.08,&quot;tint&quot;:0,&quot;vibrance&quot;:0.15,&quot;saturation&quot;:0.08},&quot;details&quot;:{&quot;vignette&quot;:0.3,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0.18,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-3svd" id="p2" class="clip" src="assets/sagrada.mp4" data-start="1.75" data-duration="1.75" data-media-start="0.4" data-track-index="1" muted></video></div>
+    <div data-hf-id="hf-5die" class="cam" id="c4"><video data-color-grading="{&quot;preset&quot;:&quot;warm-daylight&quot;,&quot;intensity&quot;:0.8,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.06,&quot;shadows&quot;:0.08,&quot;whites&quot;:0,&quot;blacks&quot;:0,&quot;temperature&quot;:0.08,&quot;tint&quot;:0,&quot;vibrance&quot;:0.15,&quot;saturation&quot;:0.08},&quot;details&quot;:{&quot;vignette&quot;:0.3,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0.18,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-afwi" id="p4" class="clip" src="assets/van.mp4" data-start="6.1" data-duration="2.1" data-media-start="1.0" data-track-index="2" data-has-audio="true" data-volume="0.8"></video></div>
+    <div data-hf-id="hf-bj87" class="cam" id="c5"><video data-color-grading="{&quot;preset&quot;:&quot;night-lift&quot;,&quot;intensity&quot;:0.7,&quot;adjust&quot;:{&quot;exposure&quot;:0.08,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.18,&quot;shadows&quot;:0.2,&quot;whites&quot;:0,&quot;blacks&quot;:-0.08,&quot;temperature&quot;:0.12,&quot;tint&quot;:0,&quot;vibrance&quot;:0.1,&quot;saturation&quot;:0.04},&quot;details&quot;:{&quot;vignette&quot;:0.3,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0.18,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-gws7" id="p5" class="clip" src="assets/acm.mp4" data-start="8.2" data-duration="2.9" data-media-start="0.6" data-track-index="3" muted data-playback-rate="0.8"></video></div>
+    <div data-hf-id="hf-0nqk" class="cam" id="c6"><video data-color-grading="{&quot;preset&quot;:&quot;warm-daylight&quot;,&quot;intensity&quot;:0.8,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.06,&quot;shadows&quot;:0.08,&quot;whites&quot;:0,&quot;blacks&quot;:0,&quot;temperature&quot;:0.08,&quot;tint&quot;:0,&quot;vibrance&quot;:0.15,&quot;saturation&quot;:0.08},&quot;details&quot;:{&quot;vignette&quot;:0.3,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0.18,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-vavr" id="p6" class="clip" src="assets/groupe-nuit.mp4" data-start="11.1" data-duration="1.7" data-media-start="4.0" data-track-index="4" muted></video></div>
+
+    <!-- CARTE -->
+    <div data-hf-id="hf-egsa" id="carte" class="clip" data-start="3.5" data-duration="2.6" data-track-index="5">
+      <div data-hf-id="hf-y2tw" id="monde">
+        <svg data-hf-id="hf-wmvq" viewBox="0 0 960 760" aria-hidden="true">
+          <defs data-hf-id="hf-mh0t">
+            <pattern data-hf-id="hf-kegf" id="grille" width="30" height="30" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect data-hf-id="hf-ce1n" width="30" height="30" fill="none" stroke="#4A2418" stroke-width="2" /></pattern>
+            <radialgradient data-hf-id="hf-oo5d" id="halo"><stop data-hf-id="hf-r3u9" offset="0" stop-color="#F2B544" stop-opacity=".7" /><stop data-hf-id="hf-jao9" offset="1" stop-color="#F2B544" stop-opacity="0" /></radialgradient>
+            <radialgradient data-hf-id="hf-57d4" id="halo-r"><stop data-hf-id="hf-b4kj" offset="0" stop-color="#FF7A3D" stop-opacity=".7" /><stop data-hf-id="hf-24kn" offset="1" stop-color="#FF7A3D" stop-opacity="0" /></radialgradient>
           </defs>
-          <path d="M960 380 C 900 470, 820 560, 760 640 S 700 720, 690 760 L 960 760 Z" fill="#14223A"/>
-          <path d="M380 470 C 470 420, 640 400, 760 440 L 800 560 C 760 640, 640 700, 480 700 C 400 650, 360 560, 380 470 Z" fill="url(#grille)"/>
-          <path d="M0 330 C 120 300, 230 380, 330 340 S 520 250, 640 300 S 820 250, 960 200 L 960 270 C 830 320, 720 360, 630 360 S 470 410, 340 420 S 120 400, 0 420 Z" fill="#1F2A1E"/>
-          <path d="M150 80 C 230 60, 400 70, 450 120 C 470 190, 400 240, 300 240 C 200 240, 130 190, 150 80 Z" fill="url(#grille)" opacity=".7"/>
-          <path d="M600 600 C 560 520, 600 450, 560 400 S 440 330, 400 280 S 330 210, 300 150" fill="none" stroke="#3A2A40" stroke-width="18" stroke-linecap="round"/>
-          <path id="route" d="M600 600 C 560 520, 600 450, 560 400 S 440 330, 400 280 S 330 210, 300 150" fill="none" stroke="#FFC24B" stroke-width="10" stroke-linecap="round" style="filter: drop-shadow(0 0 12px #FFC24B)"/>
-          <circle cx="600" cy="600" r="80" fill="url(#halo)"/>
-          <g transform="translate(600 600)" fill="#FFF6EC"><path d="M-34 0 L-34 -38 L-30 -62 L-26 -38 L-26 0 Z"/><path d="M-18 0 L-18 -52 L-13 -84 L-8 -52 L-8 0 Z"/><path d="M-4 0 L-4 -66 L2 -104 L8 -66 L8 0 Z"/><path d="M12 0 L12 -52 L17 -84 L22 -52 L22 0 Z"/><path d="M28 0 L28 -38 L32 -62 L36 -38 L36 0 Z"/><rect x="-40" y="-8" width="82" height="12" rx="3"/></g>
-          <g id="pin"><circle id="onde" cx="300" cy="150" r="30" fill="none" stroke="#FF4FD8" stroke-width="6"/>
-            <path d="M300 150 C 278 120, 262 104, 262 84 A 38 38 0 0 1 338 84 C 338 104, 322 120, 300 150 Z" fill="#E8304A" stroke="#FFF6EC" stroke-width="4"/><circle cx="300" cy="84" r="14" fill="#FFF6EC"/></g>
+          <path data-hf-id="hf-1mvt" d="M960 380 C 900 470, 820 560, 760 640 S 700 720, 690 760 L 1300 760 L 1300 200 Z" fill="#221218" />
+          <path data-hf-id="hf-j1ut" d="M960 380 C 900 470, 820 560, 760 640 S 700 720, 690 760" fill="none" stroke="#5A2A22" stroke-width="3" />
+          <path data-hf-id="hf-mu4n" d="M380 470 C 470 420, 640 400, 760 440 L 800 560 C 760 640, 640 700, 480 700 C 400 650, 360 560, 380 470 Z" fill="url(#grille)" />
+          <text data-hf-id="hf-bxut" x="560" y="520" text-anchor="middle" font-family="Anton, sans-serif" font-size="30" fill="#6A3A2A" letter-spacing="6">BARCELONA</text>
+          <path data-hf-id="hf-e4re" d="M-300 330 C 120 300, 230 380, 330 340 S 520 250, 640 300 S 820 250, 1300 160 L 1300 240 C 830 320, 720 360, 630 360 S 470 410, 340 420 S 120 400, -300 420 Z" fill="#2E2410" />
+          <text data-hf-id="hf-ap3m" x="170" y="388" font-family="Inter, Arial" font-weight="800" font-size="20" fill="#6E5A2A" letter-spacing="6">COLLSEROLA</text>
+          <path data-hf-id="hf-7ihe" d="M150 80 C 230 60, 400 70, 450 120 C 470 190, 400 240, 300 240 C 200 240, 130 190, 150 80 Z" fill="url(#grille)" />
+          <text data-hf-id="hf-guds" x="300" y="215" text-anchor="middle" font-family="Anton, sans-serif" font-size="24" fill="#6A3A2A" letter-spacing="4">CERDANYOLA</text>
+          <g data-hf-id="hf-xbru" fill="none" stroke="#3A1C14" stroke-width="6" stroke-linecap="round"><path data-hf-id="hf-unvc" d="M-300 520 C 200 500, 300 470, 380 470" /><path data-hf-id="hf-cnqq" d="M800 560 C 860 500, 900 420, 1100 250" /><path data-hf-id="hf-w5n8" d="M450 120 C 600 140, 760 120, 1200 80" /><path data-hf-id="hf-4ne0" d="M-200 180 C 80 170, 130 150, 150 130" /></g>
+          <path data-hf-id="hf-u2yc" d="M600 600 C 560 520, 600 450, 560 400 S 440 330, 400 280 S 330 210, 300 150" fill="none" stroke="#3A1C14" stroke-width="16" stroke-linecap="round" />
+          <path data-hf-id="hf-spjw" id="route" d="M600 600 C 560 520, 600 450, 560 400 S 440 330, 400 280 S 330 210, 300 150" fill="none" stroke="#F2B544" stroke-width="8" stroke-linecap="round" />
+          <circle data-hf-id="hf-hf9o" cx="600" cy="600" r="90" fill="url(#halo)" />
+          <g data-hf-id="hf-xfz1" transform="translate(600 600)" fill="#FFF4E6"><path data-hf-id="hf-b1no" d="M-34 0 L-34 -38 L-30 -62 L-26 -38 L-26 0 Z" /><path data-hf-id="hf-mnoz" d="M-18 0 L-18 -52 L-13 -84 L-8 -52 L-8 0 Z" /><path data-hf-id="hf-w8c7" d="M-4 0 L-4 -66 L2 -104 L8 -66 L8 0 Z" /><path data-hf-id="hf-uprg" d="M12 0 L12 -52 L17 -84 L22 -52 L22 0 Z" /><path data-hf-id="hf-3pvv" d="M28 0 L28 -38 L32 -62 L36 -38 L36 0 Z" /><rect data-hf-id="hf-uam3" x="-40" y="-8" width="82" height="12" rx="3" /></g>
+          <circle data-hf-id="hf-115t" id="halo-acm" cx="300" cy="150" r="110" fill="url(#halo-r)" opacity="0" />
+          <g data-hf-id="hf-bqho" id="pin"><path data-hf-id="hf-jfne" d="M300 150 C 278 120, 262 104, 262 84 A 38 38 0 0 1 338 84 C 338 104, 322 120, 300 150 Z" fill="#8E1B2E" stroke="#F2B544" stroke-width="4" /><circle data-hf-id="hf-up29" cx="300" cy="84" r="13" fill="#F2B544" /></g>
         </svg>
-        <div id="van"><svg viewBox="0 0 92 52" aria-hidden="true"><rect x="4" y="6" width="80" height="34" rx="9" fill="#FFF6EC" stroke="#8E1B2E" stroke-width="4"/><path d="M58 10 h14 a8 8 0 0 1 8 8 v8 h-22z" fill="#1F3FA8"/><rect x="14" y="13" width="36" height="9" rx="2" fill="#8E1B2E"/><circle cx="24" cy="42" r="8" fill="#0E0A12" stroke="#FFC24B" stroke-width="3"/><circle cx="66" cy="42" r="8" fill="#0E0A12" stroke="#FFC24B" stroke-width="3"/></svg></div>
+        <div data-hf-id="hf-rvu8" id="van"><svg data-hf-id="hf-gyo9" viewBox="0 0 92 52" width="92" height="52" aria-hidden="true"><rect data-hf-id="hf-5bcy" x="4" y="6" width="80" height="34" rx="9" fill="#FFF4E6" stroke="#8E1B2E" stroke-width="4" /><path data-hf-id="hf-5i4b" d="M58 10 h14 a8 8 0 0 1 8 8 v8 h-22z" fill="#1F3FA8" /><rect data-hf-id="hf-ou10" x="14" y="13" width="36" height="9" rx="2" fill="#8E1B2E" /><circle data-hf-id="hf-p7s1" cx="24" cy="42" r="8" fill="#140A08" stroke="#F2B544" stroke-width="3" /><circle data-hf-id="hf-kn4z" cx="66" cy="42" r="8" fill="#140A08" stroke="#F2B544" stroke-width="3" /><path data-hf-id="hf-gvso" d="M84 18 l40 -10 v34 l-40 -10z" fill="#FFE0A3" opacity=".35" /></svg></div>
       </div>
-      <div id="mins"><span id="mins-n">0</span><small>MIN</small></div>
+      <div data-hf-id="hf-1cn7" id="carte-titre"><span data-hf-id="hf-s05b" class="w" id="ct1">SAGRADA</span> <span data-hf-id="hf-ulho" class="w or" id="ct2">→</span> <span data-hf-id="hf-eks5" class="w" id="ct3">ACM</span></div>
+      <div data-hf-id="hf-e90s" id="minutes"><span data-hf-id="hf-n5mt" id="min-n">0</span><small data-hf-id="hf-3qjc">MIN</small></div>
+      <div data-hf-id="hf-mfrf" id="pastille"></div>
     </div>
-    <video id="p4" class="plan clip" src="assets/van.mp4" data-start="6.2" data-duration="2" data-media-start="1.0" data-track-index="3" muted></video>
-    <video id="p5" class="plan clip" src="assets/acm.mp4" data-start="8.2" data-duration="2.9" data-media-start="0.6" data-track-index="4" muted></video>
-    <video id="p6" class="plan clip" src="assets/groupe-nuit.mp4" data-start="11.1" data-duration="1.6" data-media-start="4.0" data-track-index="5" muted></video>
-    <video id="fin-bg" class="plan clip" src="assets/groupe-nuit.mp4" data-start="12.7" data-duration="2.3" data-media-start="5.6" data-track-index="6" muted></video>
 
-    <div id="voile" class="clip" data-start="0" data-duration="15" data-track-index="7"></div>
-    <div id="vignette" class="clip" data-start="0" data-duration="15" data-track-index="8"></div>
+    <div data-hf-id="hf-goez" id="chaleur" class="clip" data-start="0" data-duration="16.5" data-track-index="6"></div>
+    <div data-hf-id="hf-imbl" id="voile" class="clip" data-start="0" data-duration="16.5" data-track-index="7"></div>
 
     <!-- TEXTES -->
-    <div id="t1-tag" class="t clip" data-start="0" data-duration="1.8" data-track-index="9"><span class="pill">THURSDAY 26 NOV</span></div>
-    <div id="t1" class="t big clip" data-start="0" data-duration="1.8" data-track-index="10"><span class="w" id="w1">YOUR</span> <span class="w" id="w2">RIDE</span><br><span class="w" id="w3">TO</span> <em class="w" id="w4">ACM</em></div>
-    <div id="t2" class="t clip" data-start="1.8" data-duration="1.8" data-track-index="11"><span class="big" id="t2a">MEET AT <em>22:30</em></span><span class="pill" id="t2b">SAGRADA FAMÍLIA</span></div>
-    <div id="t4" class="t clip" data-start="6.2" data-duration="2" data-track-index="12"><span class="big" id="t4a">BACHATA<br><em>ON BOARD</em></span><span class="barre" id="t4b"></span></div>
-    <div id="t5" class="t clip" data-start="8.2" data-duration="2.9" data-track-index="13"><span class="big" id="t5a">ACM CITY</span><span class="sous" id="t5b">ROOM 1 · 100% BACHATA</span></div>
-    <div id="t6" class="t clip" data-start="11.1" data-duration="1.6" data-track-index="14"><span class="pill rouge" id="t6a">RIDE HOME</span><span class="big" id="t6b">02:30</span></div>
+    <div data-hf-id="hf-wde7" id="h1-tag" class="t clip" data-start="0" data-duration="1.75" data-track-index="8"><span data-hf-id="hf-wwha" class="pill">JUEVES · 26 NOV</span></div>
+    <div data-hf-id="hf-3lbe" id="h1" class="t big ombre clip" data-start="0" data-duration="1.75" data-track-index="9"><span data-hf-id="hf-sv8z" class="w">YOUR</span> <span data-hf-id="hf-du1e" class="w">RIDE</span><br data-hf-id="hf-x5px"><span data-hf-id="hf-ft01" class="w">TO</span> <span data-hf-id="hf-pn4a" class="w or">ACM</span></div>
+    <div data-hf-id="hf-ag5i" id="h2" class="t big ombre clip" data-start="1.75" data-duration="1.75" data-track-index="10"><span data-hf-id="hf-jlmj" class="w" id="m1">MEET</span> <span data-hf-id="hf-yi2y" class="w" id="m2">AT</span><br data-hf-id="hf-rsrt"><span data-hf-id="hf-939e" class="w or" id="m3">22:30</span></div>
+    <div data-hf-id="hf-usw4" id="h2-pill" class="t clip" data-start="1.75" data-duration="1.75" data-track-index="11"><span data-hf-id="hf-72jp" class="pill" id="pill-sf">SAGRADA FAMÍLIA</span></div>
+    <div data-hf-id="hf-5mlc" id="h4" class="t big ombre clip" data-start="6.1" data-duration="2.1" data-track-index="12"><span data-hf-id="hf-utwd" class="w" id="b1">BACHATA</span><br data-hf-id="hf-szow"><span data-hf-id="hf-0dq4" class="w or" id="b2">ON</span> <span data-hf-id="hf-nk08" class="w or" id="b3">BOARD</span></div>
+    <div data-hf-id="hf-p0j0" id="h5" class="t big clip" data-start="8.2" data-duration="2.9" data-track-index="13"><span data-hf-id="hf-dadw" id="neon">ACM CITY</span></div>
+    <div data-hf-id="hf-ycfc" id="h5-sous" class="t clip" data-start="8.2" data-duration="2.9" data-track-index="14"><span data-hf-id="hf-884r" id="sous">SALA 1 · 100% BACHATA</span></div>
+    <div data-hf-id="hf-z1gz" id="h6-pill" class="t clip" data-start="11.1" data-duration="1.7" data-track-index="15"><span data-hf-id="hf-rw5v" class="pill" id="pill-r">RIDE HOME</span></div>
+    <div data-hf-id="hf-vsxj" id="h6" class="t big ombre clip" data-start="11.1" data-duration="1.7" data-track-index="16"><span data-hf-id="hf-w5lf" class="w" id="r1">02</span><span data-hf-id="hf-ng3l" class="w or" id="r2">:</span><span data-hf-id="hf-s3io" class="w" id="r3">30</span></div>
+
+    <div data-hf-id="hf-ixbw" id="fuite" class="clip" data-start="0" data-duration="16.5" data-track-index="17"></div>
 
     <!-- FIN -->
-    <div id="fin" class="clip" data-start="12.7" data-duration="2.3" data-track-index="15">
-      <div id="fin-halo"></div>
-      <div id="fin-plaque"><img src="assets/plaque.png" alt="BachataVan" /></div>
-      <div id="fin-txt">
-        <div id="fin-date">THURSDAY <em>26 NOV</em></div>
-        <div id="fin-h">22:30 Sagrada Família → ACM City · back 02:30</div>
-        <div id="fin-cta"><span class="pill rouge">BOOK YOUR SEAT · LINK IN BIO</span></div>
-        <div id="fin-slogan">More than a ride. <em>It's a community.</em></div>
-      </div>
+    <div data-hf-id="hf-4ieq" id="fin" class="clip" data-start="12.8" data-duration="3.7" data-track-index="18">
+      <div data-hf-id="hf-cajj" id="fin-halo"></div>
+      <div data-hf-id="hf-agkt" id="fin-plaque"><img data-hf-id="hf-ymgi" src="assets/plaque.png" alt="BachataVan"></div>
+      <div data-hf-id="hf-5f3t" id="fin-date"><span data-hf-id="hf-uhj9" class="w" id="d1">JUEVES</span> <span data-hf-id="hf-6spc" class="w or" id="d2">26 NOV</span></div>
+      <div data-hf-id="hf-7qyd" id="fin-trajet"><span data-hf-id="hf-ihd0" id="ftr">Sagrada Família 22:30 → ACM City · back 02:30</span></div>
+      <div data-hf-id="hf-4k55" id="fin-cta"><span data-hf-id="hf-ac3p" id="cta">RESERVA TU PLAZA · LINK IN BIO</span></div>
+      <div data-hf-id="hf-poib" id="fin-slogan"><span data-hf-id="hf-s2ml" id="slg">More than a ride. <em data-hf-id="hf-45q0">It's a community.</em></span></div>
     </div>
 
-    <div id="logo" class="clip" data-start="0" data-duration="12.7" data-track-index="16"><img src="assets/plaque.png" alt="BachataVan" /></div>
+    <div data-hf-id="hf-07au" id="logo" class="clip" data-start="0" data-duration="12.8" data-track-index="19"><img data-hf-id="hf-b2e3" id="logo-img" src="assets/plaque.png" alt="BachataVan"></div>
 
-    <svg id="grain" class="clip" data-start="0" data-duration="15" data-track-index="17" width="1180" height="2020" aria-hidden="true">
-      <filter id="bruit"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/></filter>
-      <rect width="100%" height="100%" filter="url(#bruit)"/>
-    </svg>
-    <div id="flash" class="clip" data-start="0" data-duration="15" data-track-index="18"></div>
+    <!-- SON : bruitages calés sur les transitions -->
+    <audio data-hf-id="hf-7w2a" id="sfx-w1" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="1.55" data-duration="0.57" data-track-index="20" data-volume="0.55"></audio>
+    <audio data-hf-id="hf-dmk2" id="sfx-w2" class="clip" src="assets/sfx/whoosh.mp3" data-start="3.3" data-duration="0.57" data-track-index="21" data-volume="0.55"></audio>
+    <audio data-hf-id="hf-uu0d" id="sfx-pin" class="clip" src="assets/sfx/pop.mp3" data-start="5.25" data-duration="0.72" data-track-index="22" data-volume="0.6"></audio>
+    <audio data-hf-id="hf-rvjc" id="sfx-w3" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="5.85" data-duration="0.57" data-track-index="23" data-volume="0.55"></audio>
+    <audio data-hf-id="hf-xy9y" id="sfx-hit" class="clip" src="assets/sfx/impact-bass-1.mp3" data-start="8.18" data-duration="2.12" data-track-index="24" data-volume="0.7"></audio>
+    <audio data-hf-id="hf-h3hc" id="sfx-w4" class="clip" src="assets/sfx/whoosh.mp3" data-start="10.95" data-duration="0.57" data-track-index="25" data-volume="0.5"></audio>
+    <audio data-hf-id="hf-twhi" id="sfx-fin" class="clip" src="assets/sfx/impact-bass-2.mp3" data-start="12.45" data-duration="2.59" data-track-index="26" data-volume="0.75"></audio>
+    <audio data-hf-id="hf-tbd0" id="sfx-shine" class="clip" src="assets/sfx/sparkle.mp3" data-start="13.2" data-duration="1.8" data-track-index="27" data-volume="0.45"></audio>
   </div>
   <script>
     const tl = gsap.timeline({ paused: true });
-    const coupes = [1.8, 3.6, 6.2, 8.2, 11.1, 12.7];
-    // Flash + punch-in à chaque coupe
-    coupes.forEach(t => {
-      tl.fromTo("#flash", { opacity: .55 }, { opacity: 0, duration: .22, ease: "power2.out", immediateRender: false }, t);
-    });
-    const punch = (sel, t, d) => tl.fromTo(sel, { scale: 1.14 }, { scale: 1, duration: d, ease: "power3.out" }, t);
-    punch("#p1", 0, 1.8); punch("#p2", 1.8, 1.8); punch("#p4", 6.2, 2); punch("#p5", 8.2, 2.9); punch("#p6", 11.1, 1.6);
-    tl.fromTo("#grain", { x: 0, y: 0 }, { x: -40, y: -30, duration: 15, ease: "steps(90)" }, 0);
-    tl.fromTo("#logo img", { y: -10 }, { y: 0, duration: .4, ease: "power3.out" }, 0);
+    const S = (sel, from, to, at) => tl.fromTo(sel, from, to, at);
 
-    // 1. accroche (visible dès l'image 0)
-    tl.fromTo("#t1-tag .pill", { scale: .9 }, { scale: 1, duration: .3, ease: "back.out(2.5)" }, 0);
-    ["#w1", "#w2", "#w3", "#w4"].forEach((w, i) => tl.fromTo(w, { scale: 1.18, opacity: 1 }, { scale: 1, opacity: 1, duration: .3, ease: "power4.out", immediateRender: false }, .25 + i * .08));
-    tl.to("#w4", { scale: 1.08, duration: .18, yoyo: true, repeat: 1, ease: "power2.inOut" }, .9);
+    // ---------- 1. Accroche (complète dès l'image 0) : la caméra bouge, le titre reste immobile
+    S("#c1", { scale: 1.18, x: 0 }, { scale: 1.04, duration: 1.75, ease: "power2.out" }, 0);
+    S("#logo-img", { y: 0 }, { y: 0, duration: .01 }, 0);
+    // Whip vers le plan 2 : flou horizontal au pic de vitesse
+    tl.to("#c1", { x: -1100, filter: "blur(18px)", duration: .25, ease: "power3.in" }, 1.5);
+    S("#c2", { x: 1100, scale: 1.12, filter: "blur(18px)" }, { x: 0, filter: "blur(0px)", duration: .35, ease: "power3.out" }, 1.75);
+    S("#c2", { scale: 1.12 }, { scale: 1.0, duration: 1.6, ease: "power2.out", immediateRender: false }, 1.9);
 
-    // 2. rendez-vous
-    tl.fromTo("#t2a", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 1.85);
-    tl.fromTo("#t2b", { scale: .7, opacity: 0 }, { scale: 1, opacity: 1, duration: .3, ease: "back.out(2.5)" }, 2.15);
+    // ---------- 2. Rendez-vous : mots qui sortent du flou, un par un
+    ["#m1", "#m2", "#m3"].forEach((m, i) => S(m, { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: .16, ease: "power2.out" }, 1.85 + i * .08));
+    S("#pill-sf", { opacity: 0, scaleX: .3 }, { opacity: 1, scaleX: 1, duration: .3, ease: "expo.out" }, 2.15);
+    // Transition « l'objet devient le monde » : la pastille dorée grandit et devient la carte
+    tl.to("#h2", { opacity: 0, filter: "blur(10px)", duration: .18 }, 3.2);
+    tl.to("#pill-sf", { scale: 9, duration: .3, ease: "power3.in" }, 3.2);
+    tl.to("#c2", { filter: "blur(14px)", duration: .3 }, 3.2);
 
-    // 3. carte : le van roule
-    const route = document.getElementById("route"), L = route.getTotalLength(), van = document.getElementById("van"), mn = document.getElementById("mins-n");
-    const tr = { p: 0 };
-    function place() {
-      const a = route.getPointAtLength(tr.p * L), b = route.getPointAtLength(Math.min(L, tr.p * L + 2));
+    // ---------- 3. Carte : la caméra suit le van puis recule pour montrer tout le trajet
+    const route = document.getElementById("route"), L = route.getTotalLength(), van = document.getElementById("van"), monde = document.getElementById("monde"), minN = document.getElementById("min-n");
+    const st = { p: 0, z: 2.1, f: 1 };
+    const repos = { x: 60, y: 560, z: 1.0 }; // monde entier centré dans la bande sûre
+    function cam() {
+      const a = route.getPointAtLength(st.p * L), b = route.getPointAtLength(Math.min(L, st.p * L + 2));
       let ang = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI; const flip = Math.abs(ang) > 90; if (flip) ang += 180;
-      const k = 1000 / 960;
-      van.style.transform = `translate(${a.x * k}px, ${a.y * k}px) rotate(${ang}deg) scaleX(${flip ? -1 : 1})`;
-      route.style.strokeDasharray = L; route.style.strokeDashoffset = L * (1 - tr.p); mn.textContent = Math.round(tr.p * 25);
+      van.style.transform = `translate(${a.x}px, ${a.y}px) rotate(${ang}deg) scaleX(${flip ? -1 : 1})`;
+      route.style.strokeDasharray = L; route.style.strokeDashoffset = L * (1 - st.p);
+      const tx = 540 - a.x * st.z, ty = 860 - a.y * st.z;           // van au centre
+      const x = tx * st.f + repos.x * (1 - st.f), y = ty * st.f + repos.y * (1 - st.f), z = st.z * st.f + repos.z * (1 - st.f);
+      monde.style.transform = `translate(${x}px, ${y}px) scale(${z})`;
+      minN.textContent = Math.round(st.p * 25);
     }
-    place();
-    tl.fromTo("#carte-in", { scale: 1.25, rotation: -4 }, { scale: 1, rotation: 0, duration: 2.6, ease: "power2.out" }, 3.6);
-    tl.fromTo("#ct", { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 3.65);
-    tl.to(tr, { p: 1, duration: 1.8, ease: "power2.inOut", onUpdate: place }, 3.75);
-    tl.fromTo("#pin", { opacity: 0, y: -50 }, { opacity: 1, y: 0, duration: .35, ease: "bounce.out" }, 5.5);
-    tl.to("#van", { opacity: 0, duration: .15 }, 5.5);
-    tl.fromTo("#onde", { attr: { r: 20 }, opacity: 1 }, { attr: { r: 110 }, opacity: 0, duration: .6, ease: "power2.out" }, 5.6);
-    tl.fromTo("#mins", { scale: 1 }, { scale: 1.15, duration: .15, yoyo: true, repeat: 1 }, 5.5);
+    cam();
+    S("#carte", { opacity: 0 }, { opacity: 1, duration: .15 }, 3.42);
+    tl.to(st, { p: 1, duration: 1.85, ease: "power2.inOut", onUpdate: cam }, 3.55);
+    tl.to(st, { f: 0, duration: .9, ease: "power2.inOut", onUpdate: cam }, 4.55);
+    ["#ct1", "#ct2", "#ct3"].forEach((m, i) => S(m, { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: .16 }, 3.6 + i * .08));
+    S("#pin", { opacity: 0, y: -40 }, { opacity: 1, y: 0, duration: .45, ease: "back.out(1.4)" }, 5.25);
+    S("#halo-acm", { opacity: 0 }, { opacity: 1, duration: .4 }, 5.3);
+    tl.to("#van", { opacity: 0, duration: .12 }, 5.3);
+    // Zoom à travers le pin vers le van
+    tl.to(monde, { scale: 9, x: -2100, y: -400, duration: .3, ease: "power3.in", onStart: () => {} }, 5.85);
+    tl.to(["#carte-titre", "#minutes"], { opacity: 0, filter: "blur(10px)", duration: .18 }, 5.85);
 
-    // 4. dans le van
-    tl.fromTo("#t4a", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 6.3);
-    tl.fromTo("#t4b", { scaleX: 0 }, { scaleX: 1, duration: .45, ease: "power3.out" }, 6.55);
+    // ---------- 4. Dans le van (son réel des passagers)
+    S("#c4", { scale: 1.35, filter: "blur(16px)" }, { scale: 1.06, filter: "blur(0px)", duration: .4, ease: "expo.out" }, 6.1);
+    S("#c4", { scale: 1.06 }, { scale: 1.0, duration: 1.7, ease: "none", immediateRender: false }, 6.5);
+    S("#b1", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: .2 }, 6.35);
+    S("#b2", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: .16 }, 6.5);
+    S("#b3", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: .16 }, 6.58);
+    // Dip cut + éclat de lumière chaude
+    tl.to("#c4", { filter: "brightness(.55)", duration: .1 }, 8.1);
+    S("#fuite", { opacity: 0 }, { opacity: 1, duration: .1, ease: "power2.in" }, 8.12);
+    tl.to("#fuite", { opacity: 0, duration: .5, ease: "power2.out" }, 8.25);
 
-    // 5. ACM néon (clignote comme une enseigne)
-    tl.fromTo("#t5a", { opacity: 0, scale: .92 }, { opacity: 1, scale: 1, duration: .08 }, 8.3);
-    tl.to("#t5a", { opacity: .25, duration: .05, yoyo: true, repeat: 3 }, 8.4);
-    tl.fromTo("#t5a", { scale: 1 }, { scale: 1.06, duration: 2.6, ease: "none" }, 8.5);
-    tl.fromTo("#t5b", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 8.8);
+    // ---------- 5. ACM : ralenti, enseigne néon qui s'allume
+    S("#c5", { scale: 1.2 }, { scale: 1.0, duration: 2.9, ease: "power2.out" }, 8.2);
+    S("#neon", { opacity: 0 }, { opacity: 1, duration: .04 }, 8.45);
+    tl.to("#neon", { opacity: .2, duration: .04, yoyo: true, repeat: 3 }, 8.52);
+    S("#sous", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: .2 }, 8.9);
+    tl.to("#c5", { y: -1920, filter: "blur(20px)", duration: .25, ease: "power3.in" }, 10.85);
+    tl.to(["#neon", "#sous"], { y: -400, opacity: 0, duration: .2, ease: "power3.in" }, 10.85);
 
-    // 6. retour
-    tl.fromTo("#t6a", { scale: .7, opacity: 0 }, { scale: 1, opacity: 1, duration: .3, ease: "back.out(2.5)" }, 11.15);
-    tl.fromTo("#t6b", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 11.35);
+    // ---------- 6. Retour
+    S("#c6", { y: 1920, filter: "blur(20px)" }, { y: 0, filter: "blur(0px)", duration: .35, ease: "power3.out" }, 11.1);
+    S("#c6", { scale: 1.12 }, { scale: 1.0, duration: 1.7, ease: "power2.out" }, 11.1);
+    S("#pill-r", { opacity: 0, scaleX: .3 }, { opacity: 1, scaleX: 1, duration: .3, ease: "expo.out" }, 11.3);
+    ["#r1", "#r2", "#r3"].forEach((m, i) => S(m, { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: .15 }, 11.45 + i * .07));
 
-    // 7. fin
-    tl.fromTo("#fin-plaque", { scale: .85, opacity: 0, rotationX: 25 }, { scale: 1, opacity: 1, rotationX: 0, duration: .55, ease: "back.out(1.6)" }, 12.75);
-    tl.fromTo("#fin-halo", { opacity: 0 }, { opacity: 1, duration: .6 }, 12.9);
-    tl.fromTo("#fin-date", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "power3.out" }, 13.05);
-    tl.fromTo("#fin-h", { y: 30, opacity: 0 }, { y: 0, opacity: .9, duration: .35, ease: "power3.out" }, 13.25);
-    tl.fromTo("#fin-cta span", { scale: .7, opacity: 0 }, { scale: 1, opacity: 1, duration: .35, ease: "back.out(2.4)" }, 13.45);
-    tl.to("#fin-cta span", { scale: 1.06, duration: .22, yoyo: true, repeat: 3, ease: "power2.inOut" }, 14.0);
-    tl.fromTo("#fin-slogan", { opacity: 0 }, { opacity: 1, duration: .4 }, 13.7);
+    // ---------- 7. Fin : inondation de couleur vin, la plaque se pose
+    S("#fin", { clipPath: "circle(0% at 50% 55%)" }, { clipPath: "circle(120% at 50% 55%)", duration: .5, ease: "power2.inOut" }, 12.8);
+    S("#fin-plaque", { opacity: 0, scale: .82, y: 30 }, { opacity: 1, scale: 1, y: 0, duration: .6, ease: "back.out(1.4)" }, 13.0);
+    S("#fin-halo", { opacity: 0 }, { opacity: 1, duration: .8 }, 13.1);
+    S("#d1", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: .16 }, 13.35);
+    S("#d2", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: .16 }, 13.45);
+    S("#ftr", { opacity: 0 }, { opacity: 1, duration: .25 }, 13.6);
+    S("#cta", { opacity: 0, scale: .9 }, { opacity: 1, scale: 1, duration: .45, ease: "back.out(1.4)" }, 13.75);
+    S("#slg", { opacity: 0 }, { opacity: 1, duration: .3 }, 14.0);
 
     window.__timelines = window.__timelines || {};
     window.__timelines["main"] = tl;
