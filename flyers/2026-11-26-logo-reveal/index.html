@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="assets/gsap.min.js"></script>
+<style>
+  @font-face { font-family: "Anton"; src: url("assets/fonts/anton.woff2") format("woff2"); font-weight: 400; }
+  :root { --nuit: #07060A; --or: #FFC24B; --or-clair: #FFE3A1; --creme: #FFF6EC; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--nuit); }
+  #root { position: absolute; inset: 0; overflow: hidden; }
+
+  #fond { position: absolute; inset: 0; background: linear-gradient(180deg, #0B0912 0%, #120D18 45%, #07060A 62%, #0A0A0E 100%); }
+  #bokeh { position: absolute; inset: 0; }
+  .b { position: absolute; border-radius: 50%; filter: blur(6px); }
+  #route { position: absolute; left: 0; right: 0; top: 1080px; bottom: 0; background: linear-gradient(180deg, rgba(40,40,55,0), rgba(40,40,55,.5) 18%, rgba(7,6,10,1)); }
+  #pluie { position: absolute; inset: 0; opacity: .22;
+    background-image: repeating-linear-gradient(100deg, transparent 0 22px, rgba(220,230,255,.5) 22px 23px, transparent 23px 61px);
+    background-size: 400px 900px; }
+
+  /* phares */
+  .phare { position: absolute; top: 1120px; left: 540px; width: 260px; height: 260px; margin: -130px 0 0 -130px; border-radius: 50%;
+    background: radial-gradient(circle, #FFFFFF 0%, #E8F0FF 12%, rgba(170,200,255,.55) 32%, rgba(120,160,255,0) 70%); }
+  .reflet { position: absolute; top: 1180px; left: 540px; width: 70px; height: 560px; margin-left: -35px;
+    background: linear-gradient(180deg, rgba(220,230,255,.55), rgba(220,230,255,0)); filter: blur(10px); transform-origin: top center; }
+  #flash { position: absolute; inset: 0; background: radial-gradient(circle at 50% 58%, #FFFFFF 0%, #F4F7FF 45%, #C9D6FF 100%); opacity: 0; }
+
+  /* logo */
+  #halo { position: absolute; left: 540px; top: 900px; width: 1300px; height: 700px; margin: -350px 0 0 -650px;
+    background: radial-gradient(ellipse, rgba(255,194,75,.42) 0%, rgba(255,194,75,.12) 40%, rgba(255,194,75,0) 70%); opacity: 0; }
+  #scene { position: absolute; inset: 0; perspective: 1400px; }
+  #plaque { position: absolute; left: 90px; top: 803px; width: 900px; height: 193px; transform-style: preserve-3d; }
+  #plaque img { width: 900px; height: 193px; display: block; filter: drop-shadow(0 30px 40px rgba(0,0,0,.7)); }
+  #brillance-masque { position: absolute; inset: 6px; border-radius: 26px; overflow: hidden; }
+  #brillance { position: absolute; top: -40px; bottom: -40px; width: 140px; left: -200px; transform: skewX(-20deg);
+    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.75), rgba(255,255,255,0)); mix-blend-mode: screen; }
+  .eclat { position: absolute; width: 34px; height: 34px; margin: -17px 0 0 -17px; background: var(--or-clair);
+    clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%); filter: drop-shadow(0 0 8px #FFC24B); }
+
+  #comete { position: absolute; inset: 0; }
+  #tete { position: absolute; left: 0; top: 0; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%;
+    background: radial-gradient(circle, #FFFFFF 0%, #FFE3A1 35%, rgba(255,194,75,0) 72%); }
+
+  #slogan { position: absolute; top: 1095px; left: 0; right: 0; text-align: center; font-family: "Anton", sans-serif; font-size: 66px; line-height: 1.12; letter-spacing: 2px; color: var(--creme); }
+  #slogan span, #slogan em { display: inline-block; }
+  #slogan em { font-style: normal; background: linear-gradient(180deg, var(--or-clair), var(--or) 60%, #C98A1B); -webkit-background-clip: text; background-clip: text; color: transparent; }
+</style>
+</head>
+<body>
+  <div id="root" data-composition-id="main" data-start="0" data-duration="6.5" data-width="1080" data-height="1920">
+    <div id="fond" class="clip" data-start="0" data-duration="6.5" data-track-index="0"></div>
+    <div id="bokeh" class="clip" data-start="0" data-duration="6.5" data-track-index="1"></div>
+    <div id="route" class="clip" data-start="0" data-duration="6.5" data-track-index="2"></div>
+    <div id="pluie" class="clip" data-start="0" data-duration="6.5" data-track-index="3"></div>
+    <div id="phare-g" class="phare clip" data-start="0" data-duration="3" data-track-index="4"></div>
+    <div id="phare-d" class="phare clip" data-start="0" data-duration="3" data-track-index="5"></div>
+    <div id="reflet-g" class="reflet clip" data-start="0" data-duration="3" data-track-index="6"></div>
+    <div id="reflet-d" class="reflet clip" data-start="0" data-duration="3" data-track-index="7"></div>
+    <div id="halo" class="clip" data-start="0" data-duration="6.5" data-track-index="8"></div>
+
+    <div id="scene" class="clip" data-start="0" data-duration="6.5" data-track-index="9">
+      <div id="plaque">
+        <img src="assets/plaque.png" alt="BachataVan plate logo" />
+        <div id="brillance-masque"><div id="brillance"></div></div>
+      </div>
+    </div>
+
+    <div id="eclats" class="clip" data-start="0" data-duration="6.5" data-track-index="10"></div>
+
+    <div id="comete" class="clip" data-start="0" data-duration="6.5" data-track-index="11">
+      <svg width="1080" height="1920" viewBox="0 0 1080 1920" style="position:absolute;inset:0">
+        <defs><linearGradient id="trainee" x1="0" x2="1"><stop offset="0" stop-color="#FFC24B" stop-opacity="0"/><stop offset="1" stop-color="#FFE3A1"/></linearGradient></defs>
+        <path id="orbite" d="M 540 735 C 860 735, 1035 800, 1035 900 C 1035 1000, 860 1065, 540 1065 C 220 1065, 45 1000, 45 900 C 45 800, 220 735, 540 735" fill="none" stroke="#FFC24B" stroke-width="5" stroke-linecap="round" style="filter: drop-shadow(0 0 10px #FFC24B)"/>
+      </svg>
+      <div id="tete"></div>
+    </div>
+
+    <div id="flash" class="clip" data-start="0" data-duration="6.5" data-track-index="12"></div>
+
+    <div id="slogan" class="clip" data-start="4.4" data-duration="2.1" data-track-index="13"><span id="s1">MORE THAN A RIDE.</span><br><em id="s2">IT'S A COMMUNITY.</em></div>
+  </div>
+  <script>
+    // Bokeh fixe (pseudo-aléatoire déterministe)
+    let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+    const bokeh = document.getElementById("bokeh");
+    for (let i = 0; i < 26; i++) {
+      const d = document.createElement("div"); d.className = "b"; const s = 30 + rnd() * 90;
+      const warm = rnd() < .7;
+      Object.assign(d.style, { width: s + "px", height: s + "px", left: (rnd() * 1080 - s / 2) + "px", top: (380 + rnd() * 700) + "px",
+        background: warm ? `rgba(255,${180 + rnd() * 40 | 0},90,${.25 + rnd() * .35})` : `rgba(170,200,255,${.2 + rnd() * .25})` });
+      bokeh.appendChild(d);
+    }
+    // Éclats sur les étoiles de la plaque (positions du logo 560×120 → 900 px de large)
+    const etoiles = [[40,22],[48.5,24.3],[54.7,30.5],[57,39],[54.7,47.5],[48.5,53.7],[40,56],[31.5,53.7],[25.3,47.5],[23,39],[25.3,30.5],[31.5,24.3]];
+    const k = 900 / 560, eclats = document.getElementById("eclats");
+    etoiles.forEach(([x, y], i) => { const e = document.createElement("div"); e.className = "eclat"; e.id = "e" + i; e.style.left = (90 + x * k) + "px"; e.style.top = (803 + y * k) + "px"; eclats.appendChild(e); });
+
+    const tl = gsap.timeline({ paused: true });
+    // Ambiance : pluie et bokeh qui bougent
+    tl.fromTo("#pluie", { backgroundPosition: "0px 0px" }, { backgroundPosition: "-160px 900px", duration: 6.5, ease: "none" }, 0);
+    tl.fromTo("#bokeh", { scale: 1, y: 0 }, { scale: 1.12, y: -30, duration: 6.5, ease: "none" }, 0);
+    // Le van arrive : les phares s'écartent et grossissent
+    tl.fromTo("#phare-g", { x: -40, y: -60, scale: .18 }, { x: -330, y: 40, scale: 1.9, duration: 2.1, ease: "power2.in" }, 0);
+    tl.fromTo("#phare-d", { x: 40, y: -60, scale: .18 }, { x: 330, y: 40, scale: 1.9, duration: 2.1, ease: "power2.in" }, 0);
+    tl.fromTo("#reflet-g", { x: -40, scaleY: .2, opacity: .3 }, { x: -330, scaleY: 1.4, opacity: .9, duration: 2.1, ease: "power2.in" }, 0);
+    tl.fromTo("#reflet-d", { x: 40, scaleY: .2, opacity: .3 }, { x: 330, scaleY: 1.4, opacity: .9, duration: 2.1, ease: "power2.in" }, 0);
+    // Flash des phares
+    tl.fromTo("#flash", { opacity: 0 }, { opacity: 1, duration: .25, ease: "power2.in" }, 1.85);
+    tl.to("#flash", { opacity: 0, duration: .75, ease: "power2.out" }, 2.15);
+    tl.to(["#phare-g", "#phare-d", "#reflet-g", "#reflet-d"], { opacity: 0, duration: .1 }, 2.1);
+    // La plaque apparaît en 3D
+    tl.fromTo("#plaque", { opacity: 0, scale: .55, rotationY: -38, rotationX: 10, z: -300 }, { opacity: 1, scale: 1, rotationY: 0, rotationX: 0, z: 0, duration: .95, ease: "back.out(1.4)" }, 2.1);
+    tl.fromTo("#brillance", { x: 0 }, { x: 1300, duration: .7, ease: "power2.inOut" }, 3.0);
+    // La comète dorée fait le tour
+    const orbite = document.getElementById("orbite"), L = orbite.getTotalLength(), tete = document.getElementById("tete");
+    const c = { p: 0 };
+    function trace() {
+      const fin = c.p * L, queue = Math.max(0, fin - 520);
+      orbite.style.strokeDasharray = `0 ${queue} ${fin - queue} ${L}`;
+      const pt = orbite.getPointAtLength(fin); tete.style.transform = `translate(${pt.x}px, ${pt.y}px) scale(${1 + Math.sin(c.p * 30) * .15})`;
+    }
+    trace();
+    tl.fromTo("#comete", { opacity: 0 }, { opacity: 1, duration: .2 }, 2.9);
+    tl.to(c, { p: 1, duration: 1.5, ease: "power1.inOut", onUpdate: trace }, 2.9);
+    tl.to("#comete", { opacity: 0, duration: .4 }, 4.3);
+    // Les étoiles de la plaque s'allument une par une
+    etoiles.forEach((_, i) => tl.fromTo("#e" + i, { scale: 0, opacity: 0, rotation: 0 }, { scale: 1, opacity: 1, rotation: 90, duration: .25, ease: "back.out(3)" }, 3.2 + i * .08)
+      .to("#e" + i, { scale: .35, opacity: .5, duration: .4, ease: "power2.out" }, 3.5 + i * .08));
+    // Halo + slogan
+    tl.fromTo("#halo", { opacity: 0, scale: .7 }, { opacity: 1, scale: 1, duration: .9, ease: "power2.out" }, 3.9);
+    tl.fromTo("#plaque", { y: 0 }, { y: -40, duration: .6, ease: "power3.out" }, 4.3);
+    tl.to("#eclats", { y: -40, duration: .6, ease: "power3.out" }, 4.3);
+    tl.fromTo("#s1", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .35, ease: "power3.out" }, 4.45);
+    tl.fromTo("#s2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .35, ease: "power3.out" }, 4.75);
+    tl.fromTo("#scene", { scale: 1 }, { scale: 1.04, duration: 2.4, ease: "none" }, 4.1);
+    window.__timelines = window.__timelines || {};
+    window.__timelines["main"] = tl;
+    tl.seek(0);
+  </script>
+</body>
+</html>
