@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BachataVan BCN</title>
+<meta name="description" content="Your bachata ride from Sagrada Família to the best bachata nights around Barcelona. 15 € round trip. Book on WhatsApp.">
+<meta property="og:title" content="BachataVan BCN">
+<meta property="og:description" content="From Sagrada Família to the dance floor, and back. Book your seat on WhatsApp.">
+<meta property="og:image" content="/img/hero.jpg">
+<meta name="theme-color" content="#8E1B2E">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BachataVan">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;800&display=swap">
+<style>
+/* Layout: one warm night-time scroll. Plate logo, a photo hero, this week's rides as tickets coloured per party
+   (gold ACM, emerald Quechimba, ruby Manisero, like the VIP pass), how to book, the family, good to know. */
+:root {
+  --noir: #140A08; --noir-2: #1F1310; --carte: #26170F; --ligne: #3A2418;
+  --creme: #FFF4E6; --muted: #C8B4A4; --vin: #8E1B2E; --or: #F2B544; --or-clair: #FFE0A3; --braise: #FF7A3D;
+  --ok: #4FD39A; --low: #FFB54D; --full: #FF6B6B; --bleu: #1F3FA8;
+  --display: "Barlow Condensed", "Arial Narrow", sans-serif; --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body { background: var(--noir); color: var(--creme); font-family: var(--body); line-height: 1.5; }
+a { color: inherit; }
+img { max-width: 100%; display: block; }
+.wrap { max-width: 720px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* header */
+header { position: sticky; top: 0; z-index: 10; background: rgba(20,10,8,.86); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--ligne); padding-top: env(safe-area-inset-top, 0px); }
+header .wrap { display: flex; justify-content: space-between; align-items: center; padding-block: 10px; gap: 12px; }
+.plate { height: 34px; width: auto; }
+.lang { display: flex; gap: 4px; }
+.lang button { background: transparent; border: 1px solid var(--ligne); color: var(--muted); border-radius: 8px; padding: 6px 10px; font: 600 13px var(--body); cursor: pointer; min-height: 34px; transition: color 160ms var(--ease-out), border-color 160ms var(--ease-out), transform 160ms var(--ease-out); }
+.lang button.on { color: var(--creme); border-color: var(--or); }
+.lang button:active { transform: scale(0.96); }
+
+/* hero */
+.hero { position: relative; overflow: hidden; }
+.hero-img { position: absolute; inset: 0; }
+.hero-img img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; }
+.hero-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,10,8,.35) 0%, rgba(20,10,8,.55) 45%, var(--noir) 100%), radial-gradient(80% 60% at 20% 10%, rgba(255,122,61,.25), transparent 70%); }
+.hero .wrap { position: relative; padding-block: 120px 28px; }
+.kicker { font-family: var(--display); font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--or); font-size: 14px; }
+h1 { font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: clamp(40px, 11vw, 64px); line-height: .95; margin-top: 8px; text-wrap: balance; }
+h1 em { font-style: normal; color: var(--or); }
+.hero p { color: var(--creme); opacity: .85; margin-top: 12px; font-size: 17px; max-width: 34ch; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.chip { background: rgba(20,10,8,.6); border: 1px solid rgba(242,181,68,.35); border-radius: 999px; padding: 7px 12px; font-size: 14px; font-weight: 600; }
+.cta { display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 22px; text-decoration: none; font-weight: 800; border-radius: 14px; padding: 14px 20px; min-height: 48px; background: var(--or); color: var(--noir); transition: transform 160ms var(--ease-out); }
+.cta:active, .btn:active { transform: scale(0.97); }
+
+h2 { font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: 30px; letter-spacing: .02em; margin: 36px 0 14px; }
+h2 small { display: block; font-family: var(--body); text-transform: none; font-weight: 500; font-size: 14px; color: var(--muted); letter-spacing: 0; }
+
+/* early bird */
+.eb { display: flex; gap: 12px; align-items: center; background: linear-gradient(90deg, rgba(242,181,68,.16), rgba(242,181,68,.04)); border: 1px solid rgba(242,181,68,.45); border-radius: 16px; padding: 12px 14px; margin-bottom: 14px; }
+.eb b { color: var(--or); }
+.eb .big { font-family: var(--display); font-weight: 700; font-size: 34px; color: var(--or); line-height: 1; flex: none; }
+
+/* ride tickets */
+.ride { --c: var(--or); position: relative; background: var(--carte); border: 1px solid var(--ligne); border-radius: 20px; overflow: hidden; margin-bottom: 14px; }
+.ride::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--c); }
+.ride-top { display: grid; grid-template-columns: 1fr auto; gap: 10px; padding: 18px 18px 6px; align-items: start; }
+.ride .day { font-family: var(--display); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--c); font-size: 14px; }
+.ride .party { font-family: var(--display); font-weight: 700; font-size: 32px; line-height: 1; text-transform: uppercase; margin-top: 2px; }
+.ride .where { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.seats { font-size: 13px; font-weight: 800; border-radius: 999px; padding: 6px 11px; white-space: nowrap; }
+.seats.ok { background: rgba(79,211,154,.14); color: var(--ok); }
+.seats.low { background: rgba(255,181,77,.16); color: var(--low); }
+.seats.full { background: rgba(255,107,107,.16); color: var(--full); }
+.route { position: relative; margin: 4px 18px 0; height: 64px; width: 280px; max-width: calc(100% - 36px); }
+.route svg:not(.van) { width: 280px; height: 64px; overflow: visible; }
+.route .van { width: 30px; height: 18px; margin: -9px 0 0 -15px; }
+.route .van { offset-path: path("M 8 50 C 66 50, 90 14, 156 14 S 248 40, 272 14"); offset-distance: 100%; offset-rotate: auto; }
+.route.go .van { animation: drive 1800ms cubic-bezier(0.77, 0, 0.175, 1) both; }
+@keyframes drive { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+.times { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px 18px 0; }
+.times div { background: var(--noir-2); border-radius: 12px; padding: 10px 12px; }
+.times span { display: block; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.times b { font-family: var(--display); font-size: 28px; line-height: 1.1; }
+.bar { margin: 12px 18px 0; height: 6px; background: var(--noir-2); border-radius: 6px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--c); border-radius: 6px; transform-origin: left; }
+.ride-bot { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 14px 18px 18px; flex-wrap: wrap; }
+.price { font-size: 14px; color: var(--muted); }
+.price b { color: var(--creme); font-size: 18px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; font-weight: 800; border-radius: 12px; padding: 12px 18px; min-height: 46px; background: var(--c); color: var(--noir); transition: transform 160ms var(--ease-out); }
+.btn.wait { background: transparent; color: var(--creme); border: 1px solid var(--ligne); }
+.skeleton { height: 230px; border-radius: 20px; margin-bottom: 14px; background: linear-gradient(90deg, var(--carte), var(--noir-2), var(--carte)); background-size: 200% 100%; animation: sh 1.2s infinite; }
+@keyframes sh { to { background-position: -200% 0; } }
+.preview-note { font-size: 12px; color: var(--low); margin: -4px 0 12px; }
+
+/* steps */
+.steps { display: grid; gap: 10px; }
+.step { display: grid; grid-template-columns: 36px 1fr; gap: 12px; align-items: start; background: var(--carte); border: 1px solid var(--ligne); border-radius: 16px; padding: 14px; }
+.step .n { width: 36px; height: 36px; border-radius: 50%; background: var(--vin); color: var(--or-clair); display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: 20px; }
+.step p { font-size: 15px; }
+
+/* photos */
+.photos { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.photos::-webkit-scrollbar { display: none; }
+.photos figure { flex: 0 0 72%; max-width: 280px; scroll-snap-align: start; }
+.photos img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 16px; }
+.photos figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+/* info */
+.info { display: grid; gap: 10px; }
+.card { background: var(--carte); border: 1px solid var(--ligne); border-radius: 16px; padding: 16px; }
+.card b { font-size: 16px; }
+.card p { color: var(--muted); margin-top: 4px; font-size: 15px; }
+.card .link { display: inline-block; margin-top: 8px; color: var(--or); font-weight: 600; text-decoration: none; }
+.stamps { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 12px; }
+.stamps i { aspect-ratio: 1; border-radius: 50%; border: 2px dashed var(--ligne); display: grid; place-items: center; font-style: normal; font-size: 12px; font-weight: 800; color: var(--muted); }
+.stamps i.on { border: 2px solid var(--or); background: rgba(242,181,68,.12); color: var(--or); }
+.stamps i.free { border: 2px solid var(--or); background: var(--or); color: var(--noir); }
+.wa-num { font-family: var(--display); font-size: 24px; letter-spacing: .03em; user-select: all; margin-top: 6px; }
+
+/* install */
+.install { display: none; gap: 12px; align-items: center; background: var(--vin); border-radius: 16px; padding: 14px; margin-top: 24px; }
+.install.show { display: flex; }
+.install img { width: 48px; height: 48px; border-radius: 12px; flex: none; }
+.install p { font-size: 14px; }
+.install b { display: block; font-size: 15px; }
+
+footer { padding-block: 32px calc(40px + env(safe-area-inset-bottom, 0px)); color: var(--muted); font-size: 14px; text-align: center; }
+footer .slogan { font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: 22px; color: var(--creme); margin-bottom: 8px; }
+footer .slogan em { font-style: normal; color: var(--or); }
+
+/* entrance: content is visible at rest; this only plays once on load */
+@media (prefers-reduced-motion: no-preference) {
+  .hero .wrap > * { animation: up 500ms var(--ease-out) both; }
+  .hero .wrap > *:nth-child(2) { animation-delay: 60ms; } .hero .wrap > *:nth-child(3) { animation-delay: 110ms; } .hero .wrap > *:nth-child(4) { animation-delay: 150ms; } .hero .wrap > *:nth-child(5) { animation-delay: 190ms; }
+  @keyframes up { from { opacity: 0; transform: translateY(10px); } }
+  .bar i { animation: fill 700ms var(--ease-out) 200ms both; }
+  @keyframes fill { from { transform: scaleX(0); } }
+}
+@media (prefers-reduced-motion: reduce) { .route.go .van { animation: none; } .skeleton { animation: none; } }
+:focus-visible { outline: 3px solid var(--or); outline-offset: 3px; }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <svg class="plate" viewBox="0 0 560 120" role="img" aria-label="BachataVan">
+    <rect x="4" y="4" width="552" height="112" rx="12" fill="#F8F6F1" stroke="#8E1B2E" stroke-width="7"/>
+    <path d="M12 12 h56 v96 h-56 a6 6 0 0 1 -6 -6 v-84 a6 6 0 0 1 6 -6z" fill="#1F3FA8"/>
+    <g fill="#F2B544"><circle cx="40" cy="22" r="2.6"/><circle cx="48.5" cy="24.3" r="2.6"/><circle cx="54.7" cy="30.5" r="2.6"/><circle cx="57" cy="39" r="2.6"/><circle cx="54.7" cy="47.5" r="2.6"/><circle cx="48.5" cy="53.7" r="2.6"/><circle cx="40" cy="56" r="2.6"/><circle cx="31.5" cy="53.7" r="2.6"/><circle cx="25.3" cy="47.5" r="2.6"/><circle cx="23" cy="39" r="2.6"/><circle cx="25.3" cy="30.5" r="2.6"/><circle cx="31.5" cy="24.3" r="2.6"/></g>
+    <text x="40" y="96" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="30" fill="#F8F6F1">BCN</text>
+    <text x="312" y="88" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="80" letter-spacing="6" fill="#8E1B2E">BACHATAVAN</text>
+  </svg>
+  <div class="lang"><button type="button" data-l="en">EN</button><button type="button" data-l="es">ES</button><button type="button" data-l="fr">FR</button></div>
+</div></header>
+
+<section class="hero">
+  <div class="hero-img"><img src="img/hero.jpg" alt="The BachataVan family in front of the van at night" fetchpriority="high"></div>
+  <div class="wrap">
+    <div class="kicker">Barcelona · Sagrada Família</div>
+    <h1 data-t="h1"></h1>
+    <p data-t="sub"></p>
+    <div class="chips"><span class="chip" data-t="price"></span><span class="chip" data-t="loyal"></span><span class="chip" data-t="langs"></span></div>
+    <a class="cta" href="#rides" data-t="seeRides"></a>
+  </div>
+</section>
+
+<main class="wrap">
+  <h2 id="rides"><span data-t="week"></span><small data-t="weekSub"></small></h2>
+  <div class="eb" id="eb" hidden><div class="big">10 €</div><div data-t="eb"></div></div>
+  <div id="slots"><div class="skeleton"></div><div class="skeleton"></div></div>
+
+  <h2 data-t="how"></h2>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><p data-t="s1"></p></div>
+    <div class="step"><div class="n">2</div><p data-t="s2"></p></div>
+    <div class="step"><div class="n">3</div><p data-t="s3"></p></div>
+  </div>
+
+  <h2><span data-t="family"></span><small data-t="familySub"></small></h2>
+  <div class="photos">
+    <figure><img src="img/ride.jpg" alt="" loading="lazy"><figcaption data-t="c1"></figcaption></figure>
+    <figure><img src="img/party.jpg" alt="" loading="lazy"><figcaption data-t="c2"></figcaption></figure>
+    <figure><img src="img/city.jpg" alt="" loading="lazy"><figcaption data-t="c3"></figcaption></figure>
+    <figure><img src="img/crew.jpg" alt="" loading="lazy"><figcaption data-t="c4"></figcaption></figure>
+    <figure><img src="img/plaque.jpg" alt="" loading="lazy"><figcaption data-t="c5"></figcaption></figure>
+  </div>
+
+  <h2 data-t="good"></h2>
+  <div class="info">
+    <div class="card"><b data-t="meetT"></b><p data-t="meet"></p><a class="link" href="https://maps.app.goo.gl/x6c6GEqHpAciMcgd8" target="_blank" rel="noopener" data-t="map"></a></div>
+    <div class="card"><b data-t="loyalT"></b><p data-t="loyalD"></p>
+      <div class="stamps" aria-hidden="true"><i class="on">1</i><i class="on">2</i><i class="on">3</i><i>4</i><i>5</i><i class="free">FREE</i></div></div>
+    <div class="card"><b data-t="qT"></b><p data-t="qD"></p><div class="wa-num">+34 634 060 972</div><a class="btn" style="--c: var(--or); margin-top: 10px" href="https://wa.me/34634060972" target="_blank" rel="noopener" data-t="ask"></a></div>
+  </div>
+
+  <div class="install" id="install"><img src="icon-180.png" alt=""><p><b data-t="instT"></b><span data-t="instD"></span></p></div>
+</main>
+
+<footer><div class="wrap">
+  <div class="slogan">More than a ride. <em>It's a community.</em></div>
+  BachataVan BCN · <a href="https://instagram.com/bachatavan_official" target="_blank" rel="noopener">@bachatavan_official</a>
+</div></footer>
+
+<script>
+const CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQFRue_i-40hoMbz8TDK6hJg5zN5seb81vT12S2HeBhm2QGGylzlxcz2PF8XyqbeF2fJbcRmas_5Fr3/pub?gid=0&single=true&output=csv";
+const WA = "34634060972";
+// Party look + destination, same colours as the VIP pass (/api/pass)
+const PARTIES = {
+  acm:       { c: "#F2B544", where: "ACM City · Cerdanyola del Vallès", min: 25 },
+  quechimba: { c: "#34C98E", where: "Quechimba · Terrassa", min: 35 },
+  manisero:  { c: "#E8506A", where: "Sala 7PK2 · Sant Quirze del Vallès", min: 30 }
+};
+const themeOf = name => { const k = Object.keys(PARTIES).find(p => name.toLowerCase().includes(p)); return PARTIES[k] || { c: "#FF7A3D", where: "", min: 0 }; };
+
+const T = {
+en:{h1:"From Sagrada Família <em>to the dance floor</em>",sub:"Every week we drive you to the best bachata nights around Barcelona, and back. You just dance.",price:"💶 15 € round trip",loyal:"🎁 6th ride free",langs:"🇪🇸 🇬🇧 🇫🇷 We speak your language",seeRides:"See this week's rides ↓",week:"This week",weekSub:"Seats update live",how:"How to book",s1:"Tap <b>Book on WhatsApp</b> on your night. The message is already written: just press send.",s2:"Our assistant sends you a secure SumUp payment link (valid 20 minutes).",s3:"Pay, and you instantly get your confirmation, the departure point, times and your loyalty card.",family:"The BachataVan family",familySub:"Real nights, real people",c1:"Singing all the way",c2:"Front row at ACM",c3:"Sagrada Família by night",c4:"Festival arrival day",c5:"The famous plate",good:"Good to know",meetT:"📍 Departure point",meet:"Sagrada Família, Barcelona. Please be there 5 minutes before departure. Look for the BachataVan plate.",map:"Open in Google Maps →",loyalT:"🎁 Loyalty card",loyalD:"After 5 rides, the 6th is free. Every payment is counted automatically.",qT:"💬 A question?",qD:"Private rides, festivals, airport transfers or anything else: write to us.",ask:"Write on WhatsApp",book:"Book on WhatsApp",wait:"Join waiting list",left:n=>n+" seats left",one:"1 seat left",full:"Full",dep:"Departure",ret:"Return",perSeat:"per seat, round trip",eb:"<b>Early bird:</b> book before Tuesday 12:00 and pay 10 € instead of 15 €.",err:"The schedule could not load. Write to us on WhatsApp and we answer right away.",empty:"The new schedule is coming soon. Write to us on WhatsApp.",preview:"Preview: example schedule. The live site shows your Google Sheet.",instT:"Add BachataVan to your home screen",instD:"Tap Share, then “Add to Home Screen”. Your rides are one tap away.",days:{Thursday:"Thursday",Friday:"Friday",Saturday:"Saturday",Sunday:"Sunday",Monday:"Monday",Tuesday:"Tuesday",Wednesday:"Wednesday"}},
+es:{h1:"De la Sagrada Família <em>a la pista</em>",sub:"Cada semana te llevamos a las mejores noches de bachata de Barcelona, ida y vuelta. Tú solo baila.",price:"💶 15 € ida y vuelta",loyal:"🎁 6º viaje gratis",langs:"🇪🇸 🇬🇧 🇫🇷 Hablamos tu idioma",seeRides:"Ver los viajes de esta semana ↓",week:"Esta semana",weekSub:"Plazas en tiempo real",how:"Cómo reservar",s1:"Pulsa <b>Reservar por WhatsApp</b> en tu noche. El mensaje ya está escrito: solo envíalo.",s2:"Nuestro asistente te manda un enlace de pago SumUp seguro (válido 20 minutos).",s3:"Pagas y recibes al momento tu confirmación, el punto de salida, los horarios y tu tarjeta de fidelidad.",family:"La familia BachataVan",familySub:"Noches reales, gente real",c1:"Cantando todo el camino",c2:"Primera fila en ACM",c3:"Sagrada Família de noche",c4:"Llegada al festival",c5:"La famosa matrícula",good:"Info útil",meetT:"📍 Punto de salida",meet:"Sagrada Família, Barcelona. Llega 5 minutos antes de la salida. Busca la matrícula BachataVan.",map:"Abrir en Google Maps →",loyalT:"🎁 Tarjeta de fidelidad",loyalD:"Después de 5 viajes, el 6º es gratis. Cada pago se cuenta automáticamente.",qT:"💬 ¿Una pregunta?",qD:"Viajes privados, festivales, aeropuerto o lo que sea: escríbenos.",ask:"Escribir por WhatsApp",book:"Reservar por WhatsApp",wait:"Lista de espera",left:n=>"Quedan "+n+" plazas",one:"Queda 1 plaza",full:"Completo",dep:"Salida",ret:"Vuelta",perSeat:"por plaza, ida y vuelta",eb:"<b>Early bird:</b> reserva antes del martes a las 12:00 y paga 10 € en vez de 15 €.",err:"No se pudo cargar el horario. Escríbenos por WhatsApp y te respondemos enseguida.",empty:"El nuevo horario llega pronto. Escríbenos por WhatsApp.",preview:"Vista previa: horario de ejemplo. La web real muestra tu Google Sheet.",instT:"Añade BachataVan a tu pantalla de inicio",instD:"Pulsa Compartir y luego “Añadir a pantalla de inicio”.",days:{Thursday:"Jueves",Friday:"Viernes",Saturday:"Sábado",Sunday:"Domingo",Monday:"Lunes",Tuesday:"Martes",Wednesday:"Miércoles"}},
+fr:{h1:"De la Sagrada Família <em>à la piste</em>",sub:"Chaque semaine, on t'emmène aux meilleures soirées bachata autour de Barcelone, aller-retour. Toi, tu danses.",price:"💶 15 € aller-retour",loyal:"🎁 6e trajet offert",langs:"🇪🇸 🇬🇧 🇫🇷 On parle ta langue",seeRides:"Voir les trajets de la semaine ↓",week:"Cette semaine",weekSub:"Places mises à jour en direct",how:"Comment réserver",s1:"Appuie sur <b>Réserver sur WhatsApp</b> pour ta soirée. Le message est déjà écrit : il suffit de l'envoyer.",s2:"Notre assistant t'envoie un lien de paiement SumUp sécurisé (valable 20 minutes).",s3:"Tu paies et tu reçois tout de suite ta confirmation, le point de départ, les horaires et ta carte de fidélité.",family:"La famille BachataVan",familySub:"De vraies soirées, de vraies personnes",c1:"Ça chante tout le trajet",c2:"Au premier rang à ACM",c3:"La Sagrada Família de nuit",c4:"Arrivée au festival",c5:"La fameuse plaque",good:"Bon à savoir",meetT:"📍 Point de départ",meet:"Sagrada Família, Barcelone. Sois là 5 minutes avant le départ. Cherche la plaque BachataVan.",map:"Ouvrir dans Google Maps →",loyalT:"🎁 Carte de fidélité",loyalD:"Après 5 trajets, le 6e est offert. Chaque paiement est compté automatiquement.",qT:"💬 Une question ?",qD:"Trajets privés, festivals, aéroport ou autre : écris-nous.",ask:"Écrire sur WhatsApp",book:"Réserver sur WhatsApp",wait:"Liste d'attente",left:n=>n+" places restantes",one:"1 place restante",full:"Complet",dep:"Départ",ret:"Retour",perSeat:"la place, aller-retour",eb:"<b>Early bird :</b> réserve avant mardi 12h et paie 10 € au lieu de 15 €.",err:"Les horaires n'ont pas pu se charger. Écris-nous sur WhatsApp, on te répond tout de suite.",empty:"Le nouveau programme arrive bientôt. Écris-nous sur WhatsApp.",preview:"Aperçu : programme d'exemple. Le vrai site affiche ton Google Sheet.",instT:"Ajoute BachataVan à ton écran d'accueil",instD:"Appuie sur Partager, puis « Sur l'écran d'accueil ».",days:{Thursday:"Jeudi",Friday:"Vendredi",Saturday:"Samedi",Sunday:"Dimanche",Monday:"Lundi",Tuesday:"Mardi",Wednesday:"Mercredi"}}
+};
+// Shown only when the live sheet can't be reached (e.g. a preview): clearly labelled examples.
+const EXAMPLE = [
+  { party: "Manisero 32 Aniversario", day: "Saturday", time: "21:30 - 03:00", date: new Date(2026, 10, 28), free: 3 },
+  { party: "Quechimba Domingo", day: "Sunday", time: "18:00 - 23:00", date: new Date(2026, 10, 29), free: 7 },
+  { party: "ACM Bachata Elegance", day: "Thursday", time: "22:30 - 02:30", date: new Date(2026, 11, 3), free: 0 }
+];
+
+let L = "en", DATA = null, ERR = false, PREVIEW = false;
+try { const s = localStorage.getItem("bv_lang"); if (s && T[s]) L = s; else { const n = (navigator.language || "").slice(0, 2); if (T[n]) L = n; } } catch (e) {}
+function parseCSV(t){const rows=[];let r=[],f="",q=false;for(let i=0;i<t.length;i++){const c=t[i];if(q){if(c=='"'){if(t[i+1]=='"'){f+='"';i++}else q=false}else f+=c}else{if(c=='"')q=true;else if(c==","){r.push(f);f=""}else if(c=="\n"){r.push(f);rows.push(r);r=[];f=""}else if(c!="\r")f+=c}}if(f||r.length){r.push(f);rows.push(r)}return rows}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function parseDate(s){const m=String(s).match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);return m?new Date(+m[3],m[2]-1,+m[1]):null}
+const waLink = s => "https://wa.me/" + WA + "?text=" + encodeURIComponent("Book " + s.party + " " + s.day + " " + s.time);
+const CAP = 8;
+
+function render() {
+  const t = T[L]; document.documentElement.lang = L;
+  document.querySelectorAll("[data-t]").forEach(e => e.innerHTML = t[e.dataset.t]);
+  document.querySelectorAll(".lang button").forEach(b => b.classList.toggle("on", b.dataset.l == L));
+  const box = document.getElementById("slots"), eb = document.getElementById("eb");
+  if (ERR) { box.innerHTML = '<div class="card"><p>' + t.err + '</p></div>'; eb.hidden = true; return; }
+  if (!DATA) return;
+  if (!DATA.length) { box.innerHTML = '<div class="card"><p>' + t.empty + '</p></div>'; eb.hidden = true; return; }
+  box.innerHTML = (PREVIEW ? '<p class="preview-note">' + t.preview + '</p>' : '') + DATA.map(s => {
+    const th = themeOf(s.party), free = s.free;
+    const cls = free <= 0 ? "full" : free <= 3 ? "low" : "ok";
+    const label = free <= 0 ? t.full : free == 1 ? t.one : t.left(free);
+    const date = s.date ? String(s.date.getDate()).padStart(2, "0") + "/" + String(s.date.getMonth() + 1).padStart(2, "0") : "";
+    const [a, b] = s.time.split("-").map(x => x.trim());
+    const fill = Math.max(0, Math.min(1, (CAP - Math.max(free, 0)) / CAP));
+    return '<article class="ride" style="--c:' + th.c + '">' +
+      '<div class="ride-top"><div><div class="day">' + esc(t.days[s.day] || s.day) + ' ' + esc(date) + '</div><div class="party">' + esc(s.party) + '</div>' +
+      (th.where ? '<div class="where">Sagrada Família → ' + esc(th.where) + (th.min ? ' · ~' + th.min + ' min' : '') + '</div>' : '') + '</div>' +
+      '<span class="seats ' + cls + '">' + label + '</span></div>' +
+      '<div class="route" aria-hidden="true"><svg viewBox="0 0 280 64"><path d="M 8 50 C 66 50, 90 14, 156 14 S 248 40, 272 14" fill="none" stroke="' + th.c + '" stroke-opacity=".35" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round"/><circle cx="8" cy="50" r="5" fill="#FFF4E6"/><circle cx="272" cy="14" r="6" fill="' + th.c + '"/></svg>' +
+      '<svg class="van" width="30" height="18" viewBox="0 0 92 52" style="position:absolute;left:0;top:0"><rect x="4" y="6" width="80" height="34" rx="9" fill="#FFF4E6" stroke="#8E1B2E" stroke-width="5"/><path d="M58 10 h14 a8 8 0 0 1 8 8 v8 h-22z" fill="#1F3FA8"/><circle cx="24" cy="42" r="8" fill="#140A08"/><circle cx="66" cy="42" r="8" fill="#140A08"/></svg></div>' +
+      '<div class="times"><div><span>' + t.dep + '</span><b>' + esc(a || "") + '</b></div><div><span>' + t.ret + '</span><b>' + esc(b || "") + '</b></div></div>' +
+      '<div class="bar"><i style="width:' + Math.round(fill * 100) + '%"></i></div>' +
+      '<div class="ride-bot"><div class="price"><b>15 €</b> ' + t.perSeat + '</div><a class="btn' + (free <= 0 ? " wait" : "") + '" href="' + esc(s.link || waLink(s)) + '" target="_blank" rel="noopener">' + (free <= 0 ? t.wait : t.book) + '</a></div>' +
+      '</article>';
+  }).join("");
+  // Early bird: shown until Tuesday 12:00 before the first night of the week (was computed but never displayed)
+  const first = DATA.reduce((m, s) => s.date && (!m || s.date < m) ? s.date : m, null);
+  let show = false;
+  if (first) { const tue = new Date(first); tue.setDate(tue.getDate() - ((tue.getDay() + 5) % 7)); tue.setHours(12, 0, 0, 0); show = new Date() < tue; }
+  eb.hidden = !show;
+  // Van drives once along each route when the card is seen
+  try {
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("go"); io.unobserve(e.target); } }), { threshold: .6 });
+    document.querySelectorAll(".route").forEach(r => io.observe(r));
+  } catch (e) {}
+}
+document.querySelectorAll(".lang button").forEach(b => b.onclick = () => { L = b.dataset.l; try { localStorage.setItem("bv_lang", L); } catch (e) {} render(); });
+render();
+
+fetch(CSV + "&t=" + Date.now()).then(r => { if (!r.ok) throw 0; return r.text(); }).then(txt => {
+  const rows = parseCSV(txt); const h = rows.shift().map(x => x.trim().toLowerCase()); const ix = n => h.findIndex(x => x == n);
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  DATA = rows.filter(r => r.length > 3 && (r[ix("active")] || "").trim().toLowerCase() == "yes").map(r => {
+    const link = (r[ix("link")] || "").trim();
+    const s = { party: (r[ix("party")] || "").trim(), day: (r[ix("day")] || "").trim(), time: (r[ix("time")] || "").trim(), date: parseDate(r[ix("date soirée")] || ""), free: parseInt(r[ix("places libres")] || "0", 10) || 0 };
+    s.link = link ? (link.startsWith("http") ? link : "https://" + link) : waLink(s);
+    return s;
+  }).filter(s => !s.date || s.date >= today);
+  render();
+}).catch(() => {
+  const live = /bachatavan\.com$|vercel\.app$/.test(location.hostname);
+  if (live) { ERR = true; } else { DATA = EXAMPLE; PREVIEW = true; }
+  render();
+});
+
+// "Add to home screen" hint on iPhone Safari, hidden once installed
+try {
+  const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+  if (!standalone && /iphone|ipad/i.test(navigator.userAgent)) document.getElementById("install").classList.add("show");
+} catch (e) {}
+</script>
+</body>
+</html>
