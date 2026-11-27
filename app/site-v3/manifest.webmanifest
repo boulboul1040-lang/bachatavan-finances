@@ -1,0 +1,13 @@
+{
+  "name": "BachataVan BCN",
+  "short_name": "BachataVan",
+  "description": "Your bachata ride from Sagrada Família to the best bachata nights around Barcelona.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#140A08",
+  "theme_color": "#8E1B2E",
+  "icons": [
+    { "src": "/icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
