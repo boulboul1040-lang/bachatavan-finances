@@ -55,7 +55,13 @@ pour ne jamais refaire la même erreur.
 <!-- Claude ajoute ici chaque retour de l'utilisateur, daté, en une ligne.
      Exemple : - 2026-11-11 : sous-titres trop hauts → les placer plus bas. -->
 - 2026-11-11 : selfie face caméra → sous-titres sous le menton (`sousTitresY` ≈ 1430), jamais sur la bouche.
-- 2026-11-14 : logo BachataVan visible du début à la fin des vidéos (au-dessus des têtes, fond sombre), pas seulement sur la carte de fin.
+- ~~2026-11-14 : logo BachataVan visible du début à la fin des vidéos~~ → annulé le 2026-11-28 (voir plus bas).
 - 2026-11-22 : TOUJOURS centrer les titres et textes sous les photos/vidéos (jamais alignés à gauche).
 - 2026-11-26 : animation de logo codée (phares, comète) jugée trop basique → pour un logo reveal réaliste/cinéma, passer par une IA vidéo (Veo via Higgsfield ou Google Flow) à partir du PNG de la plaque ; le code reste pour les cartes, textes et infos.
 - 2026-11-26 : promo ACM jugée « trop froide » → palette chaude (vin, or, braise, crème sur noir chaud), étalonnage chaud sur les rushes (warm-daylight + grain + vignette), plus de bleu/violet ; transitions avec une cause (whip, objet qui devient le décor, zoom à travers, flash chaud), caméra qui suit le van, bruitages sur chaque transition.
+- 2026-11-28 : **JAMAIS de logo plaque BachataVan en surimpression** dans les vidéos (ni en haut, ni sur la carte de fin). Le nom peut apparaître en texte (@bachatavan_official).
+- 2026-11-28 : **JAMAIS de prix** (pas de « 15 € », pas de tarif early bird) dans les vidéos, flyers ou pages.
+- 2026-11-28 : vidéos **en anglais** par défaut (sauf demande contraire).
+- 2026-11-28 : le texte se place **au-dessus des têtes** (bande 300–760 px), jamais sur les visages ; voile sombre en haut pour la lisibilité.
+- 2026-11-28 : choisir des **plans nets à distance moyenne** ; écarter les plans où un visage est collé à l'objectif ou flou.
+- 2026-11-28 : Quechimba = **tous les vendredis et dimanches** ; message type « Every Friday & Sunday · Book your seat · link in bio ».
